@@ -1,5 +1,11 @@
 # Bellity Weapons
 
+## 2026-09-20 in-game fix
+
+The 1.0.1 pack adds explicit localized names to all three items and unlock data to both crafting recipes. Import [the rebuilt add-on](dist/bellity_addon.mcaddon), enable its Behavior Pack and Resource Pack, then reload the world. Confirm that both recipe errors are gone from the Content Log and craft both items at a crafting table. The source validation and packaging checks passed; this updated build still needs an in-game check.
+
+For an existing development-pack installation, run `./install-dev.ps1 -Update` and then `./tools/verify-dev.ps1`. Reload the world to pick up the updated files.
+
 Minecraft Bedrock Edition 用の武器アドオンです。`behavior_pack` と `resource_pack` が編集可能なソースで、`dist/bellity_addon.mcaddon` が配布用ファイルです。
 
 ## 武器

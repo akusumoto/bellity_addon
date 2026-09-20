@@ -3,6 +3,7 @@
   "minecraft:recipe_shaped": {
     "description": { "identifier": "bellity:sun_bigman_light" },
     "tags": ["crafting_table"],
+    "unlock": { "context": "AlwaysUnlocked" },
     "pattern": ["T  ", " A ", "  R"],
     "key": {
       "T": { "item": "minecraft:torch" },

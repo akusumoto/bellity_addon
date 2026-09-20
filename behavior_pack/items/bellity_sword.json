@@ -9,6 +9,7 @@
       }
     },
     "components": {
+      "minecraft:display_name": { "value": "item.bellity:bellity_sword.name" },
       "minecraft:icon": "bellity_sword",
       "minecraft:max_stack_size": 1,
       "minecraft:hand_equipped": true,

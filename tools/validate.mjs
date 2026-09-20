@@ -22,6 +22,8 @@ const languages = ["en_US", "ja_JP"];
 for (const [file, id, damage, durability] of weapons) {
   const item = json(`behavior_pack/items/${file}.json`)["minecraft:item"];
   assert.equal(item.description.identifier, id);
+  const nameKey = `item.${id}.name`;
+  assert.equal(item.components["minecraft:display_name"]?.value, nameKey);
   assert.equal(item.components["minecraft:damage"], damage);
   assert.equal(item.components["minecraft:durability"].max_durability, durability);
   assert.equal(atlas[file].textures, `textures/items/${file}`);
@@ -31,8 +33,8 @@ for (const [file, id, damage, durability] of weapons) {
   assert(png.readUInt32BE(16) > 0 && png.readUInt32BE(20) > 0);
 
   for (const locale of languages) {
-    const lines = readFileSync(resolve(root, `resource_pack/texts/${locale}.lang`), "utf8");
-    assert(lines.includes(`item.${id}.name=`));
+    const lines = readFileSync(resolve(root, `resource_pack/texts/${locale}.lang`), "utf8").split(/\r?\n/);
+    assert(lines.some((line) => line.startsWith(`${nameKey}=`) && line.length > nameKey.length + 1));
   }
 }
 
@@ -40,7 +42,10 @@ for (const [file, expectedRows, expectedKeys] of [
   ["bellity_sword", ["HG ", " C ", " B "], ["H", "G", "C", "B"]],
   ["sun_bigman_light", ["T  ", " A ", "  R"], ["T", "A", "R"]],
 ]) {
-  const recipe = json(`behavior_pack/recipes/${file}.json`)["minecraft:recipe_shaped"];
+  const recipeFile = json(`behavior_pack/recipes/${file}.json`);
+  assert.equal(recipeFile.format_version, "1.20.10");
+  const recipe = recipeFile["minecraft:recipe_shaped"];
+  assert.deepEqual(recipe.unlock, { context: "AlwaysUnlocked" });
   assert.deepEqual(recipe.pattern, expectedRows);
   assert.deepEqual(Object.keys(recipe.key).sort(), expectedKeys.sort());
   assert.equal(recipe.result.item, `bellity:${file}`);

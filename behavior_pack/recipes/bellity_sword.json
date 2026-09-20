@@ -3,6 +3,7 @@
   "minecraft:recipe_shaped": {
     "description": { "identifier": "bellity:bellity_sword" },
     "tags": ["crafting_table"],
+    "unlock": { "context": "AlwaysUnlocked" },
     "pattern": ["HG ", " C ", " B "],
     "key": {
       "H": { "item": "minecraft:flint_and_steel" },

@@ -8,6 +8,7 @@
       }
     },
     "components": {
+      "minecraft:display_name": { "value": "item.bellity:sun_bigman_light.name" },
       "minecraft:icon": "sun_bigman_light",
       "minecraft:max_stack_size": 1,
       "minecraft:hand_equipped": true,
