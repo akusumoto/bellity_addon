@@ -1,4 +1,4 @@
-# Bellity Weapons
+# ベリティアドオン
 
 Minecraft Bedrock Edition 1.21.110 以降向けの武器アドオンです。共通仕様と各武器の詳細は [設計書一覧](spec/README.md) にまとめています。
 

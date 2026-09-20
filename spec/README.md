@@ -1,8 +1,8 @@
-# Bellity Weapons 設計書
+# ベリティアドオン 設計書
 
 ## 目的と対象
 
-Minecraft Bedrock Edition に独自の武器を追加するアドオン。Behavior Pack と Resource Pack を1組として管理し、武器ごとにアイテム定義・レシピ・画像を分ける。名前空間は `bellity`、対象バージョンは Minecraft Bedrock 1.21.110 以降とする。
+Minecraft Bedrock Edition に独自の武器を追加するアドオン。ゲーム内に表示するパック名は、Behavior Pack と Resource Pack の両方で「ベリティアドオン」とする。武器ごとにアイテム定義・レシピ・画像を分ける。名前空間は `bellity`、対象バージョンは Minecraft Bedrock 1.21.110 以降とする。
 
 現在の個別仕様：
 
@@ -34,7 +34,7 @@ tests/test_checklist.md    # 実機確認項目
 dist/bellity_addon.mcaddon # 配布用パック
 ```
 
-Behavior Pack はアイテム、レシピ、Script API の動作を定義する。Resource Pack は表示名と画像を提供する。Behavior Pack は Resource Pack と `@minecraft/server` 2.0.0 に依存する。現在のパックバージョンは Behavior Pack が `1.0.2`、Resource Pack が `1.0.1`。両パックの `min_engine_version` は `1.21.110`。
+Behavior Pack はアイテム、レシピ、Script API の動作を定義する。Resource Pack は表示名と画像を提供する。Behavior Pack は Resource Pack と `@minecraft/server` 2.0.0 に依存する。現在のパックバージョンは Behavior Pack が `1.0.3`、Resource Pack が `1.0.2`。両パックの `min_engine_version` は `1.21.110`。
 
 ## 共通仕様
 

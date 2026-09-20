@@ -7,8 +7,11 @@ const json = (path) => JSON.parse(readFileSync(resolve(root, path), "utf8"));
 
 const bp = json("behavior_pack/manifest.json");
 const rp = json("resource_pack/manifest.json");
+assert.equal(bp.header.name, "ベリティアドオン");
+assert.equal(rp.header.name, "ベリティアドオン");
 assert.notEqual(bp.header.uuid, rp.header.uuid);
-assert(bp.dependencies.some((d) => d.uuid === rp.header.uuid));
+assert(bp.dependencies.some((d) => d.uuid === rp.header.uuid &&
+  JSON.stringify(d.version) === JSON.stringify(rp.header.version)));
 assert(bp.dependencies.some((d) => d.module_name === "@minecraft/server"));
 
 const weapons = [
