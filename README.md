@@ -1,8 +1,12 @@
 # Bellity Weapons
 
+## Chotto Netherite Axe recipe (1.0.2)
+
+The axe is now craftable at a crafting table. Place Netherite Ingots in the top left and top middle slots, then Sticks in the center and bottom center slots. The exact pattern and IDs are in [AXE_RECIPE_SPEC.md](AXE_RECIPE_SPEC.md). The older note below saying the axe has no recipe is superseded by this section.
+
 ## 2026-09-20 in-game fix
 
-The 1.0.1 pack adds explicit localized names to all three items and unlock data to both crafting recipes. Import [the rebuilt add-on](dist/bellity_addon.mcaddon), enable its Behavior Pack and Resource Pack, then reload the world. Confirm that both recipe errors are gone from the Content Log and craft both items at a crafting table. The source validation and packaging checks passed; this updated build still needs an in-game check.
+The 1.0.1 pack added explicit localized names to all three items and unlock data to the original two crafting recipes. Import [the rebuilt add-on](dist/bellity_addon.mcaddon), enable its Behavior Pack and Resource Pack, then reload the world. Confirm that the recipe errors are gone from the Content Log and craft all three items at a crafting table. The source validation and packaging checks passed; this updated build still needs an in-game check.
 
 For an existing development-pack installation, run `./install-dev.ps1 -Update` and then `./tools/verify-dev.ps1`. Reload the world to pick up the updated files.
 

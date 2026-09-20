@@ -1,5 +1,8 @@
 # Bellity Weapons 実機チェック
 
+- [ ] Chotto Netherite Axe crafts at a crafting table with Netherite Ingots in the top left and top middle slots, and Sticks in the center and bottom center slots.
+- [ ] No recipe error appears in the Content Log after reloading the updated development pack.
+
 対象バージョン：＿＿＿＿　確認日：＿＿＿＿
 
 - [ ] ワールドに Bellity Weapons BP/RP を適用でき、Content Log にエラーがない

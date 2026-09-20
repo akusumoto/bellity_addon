@@ -1,0 +1,14 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shaped": {
+    "description": { "identifier": "bellity:noboru_netherite_axe" },
+    "tags": ["crafting_table"],
+    "unlock": { "context": "AlwaysUnlocked" },
+    "pattern": ["NN ", " B ", " B "],
+    "key": {
+      "N": { "item": "minecraft:netherite_ingot" },
+      "B": { "item": "minecraft:stick" }
+    },
+    "result": { "item": "bellity:noboru_netherite_axe", "count": 1 }
+  }
+}

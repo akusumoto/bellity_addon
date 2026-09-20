@@ -38,18 +38,32 @@ for (const [file, id, damage, durability] of weapons) {
   }
 }
 
-for (const [file, expectedRows, expectedKeys] of [
-  ["bellity_sword", ["HG ", " C ", " B "], ["H", "G", "C", "B"]],
-  ["sun_bigman_light", ["T  ", " A ", "  R"], ["T", "A", "R"]],
+for (const [file, expectedRows, expectedKey] of [
+  ["bellity_sword", ["HG ", " C ", " B "], {
+    H: { item: "minecraft:flint_and_steel" },
+    G: { item: "minecraft:gold_ingot" },
+    C: { item: "minecraft:creeper_head" },
+    B: { item: "minecraft:stick" },
+  }],
+  ["noboru_netherite_axe", ["NN ", " B ", " B "], {
+    N: { item: "minecraft:netherite_ingot" },
+    B: { item: "minecraft:stick" },
+  }],
+  ["sun_bigman_light", ["T  ", " A ", "  R"], {
+    T: { item: "minecraft:torch" },
+    A: { item: "minecraft:arrow" },
+    R: { item: "minecraft:trident" },
+  }],
 ]) {
   const recipeFile = json(`behavior_pack/recipes/${file}.json`);
   assert.equal(recipeFile.format_version, "1.20.10");
   const recipe = recipeFile["minecraft:recipe_shaped"];
   assert.deepEqual(recipe.unlock, { context: "AlwaysUnlocked" });
   assert.deepEqual(recipe.pattern, expectedRows);
-  assert.deepEqual(Object.keys(recipe.key).sort(), expectedKeys.sort());
+  assert.deepEqual(recipe.key, expectedKey);
   assert.equal(recipe.result.item, `bellity:${file}`);
+  assert.equal(recipe.result.count, 1);
 }
 
 assert(existsSync(resolve(root, "behavior_pack/scripts/main.js")));
-console.log("Bellity pack validation passed: 3 items, 2 recipes, textures, names, manifests.");
+console.log("Bellity pack validation passed: 3 items, 3 recipes, textures, names, manifests.");

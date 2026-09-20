@@ -1,5 +1,7 @@
 # Minecraft Bedrock Edition 武器アドオン仕様書
 
+> 2026-09-20 update: the Chotto Netherite Axe recipe is now specified in [AXE_RECIPE_SPEC.md](AXE_RECIPE_SPEC.md). Any earlier "recipe undecided" text for this axe is superseded by that specification.
+
 ## 1. 文書情報
 
 | 項目 | 内容 |
