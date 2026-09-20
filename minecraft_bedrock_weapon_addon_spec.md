@@ -314,7 +314,7 @@ weapon_addon/
 └─ README.md
 ```
 
-このソース構成から、`behavior_pack`の内容をWindows側の`development_behavior_packs\weapon_addon_BP`へ、`resource_pack`の内容を`development_resource_packs\weapon_addon_RP`へ配置する。Codexを対象PC上で直接実行する場合は、最初から開発用保存先を作業対象にしてもよい。
+このソース構成から、`behavior_pack`の内容をWindows側の`development_behavior_packs\Bellity_BP`へ、`resource_pack`の内容を`development_resource_packs\Bellity_RP`へ配置する。Codexを対象PC上で直接実行する場合は、最初から開発用保存先を作業対象にしてもよい。
 
 > **実装時確認:** Bedrock Editionが対象フォルダのサブディレクトリを期待どおり読み込むことを実機確認する。問題があるファイル種別は標準フォルダ直下へ配置する。
 
