@@ -1,0 +1,14 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shaped": {
+    "description": { "identifier": "bellity:sun_bigman_light" },
+    "tags": ["crafting_table"],
+    "pattern": ["T  ", " A ", "  R"],
+    "key": {
+      "T": { "item": "minecraft:torch" },
+      "A": { "item": "minecraft:arrow" },
+      "R": { "item": "minecraft:trident" }
+    },
+    "result": { "item": "bellity:sun_bigman_light", "count": 1 }
+  }
+}

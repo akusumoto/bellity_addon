@@ -1,0 +1,20 @@
+{
+  "format_version": "1.21.110",
+  "minecraft:item": {
+    "description": {
+      "identifier": "bellity:sun_bigman_light",
+      "menu_category": {
+        "category": "equipment"
+      }
+    },
+    "components": {
+      "minecraft:icon": "sun_bigman_light",
+      "minecraft:max_stack_size": 1,
+      "minecraft:hand_equipped": true,
+      "minecraft:durability": { "max_durability": 500 },
+      "minecraft:use_modifiers": { "use_duration": 0.1, "movement_modifier": 1.0 },
+      "minecraft:cooldown": { "category": "sun_bigman_light", "duration": 0.35 },
+      "bellity:throw_light": {}
+    }
+  }
+}

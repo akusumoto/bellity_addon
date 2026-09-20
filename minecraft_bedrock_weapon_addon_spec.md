@@ -5,9 +5,9 @@
 | 項目 | 内容 |
 |---|---|
 | 文書名 | Minecraft Bedrock Edition 武器アドオン仕様書 |
-| 状態 | 初期検討版 |
+| 状態 | 3武器の実装済み・実機検証待ち |
 | 対象 | Minecraft Bedrock Edition |
-| 対象バージョン | 各実装時点の最新安定版 |
+| 対象バージョン | Bedrock Edition 1.21.110以降（対象端末での実機確認待ち） |
 | 実装担当 | Codex |
 | 画像・モデル制作 | Blockbench |
 
@@ -30,10 +30,10 @@ Minecraft Bedrock Editionへ、剣、斧、投擲武器など複数種類の独�
 
 ### 3.1 Windows版Bedrockの開発用保存先
 
-Windows版Minecraft Bedrock 1.21.120以降はUWPからGDKへ移行しているため、最新版では次のフォルダを使用する。
+このPCのWindows版Minecraft Bedrockでは、次のフォルダを使用する。実際のフォルダ名は `Users\Shared` である。
 
 ```text
-%appdata%\Minecraft Bedrock\users\shared\games\com.mojang
+%appdata%\Minecraft Bedrock\Users\Shared\games\com.mojang
 ```
 
 エクスプローラーで開く手順：
@@ -42,7 +42,7 @@ Windows版Minecraft Bedrock 1.21.120以降はUWPからGDKへ移行している�
 2. 次のパスを貼り付ける。
 
    ```text
-   %appdata%\Minecraft Bedrock\users\shared\games\com.mojang
+   %appdata%\Minecraft Bedrock\Users\Shared\games\com.mojang
    ```
 
 3. 「OK」を押す。
@@ -51,25 +51,24 @@ Windows版Minecraft Bedrock 1.21.120以降はUWPからGDKへ移行している�
 
 | 種類 | 保存先 |
 |---|---|
-| Behavior Pack | `%appdata%\Minecraft Bedrock\users\shared\games\com.mojang\development_behavior_packs\<addon_name>_BP` |
-| Resource Pack | `%appdata%\Minecraft Bedrock\users\shared\games\com.mojang\development_resource_packs\<addon_name>_RP` |
+| Behavior Pack | `%appdata%\Minecraft Bedrock\Users\Shared\games\com.mojang\development_behavior_packs\Bellity_BP` |
+| Resource Pack | `%appdata%\Minecraft Bedrock\Users\Shared\games\com.mojang\development_resource_packs\Bellity_RP` |
 
 本アドオンの配置例：
 
 ```text
-%appdata%\Minecraft Bedrock\users\shared\games\com.mojang\
+%appdata%\Minecraft Bedrock\Users\Shared\games\com.mojang\
 ├─ development_behavior_packs\
-│  └─ weapon_addon_BP\
+│  └─ Bellity_BP\
 │     ├─ manifest.json
 │     ├─ items\
 │     ├─ recipes\
-│     └─ pack_icon.png
+│     └─ scripts\
 └─ development_resource_packs\
-   └─ weapon_addon_RP\
+   └─ Bellity_RP\
       ├─ manifest.json
       ├─ textures\
-      ├─ texts\
-      └─ pack_icon.png
+      └─ texts\
 ```
 
 Codexは開発中、上記2フォルダを直接作成・更新する。配布時は両方をまとめて `.mcaddon` を生成する。
@@ -87,7 +86,7 @@ Codexは開発中、上記2フォルダを直接作成・更新する。配布�
 Minecraft Previewを使用する場合は、通常版と別の次の場所を使用する。
 
 ```text
-%appdata%\Minecraft Bedrock Preview\users\shared\games\com.mojang
+%appdata%\Minecraft Bedrock Preview\Users\Shared\games\com.mojang
 ```
 
 旧UWP版では次の場所が使われていたが、最新版の正式な開発先としては使用しない。
@@ -102,10 +101,10 @@ Minecraft Previewを使用する場合は、通常版と別の次の場所を使
 
 | 段階 | 内容 | 状態 |
 |---|---|---|
-| 第1段階 | 2Dテクスチャの剣を1種類追加し、共通基盤を確立 | 次回実装 |
-| 第2段階 | 斧を1種類以上追加 | 予定 |
-| 第3段階 | 投擲武器を1種類以上追加 | 予定 |
-| 第4段階 | 特殊能力、演出、バランス調整 | 要検討 |
+| 第1段階 | 2Dテクスチャの剣を1種類追加し、共通基盤を確立 | 実装済み・実機検証待ち |
+| 第2段階 | 斧を1種類以上追加 | 実装済み・実機検証待ち |
+| 第3段階 | 投擲武器を1種類以上追加 | 実装済み・実機検証待ち |
+| 第4段階 | 特殊能力、演出、バランス調整 | 基本能力を実装済み・調整は要検討 |
 | 第5段階 | 必要に応じて3Dモデル化 | 要検討 |
 
 ## 5. 武器の分類
@@ -175,9 +174,9 @@ Minecraft Previewを使用する場合は、通常版と別の次の場所を使
 
 | ID | 日本語名 | 分類 | 攻撃力 | 耐久値／個数 | 入手方法 | 特殊能力 | 状態 |
 |---|---|---|---:|---:|---|---|---|
-| `bellity:bellity_sword` | ベリティソード | 剣 | 32 | 1233 | クラフト | 叩くとランダムにアイテムがドロップする | 詳細要検討 |
-| `bellity:noboru_netherite_axe` | ちょっとネザライトの斧 | 斧 | 6 | 1200 | 未定 | 特になし | 詳細要検討 |
-| `bellity:sun_bigman_light` | 太陽の巨人の光 | 投擲武器 | 10 | 500 | クラフト | 投げたものが当たると燃える | 詳細要検討 |
+| `bellity:bellity_sword` | ベリティソード | 剣 | 32 | 1233 | クラフト | 叩くとランダムにアイテムがドロップする | 実装済み・実機検証待ち |
+| `bellity:noboru_netherite_axe` | ちょっとネザライトの斧 | 斧 | 6 | 1200 | クリエイティブ・コマンド（レシピ未定） | 特になし | 実装済み・実機検証待ち |
+| `bellity:sun_bigman_light` | 太陽の巨人の光 | 投擲武器 | 10 | 500 | クラフト | 投げたものが当たると燃える | 実装済み・実機検証待ち |
 
 ### 6.2 第1段階の剣：ベリティソード
 
@@ -207,7 +206,7 @@ H G -
 | C | クリーパーの顔 |
 | B | 棒 |
 
-ランダムドロップの候補・確率・個数・発動条件の詳細、修理素材、エンチャント可否、レアリティは未定とする。
+実装上、剣の有効な命中ごとに、リンゴ・石炭・鉄インゴット・金インゴット・レッドストーン・ラピスラズリ・エメラルド・ダイヤモンドから等確率で1個をドロップする。攻撃力は基本攻撃力1にアイテムの追加ダメージ31を加えた値。候補と確率はバランス調整時に変更可能とする。修理素材、エンチャント可否、レアリティは未定。
 
 ### 6.3 2つ目の武器：ちょっとネザライトの斧
 
@@ -222,6 +221,8 @@ H G -
 | クラフトレシピ | 未定 |
 | 能力 | 特になし |
 | 画像ファイル | `model_data/noboru_netherite_axe.png` |
+
+木材タグを持つブロックへの採掘速度倍率を6とする。攻撃力は基本攻撃力1にアイテムの追加ダメージ5を加えた値。クラフトレシピは未定で、現時点ではクリエイティブまたはコマンドで取得する。
 
 ### 6.4 3つ目の武器：太陽の巨人の光
 
@@ -250,7 +251,7 @@ H G -
 | A | 矢 |
 | Tr | トライデント |
 
-命中時に何が燃えるか、燃焼時間、投擲時の耐久消費など、能力と消費の詳細は未定とする。
+実装上、使用時に耐久値を1消費し、命中したエンティティに10ダメージを与えて5秒間燃やす。弾は標準の雪玉エンティティを利用し、投げたアイテム本体は消費しない。投擲間隔は最低7ゲームティック。投擲物の外観は雪玉のままで、専用表示は今後の検討事項とする。
 
 ## 7. テクスチャ・モデル仕様
 
@@ -424,30 +425,28 @@ akira:throwing_knife
 
 ## 16. 実装前に決定する共通事項
 
-1. アドオン名
-2. 名前空間（ベリティソードには `bellity` を採用）
+1. アドオン名：Bellity Weapons
+2. 名前空間：`bellity`
 3. 標準テクスチャサイズ
 4. 対象Minecraftバージョン
-5. 実験的機能を許可するか
-6. Script APIの使用を許可するか
+5. 実験的機能：現行実装では使用しない
+6. Script API：剣のドロップと投擲処理に使用する（`@minecraft/server` 2.0.0）
 7. 主な利用環境と配布範囲
 8. 武器全体の強さの基準
 9. パックアイコン
 
 ## 17. 第1段階の剣について決定する事項
 
-ベリティソードの名前、分類、攻撃力、耐久値、クラフトレシピ、能力の概要、画像ファイルは6.2節に記載済み。実装前に次を決定する。
+ベリティソードの実装内容は6.2節に記載済み。追加実装時に次を決定する。
 
-1. ランダムドロップの候補・確率・個数・発動条件の詳細
-2. 修理素材
-3. エンチャント可否
-4. レアリティ
+1. 修理素材
+2. エンチャント可否
+3. レアリティ
 
-## 18. 実装開始条件
+## 18. 実機検証の残件
 
-- 第1段階の剣について必要事項が確定している。
-- 剣のPNGが完成している。
-- 対象端末のMinecraftバージョンが確認できている。
-- テスト用ワールドを作成できる。
+- 対象端末のMinecraftバージョンを確認する。
+- テスト用ワールドに `.mcaddon` をインポートし、Behavior PackとResource Packを有効にする。
+- 13節の共通・分類別動作チェックを行い、Content Logにエラーがないことを確認する。
 
 以後の武器は「武器追加手順」に従い、同じアドオンへ継続追加する。

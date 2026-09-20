@@ -1,0 +1,15 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shaped": {
+    "description": { "identifier": "bellity:bellity_sword" },
+    "tags": ["crafting_table"],
+    "pattern": ["HG ", " C ", " B "],
+    "key": {
+      "H": { "item": "minecraft:flint_and_steel" },
+      "G": { "item": "minecraft:gold_ingot" },
+      "C": { "item": "minecraft:creeper_head" },
+      "B": { "item": "minecraft:stick" }
+    },
+    "result": { "item": "bellity:bellity_sword", "count": 1 }
+  }
+}

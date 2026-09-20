@@ -1,0 +1,21 @@
+{
+  "format_version": "1.21.110",
+  "minecraft:item": {
+    "description": {
+      "identifier": "bellity:bellity_sword",
+      "menu_category": {
+        "category": "equipment",
+        "group": "minecraft:itemGroup.name.sword"
+      }
+    },
+    "components": {
+      "minecraft:icon": "bellity_sword",
+      "minecraft:max_stack_size": 1,
+      "minecraft:hand_equipped": true,
+      "minecraft:tags": { "tags": ["minecraft:is_sword"] },
+      "minecraft:damage": 31,
+      "minecraft:durability": { "max_durability": 1233 },
+      "bellity:random_drop_on_hit": {}
+    }
+  }
+}

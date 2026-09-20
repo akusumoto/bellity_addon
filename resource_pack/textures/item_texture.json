@@ -1,0 +1,9 @@
+{
+  "resource_pack_name": "bellity_weapons",
+  "texture_name": "atlas.items",
+  "texture_data": {
+    "bellity_sword": { "textures": "textures/items/bellity_sword" },
+    "noboru_netherite_axe": { "textures": "textures/items/noboru_netherite_axe" },
+    "sun_bigman_light": { "textures": "textures/items/sun_bigman_light" }
+  }
+}
