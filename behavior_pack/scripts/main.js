@@ -3,6 +3,7 @@ import { EquipmentSlot, ItemStack, MolangVariableMap, system, world } from "@min
 const LIGHT_ID = "bellity:sun_bigman_light";
 const LIGHT_BALL_ID = "bellity:light_ball";
 const CREEPY_HORSE_EYE_ID = "bellity:creepy_horse_eye";
+const CREEPY_HORSE_EYE_ACTIVATE_SOUND = "bellity.creepy_horse_eye_activate";
 const EXTRA_KNOCKBACK_STRENGTH = 0.4;
 const FREEZE_RADIUS = 7;
 const FREEZE_DURATION_TICKS = 200;
@@ -203,6 +204,7 @@ function freezeNearbyEnemies(event) {
     const center = { ...player.location };
     const dimension = player.dimension;
     const untilTick = system.currentTick + FREEZE_DURATION_TICKS;
+    dimension.playSound(CREEPY_HORSE_EYE_ACTIVATE_SOUND, center);
     const enemies = dimension.getEntities({
       location: center,
       maxDistance: FREEZE_RADIUS,

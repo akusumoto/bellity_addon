@@ -4,14 +4,14 @@
     "name": "ベリティアドオン",
     "description": "Bellity custom weapon textures and names",
     "uuid": "4334f2c9-6ac3-4fba-9704-3f3ca28e61a6",
-    "version": [1, 0, 5],
+    "version": [1, 0, 6],
     "min_engine_version": [1, 21, 110]
   },
   "modules": [
     {
       "type": "resources",
       "uuid": "f036f3c8-4fc3-47c4-b90c-fc177cdff2cd",
-      "version": [1, 0, 5]
+      "version": [1, 0, 6]
     }
   ]
 }

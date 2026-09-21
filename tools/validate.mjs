@@ -51,6 +51,21 @@ assert.deepEqual(
   readFileSync(resolve(root, "resource_pack/textures/items/creepy_horse_eye.png")),
   readFileSync(resolve(root, "model_data/creepy_horse_eye.png")),
 );
+const creepyHorseEyeSoundId = "bellity.creepy_horse_eye_activate";
+const creepyHorseEyeSounds = json("resource_pack/sounds/sound_definitions.json").sound_definitions;
+assert.deepEqual(creepyHorseEyeSounds[creepyHorseEyeSoundId], {
+  category: "player",
+  sounds: ["sounds/creepy_horse_eye_activate"],
+});
+assert.deepEqual(
+  readFileSync(resolve(root, "resource_pack/sounds/creepy_horse_eye_activate.ogg")),
+  readFileSync(resolve(root, "model_data/creepy_horse_eye_activate.ogg")),
+);
+assert.equal(
+  readFileSync(resolve(root, "resource_pack/sounds/creepy_horse_eye_activate.ogg"), { length: 4 })
+    .subarray(0, 4).toString("ascii"),
+  "OggS",
+);
 assert.deepEqual(
   readFileSync(resolve(root, "resource_pack/textures/items/gizagiza_sword.png")),
   readFileSync(resolve(root, "model_data/gizagiza_sword.png")),
@@ -161,6 +176,8 @@ assert.match(script, /player\.dimension\.playSound\("random\.bow", player\.locat
 assert.match(script, /itemComponentRegistry\.registerCustomComponent\("bellity:freeze_nearby_enemies"/);
 assert.match(script, /const FREEZE_RADIUS = 7/);
 assert.match(script, /const FREEZE_DURATION_TICKS = 200/);
+assert.match(script, /const CREEPY_HORSE_EYE_ACTIVATE_SOUND = "bellity\.creepy_horse_eye_activate"/);
+assert.match(script, /dimension\.playSound\(CREEPY_HORSE_EYE_ACTIVATE_SOUND, center\)/);
 assert.match(script, /const FREEZE_TREMBLE_DISTANCE = 0\.025/);
 assert.match(script, /families: \["monster"\]/);
 assert.match(script, /function getFreezeTrembleLocation\(frozen, tick\)/);

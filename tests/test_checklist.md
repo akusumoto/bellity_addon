@@ -32,6 +32,7 @@ Target Version: ____ Date Checked: ____
 - [ ] The Creepy Horse Eye can be crafted in a 3x3 layout by surrounding an Ender Eye in the center with 8 Coal.
 - [ ] After applying or reloading the packs, `main.js` loads without an early-execution `MolangVariableMap` constructor error in the Content Log.
 - [ ] Holding the Creepy Horse Eye and right-clicking activates it on the spot without consuming the item.
+- [ ] Each successful Creepy Horse Eye activation plays `model_data/creepy_horse_eye_activate.ogg` exactly once without a Content Log error, including the first use and later uses after the cooldown; record its audible range and nearby-player behavior.
 - [ ] On the first activation after loading the world, white particles appear without a script error in the Content Log.
 - [ ] Only enemies in the `monster` family within a 7-block radius of the player at activation remain anchored and retain their captured body/head direction for 10 seconds.
 - [ ] Enemies outside the effect range, enemies that enter the range after activation, players, friendly mobs, items, and projectiles do not freeze.

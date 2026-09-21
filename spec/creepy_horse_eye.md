@@ -16,7 +16,8 @@
 | Cooldown | 20 seconds (400 game ticks) |
 | Maximum Stack Size | 1 (unstackable) |
 | Image | `resource_pack/textures/items/creepy_horse_eye.png` |
-| Production Assets | `model_data/creepy_horse_eye.png`, `model_data/creepy_horse_eye.bbmodel` |
+| Activation Sound | `bellity.creepy_horse_eye_activate`, played at the player's position when the item activates |
+| Production Assets | `model_data/creepy_horse_eye.png`, `model_data/creepy_horse_eye.bbmodel`, `model_data/creepy_horse_eye_activate.ogg` |
 
 Display the item in the equipment category of the Creative inventory, use the handheld presentation, and enable the use button for touch controls. Using the item does not create a projectile; it activates immediately with the player's current position as the center of the effect area. The use duration is 0.1 seconds and the movement multiplier while using it is 1.0. The item cannot be used again for 20 seconds after activation. It has no durability and is not consumed when used.
 
@@ -49,6 +50,8 @@ The implementation stores the target's location and rotation, teleports it to a 
 
 Within the effect area, display white `minecraft:colored_flame_particle` particles at 16 random points inside the sphere every 10 game ticks. Do not change any block type or state. Stop generating particles after 10 seconds; the appearance returns to normal as the remaining particles disappear. Verify the sphere's visibility, whiteness, effect on visibility, appearance to multiple players, and rendering load on a device.
 
+At activation, play `model_data/creepy_horse_eye_activate.ogg` once from the player's current position through the `bellity.creepy_horse_eye_activate` sound event. The resource-pack copy is `resource_pack/sounds/creepy_horse_eye_activate.ogg` and its registration is in `resource_pack/sounds/sound_definitions.json`.
+
 Implement the behavior in the `bellity:freeze_nearby_enemies` custom item component and `behavior_pack/scripts/main.js`. Do not leave exceptions or permanently suspended state when a target dies, despawns, changes dimensions, or the world reloads. If effects overlap on the same target, retain the first anchor position and rotation and extend the end time until 10 seconds after the later activation.
 
 ## Implementation Files and Verification
@@ -59,11 +62,14 @@ Implement the behavior in the `bellity:freeze_nearby_enemies` custom item compon
 - Display names: `resource_pack/texts/ja_JP.lang`, `resource_pack/texts/en_US.lang`
 - Item image: `resource_pack/textures/items/creepy_horse_eye.png`
 - Image registration: `resource_pack/textures/item_texture.json`
+- Activation sound: `resource_pack/sounds/creepy_horse_eye_activate.ogg`
+- Sound registration: `resource_pack/sounds/sound_definitions.json`
 - On a device, verify the Japanese and English display names, image, specified recipe, obtaining methods, activation at the player's current position, 7-block-radius spherical area, 10-second freeze of only the enemies present in the area at activation, and 20-second cooldown.
 - Verify that body and head direction, walking, flying, knockback, falling, and movement caused by water currents are corrected every tick; that the slight tremble does not accumulate into drift; and that the target returns to its anchor and resumes normal motion when the effect ends.
 - For each tested mob, record any AI attacks, Creeper fuse progress, model animations, vocalizations, or attack sounds that remain because the API cannot guarantee their complete suspension.
 - Verify the inside/outside boundary, airborne and underwater enemies, death, despawning, dimension changes, simultaneous application to multiple entities, and overlapping use by multiple players.
 - Verify that the white appearance matches the effect area and duration, does not remain after deactivation, appears correctly to players outside the area, and has acceptable rendering cost.
+- Verify that the custom activation sound plays exactly once on each successful activation, including the first and subsequent uses after the cooldown, without a Content Log error. Confirm its audible range and behavior for nearby players on a device.
 - On 2026-09-21, `./build.ps1` passed source validation for five items, five recipes, images, display names, the 20-second cooldown, and freeze processing, and generated `dist/bellity_addon.mcaddon`. The item definition, recipe, script, and image were confirmed in the distribution archive. Minecraft operation was not verified.
 - On 2026-09-21, the development packs were updated with `./install-dev.ps1 -Update`, and `./tools/verify-dev.ps1` confirmed that 13 Behavior Pack files and 14 Resource Pack files matched the source. This was a deployment check, not Minecraft operation verification.
 - On 2026-09-21, a device run reported that constructing `MolangVariableMap` during early execution stopped `main.js`. The white-particle variable map was changed to initialize lazily when the effect first runs. `node --check behavior_pack/scripts/main.js` and `node tools/validate.mjs` passed, but the corrected behavior has not yet been retested in Minecraft.

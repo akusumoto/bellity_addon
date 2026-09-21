@@ -1,0 +1,11 @@
+{
+  "format_version": "1.14.0",
+  "sound_definitions": {
+    "bellity.creepy_horse_eye_activate": {
+      "category": "player",
+      "sounds": [
+        "sounds/creepy_horse_eye_activate"
+      ]
+    }
+  }
+}
