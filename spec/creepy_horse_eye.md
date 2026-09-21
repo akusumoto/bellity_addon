@@ -1,28 +1,28 @@
-# クリーピーホースの目
+# Creepy Horse Eye
 
-[共通仕様](README.md) / アイテムID：`bellity:creepy_horse_eye`
+[Common Specifications](README.md) / Item ID: `bellity:creepy_horse_eye`
 
-## アイテム仕様
+## Item Specifications
 
-| 項目 | 仕様 |
-|---|---|
-| 分類 | 使用型アイテム（剣・斧・投擲武器ではない） |
-| 日本語名 | クリーピーホースの目 |
-| 英語名 | Creepy Horse Eye |
-| 表示名キー | `item.bellity:creepy_horse_eye.name` |
-| 使用方法 | 手に持ち、その場で右クリックして使用する |
-| 効果範囲 | 使用時のプレイヤーを中心とする半径7ブロック、中心を含めて直径15ブロック相当の球形範囲 |
-| フリーズ時間 | 10秒（200ゲームティック） |
-| クールダウン時間 | 20秒（400ゲームティック） |
-| 最大スタック数 | 1（スタック不可） |
-| 画像 | `resource_pack/textures/items/creepy_horse_eye.png` |
-| 制作素材 | `model_data/creepy_horse_eye.png`、`model_data/creepy_horse_eye.bbmodel` |
+| Item | Specification | 
+ | ----- | ----- | 
+| Category | Usable Item (Not a sword, axe, or throwable weapon) | 
+| Japanese Name | クリーピーホースの目 | 
+| English Name | Creepy Horse Eye | 
+| Display Name Key | `item.bellity:creepy_horse_eye.name` | 
+| How to Use | Hold in hand and right-click on the spot to use | 
+| Effect Area | A spherical area equivalent to a radius of 7 blocks centered on the player upon use, 15 blocks in diameter including the center. | 
+| Freeze Duration | 10 seconds (200 game ticks) | 
+| Cooldown Time | 20 seconds (400 game ticks) | 
+| Maximum Stack Size | 1 (Unstackable) | 
+| Image | `resource_pack/textures/items/creepy_horse_eye.png` | 
+| Production Assets | `model_data/creepy_horse_eye.png`, `model_data/creepy_horse_eye.bbmodel` | 
 
-クリエイティブインベントリでは装備カテゴリに表示し、手持ち表示とタッチ操作の使用ボタンを有効にする。使用時に投射物は生成せず、プレイヤーの現在位置を効果範囲の中心として即座に能力を発動する。使用時間は0.1秒、使用中の移動倍率は1.0とする。発動後は20秒間、再使用できないようにする。耐久値は設定せず、使用してもアイテムを消費しない。
+Display in the equipment category in the creative inventory, and enable handheld display and the use button for touch operations. It does not generate a projectile when used; it instantly activates the ability with the player's current position as the center of the effect area. Use duration is 0.1 seconds, and movement multiplier during use is 1.0. Cannot be reused for 20 seconds after activation. Durability is not set, and the item is not consumed upon use.
 
-## クラフト
+## Crafting
 
-作業台で次の3×3配置から1個作る。
+Craft 1 item on the crafting table from the following 3x3 layout.
 
 ```text
 S S S
@@ -30,35 +30,35 @@ S E S
 S S S
 ```
 
-| 記号 | 素材ID | 素材名 |
-|---|---|---|
-| S | `minecraft:coal` | 石炭 |
-| E | `minecraft:ender_eye` | エンダーアイ |
+| Symbol | Material ID | Material Name | 
+ | ----- | ----- | ----- | 
+| S | `minecraft:coal` | Coal | 
+| E | `minecraft:ender_eye` | Ender Eye | 
 
-石炭8個でエンダーアイ1個を囲み、`minecraft:recipe_shaped` で1個作成できるようにする。レシピIDと出力は `bellity:creepy_horse_eye`。共通仕様どおり、作業台タグと `AlwaysUnlocked` を指定する。クリエイティブインベントリと `/give @s bellity:creepy_horse_eye` でも取得できるようにする。
+Surround 1 Ender Eye with 8 Coals to craft 1 item using `minecraft:recipe_shaped`. The recipe ID and output are `bellity:creepy_horse_eye`. As per common specifications, specify the crafting table tag and `AlwaysUnlocked`. Also make it obtainable via the creative inventory and `/give @s bellity:creepy_horse_eye`.
 
-## 特殊能力
+## Special Ability
 
-右クリックで使用した瞬間のプレイヤー位置を中心に球形の対象範囲を確定し、その範囲内にいる敵を10秒間フリーズさせる。効果発動後に範囲へ入った敵は対象に追加せず、発動時に対象となった敵が範囲外へ出ようとしても、効果時間中はフリーズを継続する。
+Confirm a spherical target area centered on the player's position at the exact moment of use (right-click), and freeze enemies within that area for 10 seconds. Do not add enemies that enter the area after activation to the targets; even if an enemy targeted at activation tries to leave the area, it remains frozen for the duration of the effect.
 
-対象は Bedrock の `monster` ファミリーに属するエンティティとする。この判定によりプレイヤー、友好モブ、アイテム、投射物は対象外になる。現在プレイヤーを攻撃対象としているかではなくファミリーで判定するため、エンダーマン、クモ、ピグリンなどは中立状態でも対象になる。一方、敵対的な挙動をするエンティティでも `monster` ファミリーを持たない場合は対象外になる。
+Targets shall be entities belonging to the `monster` family in Bedrock. This check excludes players, friendly mobs, items, and projectiles. Because the check uses the family rather than whether they are currently targeting the player, mobs like Endermen, Spiders, and Piglins are targeted even in a neutral state. Conversely, entities with hostile behavior that lack the `monster` family are excluded.
 
-フリーズ中は、発動時に記録した位置と向きへ対象を毎ゲームティック戻し、速度を0にする。これにより歩行や飛行などの自発移動に加え、ノックバック、落下、水流による移動を停止する。Script API 2.0.0 には汎用的にAIやモデルアニメーションを停止する安定版APIがないため、攻撃処理、AI内部タイマー、クリーパーの導火線、モデルアニメーションの停止は保証しない。
+During a freeze, return the target to the position and rotation recorded at activation every game tick, and set its velocity to 0. This stops spontaneous movement such as walking or flying, as well as movement from knockback, falling, or water currents. Because Script API 2.0.0 lacks a stable API to universally stop AI or model animations, stopping attack processing, AI internal timers, Creeper fuses, and model animations is not guaranteed.
 
-効果範囲の空間は、`minecraft:colored_flame_particle` を白色に指定して球内のランダムな16地点へ10ゲームティックごとに表示し、フリーズ中だけ通常より少し白く見えるようにする。ブロック自体の種類や状態は変更しない。10秒後は新しいパーティクルの生成を止め、残ったパーティクルが消えることで通常の見え方へ戻す。球形の認識しやすさ、白さ、視界への影響、複数プレイヤーからの見え方、描画負荷は実機で確認する。
+The space of the effect area will display `minecraft:colored_flame_particle` specified as white at 16 random points within the sphere every 10 game ticks, making it appear slightly whiter than usual only during the freeze. The types and states of the blocks themselves are not changed. After 10 seconds, stop generating new particles, returning to normal appearance as the remaining particles disappear. Check the ease of recognizing the sphere, whiteness, impact on visibility, appearance from multiple players, and rendering load on an actual device.
 
-処理はカスタムアイテムコンポーネント `bellity:freeze_nearby_enemies` と `behavior_pack/scripts/main.js` に実装する。対象ごとに効果終了時刻とフリーズ位置を管理し、対象の死亡・消滅、ディメンション移動、ワールド再読み込みが起きても例外や永続的な停止状態を残さない。同じ対象へ効果が重なった場合は最初のフリーズ位置を維持し、終了時刻を後から発動した効果の10秒後まで延長する。
+Implement the processing in the custom item component `bellity:freeze_nearby_enemies` and `behavior_pack/scripts/main.js`. Manage the effect end time and freeze position for each target, leaving no exceptions or permanent suspended states even if the target dies/despawns, changes dimensions, or the world reloads. If effects overlap on the same target, maintain the first freeze position and extend the end time until 10 seconds after the later-activated effect.
 
-## 実装ファイルと確認
+## Implementation Files and Verification
 
-- アイテム：`behavior_pack/items/creepy_horse_eye.json`
-- レシピ：`behavior_pack/recipes/creepy_horse_eye.json`
-- 特殊能力：`behavior_pack/scripts/main.js`
-- 表示名：`resource_pack/texts/ja_JP.lang`、`resource_pack/texts/en_US.lang`
-- アイテム画像：`resource_pack/textures/items/creepy_horse_eye.png`
-- 画像登録：`resource_pack/textures/item_texture.json`
-- 実機では日英の表示名、画像、指定レシピと取得方法、右クリックによるその場での発動、効果範囲が半径7ブロックの球形であること、発動時に範囲内にいた敵だけが10秒間停止すること、発動後20秒間は再使用できないことを確認する。
-- 範囲内外の境界、空中・水中の敵、ノックバック中や落下中の敵、効果中の死亡・消滅・ディメンション移動、複数体への同時適用、複数プレイヤーによる重複使用を確認する。
-- 白色表現が効果範囲と時間に一致し、解除後に残らないこと、範囲外のプレイヤーからの見え方、描画負荷を確認する。
-- 2026-09-21 に `./build.ps1` を実行し、5アイテム・5レシピ、画像、表示名、20秒クールダウン、フリーズ処理のソース検証と `dist/bellity_addon.mcaddon` の生成が成功した。配布アーカイブにアイテム定義、レシピ、スクリプト、画像が含まれることを確認した。Minecraft上での動作確認は未実施。
-- 2026-09-21 に `./install-dev.ps1 -Update` で開発パックを更新し、`./tools/verify-dev.ps1` で Behavior Pack 13ファイル、Resource Pack 14ファイルがソースと一致することを確認した。これは配置確認であり、Minecraft上での動作確認は未実施。
+* Item: `behavior_pack/items/creepy_horse_eye.json`
+* Recipe: `behavior_pack/recipes/creepy_horse_eye.json`
+* Special Ability: `behavior_pack/scripts/main.js`
+* Display Name: `resource_pack/texts/ja_JP.lang`, `resource_pack/texts/en_US.lang`
+* Item Image: `resource_pack/textures/items/creepy_horse_eye.png`
+* Image Registration: `resource_pack/textures/item_texture.json`
+* On actual devices, verify the Japanese/English display names, image, specified recipe and obtaining method, on-the-spot activation via right-click, that the effect area is a sphere with a radius of 7 blocks, that only enemies in the area at activation stop for 10 seconds, and that it cannot be reused for 20 seconds after activation.
+* Verify the boundary between inside and outside the area, airborne/underwater enemies, enemies taking knockback or falling, death/despawn/dimension transfer during the effect, simultaneous application to multiple entities, and overlapping use by multiple players.
+* Verify that the white appearance matches the effect area and time, does not remain after deactivation, the appearance from players outside the area, and the rendering load.
+* On 2026-09-21, ran `./build.ps1`, and source verification of 5 items/5 recipes, images, display names, 20-second cooldown, freeze processing, and generation of `dist/bellity_addon.mcaddon` succeeded. Confirmed that item definitions, recipes, scripts, and images are included in the distribution archive. Operation checks on Minecraft have not yet been conducted.
+* On 2026-09-21, updated the development pack via `./install-dev.ps1 -Update`, and confirmed via `./tools/verify-dev.ps1` that the 13 Behavior Pack files and 14 Resource Pack files match the source. This is a deployment check; operation checks on Minecraft have not yet been conducted.

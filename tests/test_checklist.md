@@ -1,40 +1,40 @@
-# ベリティアドオン 実機チェック
+# Bellity Addon Device Checklist
 
 - [ ] Chotto Netherite Axe crafts at a crafting table with Netherite Ingots in the top left and top middle slots, and Sticks in the center and bottom center slots.
 - [ ] No recipe error appears in the Content Log after reloading the updated development pack.
 
-対象バージョン：＿＿＿＿　確認日：＿＿＿＿
+Target Version: ____ Date Checked: ____
 
-- [ ] ワールドにベリティアドオンのBP/RPを適用でき、Content Log にエラーがない
-- [ ] 5つのアイテムを `/give` で取得できる
-- [ ] 日本語・英語の表示名と5つの画像が正しい
-- [ ] ベリティソードを指定の3×3配置でクラフトできる
-- [ ] ベリティソードの攻撃力が32、耐久値が1233である
-- [ ] ベリティソードの有効な命中ごとに候補から1個ドロップする
-- [ ] ちょっとネザライトの斧の攻撃力が6、耐久値が1200である
-- [ ] ちょっとネザライトの斧で木材を通常より速く掘れる
-- [ ] `/give @s bellity:gizagiza_sword` でギザギザ剣を取得できる
-- [ ] ギザギザ剣が `model_data/gizagiza_sword.png` を元にした外観で表示され、日本語名「ギザギザ剣」・英語名「Gizagiza Sword」が正しい
-- [ ] ギザギザ剣の攻撃力が10、耐久値が1200である
-- [ ] エンチャントなし・ダッシュなし・同じ対象と地形という条件で、ギザギザ剣のノックバック距離がおおむね通常の剣の2倍になる
-- [ ] ギザギザ剣の命中時に対象が真上・真下に近い場合や取得できない場合でも、Content Log にスクリプトエラーが出ない
-- [ ] ギザギザ剣を、上段中央に鉄インゴット、中段の3枠すべてに鉄インゴット、下段中央に棒を置く3×3配置でクラフトできる
-- [ ] 太陽の巨人の光を指定の3×3配置でクラフトできる
-- [ ] 太陽の巨人の光の使用でライトボールが出て耐久が1減る
-- [x] 発射したライトボールが `model_data/sunlight_ball.png` を元にした外観で表示され、標準の雪玉の見た目ではない（2026-09-21 ユーザー確認）
-- [ ] ライトボールの初速・軌道・重力・飛距離・当たり判定が標準の雪玉と同じである
-- [ ] 投擲時に標準の雪玉と同じ音が鳴る
-- [ ] エンティティまたはブロックへの命中時に、標準の雪玉と同様に独自の命中音が鳴らない
-- [ ] エンティティまたはブロックへの命中時に標準の雪玉と同じパーティクルが表示される
-- [ ] ライトボールの命中で10ダメージと5秒の炎上が発生する
-- [ ] ライトボールがブロックに当たってもダメージ・炎上処理のエラーが起きない
-- [ ] 耐久値がなくなると投擲武器が壊れる
-- [ ] クリーピーホースの目を、中央のエンダーアイを石炭8個で囲む3×3配置でクラフトできる
-- [ ] クリーピーホースの目を手に持って右クリックするとその場で発動し、アイテムを消費しない
-- [ ] 発動時点でプレイヤーから半径7ブロック以内にいる `monster` ファミリーの敵だけが10秒間その位置と向きに固定される
-- [ ] 効果範囲外の敵、発動後に範囲へ入った敵、プレイヤー、友好モブ、アイテム、投射物はフリーズしない
-- [ ] フリーズ中は歩行・飛行・ノックバック・落下・水流による移動が止まり、10秒後に移動できる
-- [ ] 発動後20秒間は再使用できず、20秒後に再使用できる
-- [ ] 効果中だけ半径7ブロックの球内に白いパーティクルが表示され、解除後に残らない
-- [ ] 敵の死亡・消滅・ディメンション移動、複数体、複数プレイヤーの重複使用でも Content Log にスクリプトエラーが出ない
-- [ ] セーブしてワールドを再読み込みしても武器が保持される
+- [ ] Can apply the Bellity Addon BP/RP to the world, and there are no errors in the Content Log.
+- [ ] The 5 items can be obtained with `/give`.
+- [ ] The Japanese and English display names and the 5 images are correct.
+- [ ] The Bellity Sword can be crafted with the specified 3x3 layout.
+- [ ] The Bellity Sword has an attack damage of 32 and a durability of 1233.
+- [ ] One item from the candidates drops on every valid hit with the Bellity Sword.
+- [ ] The Chotto Netherite Axe has an attack damage of 6 and a durability of 1200.
+- [ ] Wood blocks can be mined faster than usual with the Chotto Netherite Axe.
+- [ ] The Gizagiza Sword can be obtained with `/give @s bellity:gizagiza_sword`.
+- [ ] The Gizagiza Sword is displayed with an appearance based on `model_data/gizagiza_sword.png`, and the Japanese name "ギザギザ剣" and English name "Gizagiza Sword" are correct.
+- [ ] The Gizagiza Sword has an attack damage of 10 and a durability of 1200.
+- [ ] Under the conditions of no enchantments, no sprinting, and the same target and terrain, the knockback distance of the Gizagiza Sword is approximately twice that of a normal sword.
+- [ ] No script error appears in the Content Log even if the target is almost directly above or below, or if the position cannot be obtained upon hitting with the Gizagiza Sword.
+- [ ] The Gizagiza Sword can be crafted in a 3x3 layout by placing an Iron Ingot in the top center, Iron Ingots in all 3 middle slots, and a Stick in the bottom center.
+- [ ] The Sun Bigman Light can be crafted with the specified 3x3 layout.
+- [ ] Using the Sun Bigman Light shoots a light ball and reduces durability by 1.
+- [x] The fired light ball is displayed with an appearance based on `model_data/sunlight_ball.png` and does not look like a standard snowball (Confirmed by user on 2026-09-21).
+- [ ] The initial velocity, trajectory, gravity, flight distance, and hitbox of the light ball are the same as a standard snowball.
+- [ ] The same sound as a standard snowball plays when thrown.
+- [ ] Like a standard snowball, no unique hit sound plays when hitting an entity or block.
+- [ ] The same particles as a standard snowball are displayed when hitting an entity or block.
+- [ ] Hitting with the light ball deals 10 damage and inflicts burning for 5 seconds.
+- [ ] No errors occur in the damage and burning processes even if the light ball hits a block.
+- [ ] The throwing weapon breaks when durability runs out.
+- [ ] The Creepy Horse Eye can be crafted in a 3x3 layout by surrounding an Ender Eye in the center with 8 Coal.
+- [ ] Holding the Creepy Horse Eye and right-clicking activates it on the spot without consuming the item.
+- [ ] Only enemies in the `monster` family within a 7-block radius of the player at the time of activation are frozen in their position and rotation for 10 seconds.
+- [ ] Enemies outside the effect range, enemies that enter the range after activation, players, friendly mobs, items, and projectiles do not freeze.
+- [ ] During the freeze, movement by walking, flying, knockback, falling, and water currents is stopped, and they can move again after 10 seconds.
+- [ ] Cannot be reused for 20 seconds after activation, and can be reused after 20 seconds.
+- [ ] White particles are displayed within a 7-block radius sphere only during the effect, and do not remain after it wears off.
+- [ ] No script error appears in the Content Log even with enemy death, despawning, dimension travel, multiple entities, or overlapping use by multiple players.
+- [ ] Weapons are retained even if you save and reload the world.

@@ -14,6 +14,7 @@
 - Before starting work, read the related design documents and implementations. If there are discrepancies, reorganize them to match the current requirements.
 - When adding an item, create an individual design document and update the list and links in `spec/README.md`.
 - After making changes, ensure that no outdated descriptions or broken links remain. Do not state that an unverified in-game behavior has been verified.
+- Do not build an `.mcaddon` package automatically. If packaging is needed, ask the user before building it.
 
 ## Utilizing Sub-Agents
 
