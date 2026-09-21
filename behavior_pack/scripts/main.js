@@ -2,6 +2,7 @@ import { EquipmentSlot, ItemStack, system, world } from "@minecraft/server";
 
 const LIGHT_ID = "bellity:sun_bigman_light";
 const LIGHT_BALL_ID = "bellity:light_ball";
+const EXTRA_KNOCKBACK_STRENGTH = 0.4;
 const DROP_ITEMS = [
   "minecraft:apple",
   "minecraft:coal",
@@ -25,6 +26,37 @@ function dropRandomItem(event) {
   } catch (error) {
     console.warn(`Bellity sword drop failed: ${error}`);
   }
+}
+
+function applyDoubleKnockback(event) {
+  if (!event.hadEffect) return;
+
+  const attacker = event.attackingEntity;
+  const target = event.hitEntity;
+  let directionX = target.location.x - attacker.location.x;
+  let directionZ = target.location.z - attacker.location.z;
+  let horizontalLength = Math.hypot(directionX, directionZ);
+
+  if (horizontalLength < 0.001) {
+    const view = attacker.getViewDirection();
+    directionX = view.x;
+    directionZ = view.z;
+    horizontalLength = Math.hypot(directionX, directionZ);
+  }
+  if (horizontalLength < 0.001) return;
+
+  const horizontalForce = {
+    x: (directionX / horizontalLength) * EXTRA_KNOCKBACK_STRENGTH,
+    z: (directionZ / horizontalLength) * EXTRA_KNOCKBACK_STRENGTH,
+  };
+
+  system.run(() => {
+    try {
+      target.applyKnockback(horizontalForce, 0);
+    } catch (error) {
+      console.warn(`Gizagiza sword knockback failed: ${error}`);
+    }
+  });
 }
 
 function throwLight(event) {
@@ -83,6 +115,9 @@ function throwLight(event) {
 system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {
   itemComponentRegistry.registerCustomComponent("bellity:random_drop_on_hit", {
     onHitEntity: dropRandomItem,
+  });
+  itemComponentRegistry.registerCustomComponent("bellity:double_knockback_on_hit", {
+    onHitEntity: applyDoubleKnockback,
   });
   itemComponentRegistry.registerCustomComponent("bellity:throw_light", {
     onUse: throwLight,

@@ -1,0 +1,22 @@
+{
+  "format_version": "1.21.110",
+  "minecraft:item": {
+    "description": {
+      "identifier": "bellity:gizagiza_sword",
+      "menu_category": {
+        "category": "equipment",
+        "group": "minecraft:itemGroup.name.sword"
+      }
+    },
+    "components": {
+      "minecraft:display_name": { "value": "item.bellity:gizagiza_sword.name" },
+      "minecraft:icon": "gizagiza_sword",
+      "minecraft:max_stack_size": 1,
+      "minecraft:hand_equipped": true,
+      "minecraft:tags": { "tags": ["minecraft:is_sword"] },
+      "minecraft:damage": 9,
+      "minecraft:durability": { "max_durability": 1200 },
+      "bellity:double_knockback_on_hit": {}
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
@@ -18,17 +18,21 @@ const weapons = [
   ["bellity_sword", "bellity:bellity_sword", 31, 1233],
   ["noboru_netherite_axe", "bellity:noboru_netherite_axe", 5, 1200],
   ["sun_bigman_light", "bellity:sun_bigman_light", undefined, 500],
+  ["gizagiza_sword", "bellity:gizagiza_sword", 9, 1200, "bellity:double_knockback_on_hit"],
 ];
 const atlas = json("resource_pack/textures/item_texture.json").texture_data;
 const languages = ["en_US", "ja_JP"];
 
-for (const [file, id, damage, durability] of weapons) {
+for (const [file, id, damage, durability, customComponent] of weapons) {
   const item = json(`behavior_pack/items/${file}.json`)["minecraft:item"];
   assert.equal(item.description.identifier, id);
   const nameKey = `item.${id}.name`;
   assert.equal(item.components["minecraft:display_name"]?.value, nameKey);
   assert.equal(item.components["minecraft:damage"], damage);
   assert.equal(item.components["minecraft:durability"].max_durability, durability);
+  if (customComponent !== undefined) {
+    assert.deepEqual(item.components[customComponent], {});
+  }
   assert.equal(atlas[file].textures, `textures/items/${file}`);
 
   const png = readFileSync(resolve(root, `resource_pack/textures/items/${file}.png`));
@@ -41,11 +45,24 @@ for (const [file, id, damage, durability] of weapons) {
   }
 }
 
+assert.deepEqual(
+  readFileSync(resolve(root, "resource_pack/textures/items/gizagiza_sword.png")),
+  readFileSync(resolve(root, "model_data/gizagiza_sword.png")),
+);
+assert(readFileSync(resolve(root, "resource_pack/texts/ja_JP.lang"), "utf8")
+  .split(/\r?\n/).includes("item.bellity:gizagiza_sword.name=ギザギザ剣"));
+assert(readFileSync(resolve(root, "resource_pack/texts/en_US.lang"), "utf8")
+  .split(/\r?\n/).includes("item.bellity:gizagiza_sword.name=Gizagiza Sword"));
+
 for (const [file, expectedRows, expectedKey] of [
   ["bellity_sword", ["HG ", " C ", " B "], {
     H: { item: "minecraft:flint_and_steel" },
     G: { item: "minecraft:gold_ingot" },
     C: { item: "minecraft:creeper_head" },
+    B: { item: "minecraft:stick" },
+  }],
+  ["gizagiza_sword", [" I ", "III", " B "], {
+    I: { item: "minecraft:iron_ingot" },
     B: { item: "minecraft:stick" },
   }],
   ["noboru_netherite_axe", ["NN ", " B ", " B "], {
@@ -67,6 +84,16 @@ for (const [file, expectedRows, expectedKey] of [
   assert.equal(recipe.result.item, `bellity:${file}`);
   assert.equal(recipe.result.count, 1);
 }
+
+const recipeFiles = readdirSync(resolve(root, "behavior_pack/recipes"))
+  .filter((file) => file.endsWith(".json"))
+  .sort();
+assert.deepEqual(recipeFiles, [
+  "bellity_sword.json",
+  "gizagiza_sword.json",
+  "noboru_netherite_axe.json",
+  "sun_bigman_light.json",
+]);
 
 assert(existsSync(resolve(root, "behavior_pack/scripts/main.js")));
 const lightBallId = "bellity:light_ball";
@@ -103,8 +130,11 @@ assert.deepEqual(
   readFileSync(resolve(root, "model_data/sunlight_ball.png")),
 );
 const script = readFileSync(resolve(root, "behavior_pack/scripts/main.js"), "utf8");
+assert.match(script, /itemComponentRegistry\.registerCustomComponent\("bellity:double_knockback_on_hit"/);
+assert.match(script, /const EXTRA_KNOCKBACK_STRENGTH = 0\.4/);
+assert.match(script, /target\.applyKnockback\(horizontalForce, 0\)/);
 assert.match(script, /player\.dimension\.spawnEntity\(LIGHT_BALL_ID, origin\)/);
 assert.match(script, /const LIGHT_BALL_ID = "bellity:light_ball"/);
 assert.match(script, /player\.dimension\.playSound\("random\.bow", player\.location/);
 
-console.log("Bellity pack validation passed: 3 items, 3 recipes, light ball, textures, names, manifests.");
+console.log("Bellity pack validation passed: 4 items, 4 recipes, light ball, textures, names, manifests.");
