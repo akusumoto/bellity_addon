@@ -1,0 +1,21 @@
+{
+  "format_version": "1.21.110",
+  "minecraft:item": {
+    "description": {
+      "identifier": "bellity:creepy_horse_eye",
+      "menu_category": {
+        "category": "equipment"
+      }
+    },
+    "components": {
+      "minecraft:display_name": { "value": "item.bellity:creepy_horse_eye.name" },
+      "minecraft:icon": "creepy_horse_eye",
+      "minecraft:max_stack_size": 1,
+      "minecraft:hand_equipped": true,
+      "minecraft:interact_button": true,
+      "minecraft:use_modifiers": { "use_duration": 0.1, "movement_modifier": 1.0 },
+      "minecraft:cooldown": { "category": "creepy_horse_eye", "duration": 20 },
+      "bellity:freeze_nearby_enemies": {}
+    }
+  }
+}

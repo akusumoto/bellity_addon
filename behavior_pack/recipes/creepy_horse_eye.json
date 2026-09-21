@@ -1,0 +1,14 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shaped": {
+    "description": { "identifier": "bellity:creepy_horse_eye" },
+    "tags": ["crafting_table"],
+    "unlock": { "context": "AlwaysUnlocked" },
+    "pattern": ["SSS", "SES", "SSS"],
+    "key": {
+      "S": { "item": "minecraft:coal" },
+      "E": { "item": "minecraft:ender_eye" }
+    },
+    "result": { "item": "bellity:creepy_horse_eye", "count": 1 }
+  }
+}

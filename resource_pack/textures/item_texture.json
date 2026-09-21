@@ -3,6 +3,7 @@
   "texture_name": "atlas.items",
   "texture_data": {
     "bellity_sword": { "textures": "textures/items/bellity_sword" },
+    "creepy_horse_eye": { "textures": "textures/items/creepy_horse_eye" },
     "gizagiza_sword": { "textures": "textures/items/gizagiza_sword" },
     "noboru_netherite_axe": { "textures": "textures/items/noboru_netherite_axe" },
     "sun_bigman_light": { "textures": "textures/items/sun_bigman_light" }

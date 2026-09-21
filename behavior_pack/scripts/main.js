@@ -1,8 +1,14 @@
-import { EquipmentSlot, ItemStack, system, world } from "@minecraft/server";
+import { EquipmentSlot, ItemStack, MolangVariableMap, system, world } from "@minecraft/server";
 
 const LIGHT_ID = "bellity:sun_bigman_light";
 const LIGHT_BALL_ID = "bellity:light_ball";
+const CREEPY_HORSE_EYE_ID = "bellity:creepy_horse_eye";
 const EXTRA_KNOCKBACK_STRENGTH = 0.4;
+const FREEZE_RADIUS = 7;
+const FREEZE_DURATION_TICKS = 200;
+const FREEZE_PARTICLE_INTERVAL_TICKS = 10;
+const FREEZE_PARTICLES_PER_BURST = 16;
+const FREEZE_PARTICLE_ID = "minecraft:colored_flame_particle";
 const DROP_ITEMS = [
   "minecraft:apple",
   "minecraft:coal",
@@ -16,6 +22,10 @@ const DROP_ITEMS = [
 
 const lastThrowTick = new Map();
 const lightProjectiles = new Set();
+const frozenEntities = new Map();
+const freezeZones = [];
+const whiteParticleVariables = new MolangVariableMap();
+whiteParticleVariables.setColorRGB("variable.color", { red: 0.92, green: 0.95, blue: 1.0 });
 
 function dropRandomItem(event) {
   if (!event.hadEffect) return;
@@ -112,6 +122,132 @@ function throwLight(event) {
   }
 }
 
+function randomPointInSphere(center, radius) {
+  let x;
+  let y;
+  let z;
+  do {
+    x = Math.random() * 2 - 1;
+    y = Math.random() * 2 - 1;
+    z = Math.random() * 2 - 1;
+  } while (x * x + y * y + z * z > 1);
+
+  return {
+    x: center.x + x * radius,
+    y: center.y + y * radius,
+    z: center.z + z * radius,
+  };
+}
+
+function spawnFreezeParticles(zone) {
+  for (let index = 0; index < FREEZE_PARTICLES_PER_BURST; index += 1) {
+    zone.dimension.spawnParticle(
+      FREEZE_PARTICLE_ID,
+      randomPointInSphere(zone.center, FREEZE_RADIUS),
+      whiteParticleVariables,
+    );
+  }
+}
+
+function holdFrozenEntity(frozen) {
+  frozen.entity.teleport(frozen.location, {
+    dimension: frozen.dimension,
+    keepVelocity: false,
+    rotation: frozen.rotation,
+  });
+  frozen.entity.clearVelocity();
+}
+
+function freezeNearbyEnemies(event) {
+  const player = event.source;
+
+  try {
+    const equipment = player.getComponent("minecraft:equippable");
+    const item = equipment?.getEquipmentSlot(EquipmentSlot.Mainhand)?.getItem();
+    if (!item || item.typeId !== CREEPY_HORSE_EYE_ID) return;
+
+    const center = { ...player.location };
+    const dimension = player.dimension;
+    const untilTick = system.currentTick + FREEZE_DURATION_TICKS;
+    const enemies = dimension.getEntities({
+      location: center,
+      maxDistance: FREEZE_RADIUS,
+      families: ["monster"],
+    });
+
+    for (const entity of enemies) {
+      try {
+        const existing = frozenEntities.get(entity.id);
+        if (existing) {
+          existing.untilTick = Math.max(existing.untilTick, untilTick);
+          continue;
+        }
+
+        const frozen = {
+          entity,
+          dimension,
+          location: { ...entity.location },
+          rotation: entity.getRotation(),
+          untilTick,
+        };
+        holdFrozenEntity(frozen);
+        frozenEntities.set(entity.id, frozen);
+      } catch (error) {
+        console.warn(`Creepy Horse Eye could not freeze ${entity.id}: ${error}`);
+      }
+    }
+
+    const zone = { center, dimension, untilTick };
+    freezeZones.push(zone);
+    try {
+      spawnFreezeParticles(zone);
+    } catch (error) {
+      freezeZones.pop();
+      console.warn(`Creepy Horse Eye particles failed: ${error}`);
+    }
+  } catch (error) {
+    console.warn(`Creepy Horse Eye activation failed: ${error}`);
+  }
+}
+
+function updateCreepyHorseEyeEffects() {
+  const now = system.currentTick;
+
+  for (const [entityId, frozen] of frozenEntities) {
+    if (now >= frozen.untilTick || !frozen.entity.isValid) {
+      frozenEntities.delete(entityId);
+      continue;
+    }
+
+    try {
+      if (frozen.entity.dimension.id !== frozen.dimension.id) {
+        frozenEntities.delete(entityId);
+        continue;
+      }
+      holdFrozenEntity(frozen);
+    } catch (error) {
+      frozenEntities.delete(entityId);
+      console.warn(`Creepy Horse Eye freeze failed for ${entityId}: ${error}`);
+    }
+  }
+
+  for (let index = freezeZones.length - 1; index >= 0; index -= 1) {
+    const zone = freezeZones[index];
+    if (now >= zone.untilTick) {
+      freezeZones.splice(index, 1);
+      continue;
+    }
+    if (now % FREEZE_PARTICLE_INTERVAL_TICKS !== 0) continue;
+
+    try {
+      spawnFreezeParticles(zone);
+    } catch (error) {
+      freezeZones.splice(index, 1);
+      console.warn(`Creepy Horse Eye particles failed: ${error}`);
+    }
+  }
+}
+
 system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {
   itemComponentRegistry.registerCustomComponent("bellity:random_drop_on_hit", {
     onHitEntity: dropRandomItem,
@@ -122,7 +258,12 @@ system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {
   itemComponentRegistry.registerCustomComponent("bellity:throw_light", {
     onUse: throwLight,
   });
+  itemComponentRegistry.registerCustomComponent("bellity:freeze_nearby_enemies", {
+    onUse: freezeNearbyEnemies,
+  });
 });
+
+system.runInterval(updateCreepyHorseEyeEffects, 1);
 
 world.afterEvents.projectileHitEntity.subscribe((event) => {
   try {

@@ -16,6 +16,7 @@ assert(bp.dependencies.some((d) => d.module_name === "@minecraft/server"));
 
 const weapons = [
   ["bellity_sword", "bellity:bellity_sword", 31, 1233],
+  ["creepy_horse_eye", "bellity:creepy_horse_eye", undefined, undefined, "bellity:freeze_nearby_enemies"],
   ["noboru_netherite_axe", "bellity:noboru_netherite_axe", 5, 1200],
   ["sun_bigman_light", "bellity:sun_bigman_light", undefined, 500],
   ["gizagiza_sword", "bellity:gizagiza_sword", 9, 1200, "bellity:double_knockback_on_hit"],
@@ -29,7 +30,8 @@ for (const [file, id, damage, durability, customComponent] of weapons) {
   const nameKey = `item.${id}.name`;
   assert.equal(item.components["minecraft:display_name"]?.value, nameKey);
   assert.equal(item.components["minecraft:damage"], damage);
-  assert.equal(item.components["minecraft:durability"].max_durability, durability);
+  assert.equal(item.components["minecraft:durability"]?.max_durability, durability);
+  assert.equal(item.components["minecraft:max_stack_size"], 1);
   if (customComponent !== undefined) {
     assert.deepEqual(item.components[customComponent], {});
   }
@@ -46,6 +48,10 @@ for (const [file, id, damage, durability, customComponent] of weapons) {
 }
 
 assert.deepEqual(
+  readFileSync(resolve(root, "resource_pack/textures/items/creepy_horse_eye.png")),
+  readFileSync(resolve(root, "model_data/creepy_horse_eye.png")),
+);
+assert.deepEqual(
   readFileSync(resolve(root, "resource_pack/textures/items/gizagiza_sword.png")),
   readFileSync(resolve(root, "model_data/gizagiza_sword.png")),
 );
@@ -54,12 +60,27 @@ assert(readFileSync(resolve(root, "resource_pack/texts/ja_JP.lang"), "utf8")
 assert(readFileSync(resolve(root, "resource_pack/texts/en_US.lang"), "utf8")
   .split(/\r?\n/).includes("item.bellity:gizagiza_sword.name=Gizagiza Sword"));
 
+const creepyHorseEye = json("behavior_pack/items/creepy_horse_eye.json")["minecraft:item"];
+assert.equal(creepyHorseEye.components["minecraft:interact_button"], true);
+assert.deepEqual(creepyHorseEye.components["minecraft:use_modifiers"], {
+  use_duration: 0.1,
+  movement_modifier: 1.0,
+});
+assert.deepEqual(creepyHorseEye.components["minecraft:cooldown"], {
+  category: "creepy_horse_eye",
+  duration: 20,
+});
+
 for (const [file, expectedRows, expectedKey] of [
   ["bellity_sword", ["HG ", " C ", " B "], {
     H: { item: "minecraft:flint_and_steel" },
     G: { item: "minecraft:gold_ingot" },
     C: { item: "minecraft:creeper_head" },
     B: { item: "minecraft:stick" },
+  }],
+  ["creepy_horse_eye", ["SSS", "SES", "SSS"], {
+    S: { item: "minecraft:coal" },
+    E: { item: "minecraft:ender_eye" },
   }],
   ["gizagiza_sword", [" I ", "III", " B "], {
     I: { item: "minecraft:iron_ingot" },
@@ -90,6 +111,7 @@ const recipeFiles = readdirSync(resolve(root, "behavior_pack/recipes"))
   .sort();
 assert.deepEqual(recipeFiles, [
   "bellity_sword.json",
+  "creepy_horse_eye.json",
   "gizagiza_sword.json",
   "noboru_netherite_axe.json",
   "sun_bigman_light.json",
@@ -136,5 +158,12 @@ assert.match(script, /target\.applyKnockback\(horizontalForce, 0\)/);
 assert.match(script, /player\.dimension\.spawnEntity\(LIGHT_BALL_ID, origin\)/);
 assert.match(script, /const LIGHT_BALL_ID = "bellity:light_ball"/);
 assert.match(script, /player\.dimension\.playSound\("random\.bow", player\.location/);
+assert.match(script, /itemComponentRegistry\.registerCustomComponent\("bellity:freeze_nearby_enemies"/);
+assert.match(script, /const FREEZE_RADIUS = 7/);
+assert.match(script, /const FREEZE_DURATION_TICKS = 200/);
+assert.match(script, /families: \["monster"\]/);
+assert.match(script, /frozen\.entity\.teleport\(frozen\.location/);
+assert.match(script, /frozen\.entity\.clearVelocity\(\)/);
+assert.match(script, /spawnParticle\(/);
 
-console.log("Bellity pack validation passed: 4 items, 4 recipes, light ball, textures, names, manifests.");
+console.log("Bellity pack validation passed: 5 items, 5 recipes, light ball, freeze effect, textures, names, manifests.");
