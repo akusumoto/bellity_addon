@@ -30,7 +30,9 @@ Target Version: ____ Date Checked: ____
 - [ ] No errors occur in the damage and burning processes even if the light ball hits a block.
 - [ ] The throwing weapon breaks when durability runs out.
 - [ ] The Creepy Horse Eye can be crafted in a 3x3 layout by surrounding an Ender Eye in the center with 8 Coal.
+- [ ] After applying or reloading the packs, `main.js` loads without an early-execution `MolangVariableMap` constructor error in the Content Log.
 - [ ] Holding the Creepy Horse Eye and right-clicking activates it on the spot without consuming the item.
+- [ ] On the first activation after loading the world, white particles appear without a script error in the Content Log.
 - [ ] Only enemies in the `monster` family within a 7-block radius of the player at the time of activation are frozen in their position and rotation for 10 seconds.
 - [ ] Enemies outside the effect range, enemies that enter the range after activation, players, friendly mobs, items, and projectiles do not freeze.
 - [ ] During the freeze, movement by walking, flying, knockback, falling, and water currents is stopped, and they can move again after 10 seconds.

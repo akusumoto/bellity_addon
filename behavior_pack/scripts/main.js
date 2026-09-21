@@ -24,8 +24,19 @@ const lastThrowTick = new Map();
 const lightProjectiles = new Set();
 const frozenEntities = new Map();
 const freezeZones = [];
-const whiteParticleVariables = new MolangVariableMap();
-whiteParticleVariables.setColorRGB("variable.color", { red: 0.92, green: 0.95, blue: 1.0 });
+let whiteParticleVariables;
+
+function getWhiteParticleVariables() {
+  if (!whiteParticleVariables) {
+    whiteParticleVariables = new MolangVariableMap();
+    whiteParticleVariables.setColorRGB("variable.color", {
+      red: 0.92,
+      green: 0.95,
+      blue: 1.0,
+    });
+  }
+  return whiteParticleVariables;
+}
 
 function dropRandomItem(event) {
   if (!event.hadEffect) return;
@@ -144,7 +155,7 @@ function spawnFreezeParticles(zone) {
     zone.dimension.spawnParticle(
       FREEZE_PARTICLE_ID,
       randomPointInSphere(zone.center, FREEZE_RADIUS),
-      whiteParticleVariables,
+      getWhiteParticleVariables(),
     );
   }
 }

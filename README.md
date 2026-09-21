@@ -12,9 +12,37 @@ This is a custom item addon for Minecraft Bedrock Edition 1.21.110 or later. Com
 
 ## Build and Installation
 
-Run `./build.ps1` from the root of the project using PowerShell. If verification succeeds, it generates `dist/bellity_addon.mcaddon`. Import this file into Minecraft and enable both the Behavior Pack and Resource Pack in your world.
+Run the following commands from the project root in PowerShell.
 
-Development packs are deployed initially using `./install-dev.ps1`. To update existing Bellity development packs, run `./install-dev.ps1 -Update`, and use `./tools/verify-dev.ps1` to verify that the destination matches the source. Reload the world after updating.
+### Create an `.mcaddon` Package
+
+```powershell
+./build.ps1
+```
+
+This command checks the JavaScript syntax, validates the pack files, and then creates `dist/bellity_addon.mcaddon`. Node.js must be available on `PATH`. Any existing package at that path is replaced. Import the generated file into Minecraft, then enable both the Behavior Pack and Resource Pack in your world.
+
+### Install Development Packs
+
+Close the affected Minecraft world before installing or updating the development packs. For the initial installation, run:
+
+```powershell
+./install-dev.ps1
+```
+
+This copies the Behavior Pack and Resource Pack to the Minecraft Bedrock development-pack directories under `%APPDATA%\Minecraft Bedrock\Users\Shared\games\com.mojang`. The script stops if those directories cannot be found or if Bellity development packs are already installed.
+
+After changing the source files, update the existing development packs with:
+
+```powershell
+./install-dev.ps1 -Update
+```
+
+Update mode requires both installed Bellity packs to exist and verifies that their UUIDs match the source packs before overwriting their contents. It does not remove stale files that exist only in the installed directories. After installation or an update, verify the copied files and reload the world:
+
+```powershell
+./tools/verify-dev.ps1
+```
 
 Obtaining commands:
 

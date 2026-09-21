@@ -165,5 +165,8 @@ assert.match(script, /families: \["monster"\]/);
 assert.match(script, /frozen\.entity\.teleport\(frozen\.location/);
 assert.match(script, /frozen\.entity\.clearVelocity\(\)/);
 assert.match(script, /spawnParticle\(/);
+assert.doesNotMatch(script, /^const whiteParticleVariables = new MolangVariableMap\(\);/m);
+assert.match(script, /function getWhiteParticleVariables\(\)/);
+assert.match(script, /getWhiteParticleVariables\(\),/);
 
 console.log("Bellity pack validation passed: 5 items, 5 recipes, light ball, freeze effect, textures, names, manifests.");
