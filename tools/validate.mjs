@@ -69,4 +69,42 @@ for (const [file, expectedRows, expectedKey] of [
 }
 
 assert(existsSync(resolve(root, "behavior_pack/scripts/main.js")));
-console.log("Bellity pack validation passed: 3 items, 3 recipes, textures, names, manifests.");
+const lightBallId = "bellity:light_ball";
+const lightBall = json("behavior_pack/entities/light_ball.json")["minecraft:entity"];
+assert.equal(lightBall.description.identifier, lightBallId);
+const lightBallProjectile = lightBall.components["minecraft:projectile"];
+assert.deepEqual(lightBallProjectile.on_hit, {
+  remove_on_hit: {},
+  particle_on_hit: {
+    particle_type: "snowballpoof",
+    num_particles: 6,
+    on_entity_hit: true,
+    on_other_hit: true,
+  },
+});
+assert.equal(lightBallProjectile.anchor, 1);
+assert.equal(lightBallProjectile.power, 1.5);
+assert.equal(lightBallProjectile.gravity, 0.03);
+assert.equal(lightBallProjectile.inertia, 1);
+assert.equal(lightBallProjectile.angle_offset, 0);
+assert.deepEqual(lightBallProjectile.offset, [0, -0.1, 0]);
+assert.equal("hit_sound" in lightBallProjectile, false);
+assert.equal("hit_ground_sound" in lightBallProjectile, false);
+
+const clientLightBall = json("resource_pack/entity/light_ball.entity.json")["minecraft:client_entity"].description;
+assert.equal(clientLightBall.identifier, lightBallId);
+assert.equal(clientLightBall.textures.default, "textures/entity/light_ball");
+assert.equal(clientLightBall.geometry.default, "geometry.item_sprite");
+assert(json("resource_pack/animations/light_ball.animation.json").animations[clientLightBall.animations.flying]);
+assert(json("resource_pack/render_controllers/light_ball.render_controllers.json")
+  .render_controllers[clientLightBall.render_controllers[0]]);
+assert.deepEqual(
+  readFileSync(resolve(root, "resource_pack/textures/entity/light_ball.png")),
+  readFileSync(resolve(root, "model_data/sunlight_ball.png")),
+);
+const script = readFileSync(resolve(root, "behavior_pack/scripts/main.js"), "utf8");
+assert.match(script, /player\.dimension\.spawnEntity\(LIGHT_BALL_ID, origin\)/);
+assert.match(script, /const LIGHT_BALL_ID = "bellity:light_ball"/);
+assert.match(script, /player\.dimension\.playSound\("random\.bow", player\.location/);
+
+console.log("Bellity pack validation passed: 3 items, 3 recipes, light ball, textures, names, manifests.");

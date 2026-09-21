@@ -1,6 +1,7 @@
 import { EquipmentSlot, ItemStack, system, world } from "@minecraft/server";
 
 const LIGHT_ID = "bellity:sun_bigman_light";
+const LIGHT_BALL_ID = "bellity:light_ball";
 const DROP_ITEMS = [
   "minecraft:apple",
   "minecraft:coal",
@@ -47,11 +48,11 @@ function throwLight(event) {
       y: head.y + direction.y * 0.6,
       z: head.z + direction.z * 0.6,
     };
-    const projectile = player.dimension.spawnEntity("minecraft:snowball", origin);
+    const projectile = player.dimension.spawnEntity(LIGHT_BALL_ID, origin);
     const flight = projectile.getComponent("minecraft:projectile");
     if (!flight) {
       projectile.remove();
-      throw new Error("Snowball has no projectile component");
+      throw new Error("Light ball has no projectile component");
     }
 
     lightProjectiles.add(projectile.id);
@@ -61,6 +62,10 @@ function throwLight(event) {
       x: direction.x * 1.5,
       y: direction.y * 1.5,
       z: direction.z * 1.5,
+    });
+    player.dimension.playSound("random.bow", player.location, {
+      volume: 0.5,
+      pitch: 0.33 + Math.random() * 0.17,
     });
 
     if (durability.damage + 1 >= durability.maxDurability) {

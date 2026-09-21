@@ -1,0 +1,14 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "bellity:light_ball",
+      "materials": { "default": "entity_alphatest" },
+      "textures": { "default": "textures/entity/light_ball" },
+      "geometry": { "default": "geometry.item_sprite" },
+      "render_controllers": ["controller.render.bellity_light_ball"],
+      "animations": { "flying": "animation.bellity_light_ball.billboard" },
+      "scripts": { "animate": ["flying"] }
+    }
+  }
+}

@@ -19,11 +19,16 @@ behavior_pack/
 ├─ manifest.json
 ├─ items/                 # 武器ごとのアイテム定義
 ├─ recipes/               # 武器ごとの作業台レシピ
+├─ entities/              # ライトボールの投射物定義
 └─ scripts/main.js        # 剣のドロップと投擲処理
 resource_pack/
 ├─ manifest.json
+├─ entity/                # ライトボールの表示定義
+├─ animations/            # ライトボールの表示アニメーション
+├─ render_controllers/    # ライトボールの描画設定
 ├─ textures/item_texture.json
 ├─ textures/items/        # 武器ごとの画像
+├─ textures/entity/       # ライトボールの画像
 └─ texts/
    ├─ languages.json
    ├─ ja_JP.lang
@@ -34,7 +39,7 @@ tests/test_checklist.md    # 実機確認項目
 dist/bellity_addon.mcaddon # 配布用パック
 ```
 
-Behavior Pack はアイテム、レシピ、Script API の動作を定義する。Resource Pack は表示名と画像を提供する。Behavior Pack は Resource Pack と `@minecraft/server` 2.0.0 に依存する。現在のパックバージョンは Behavior Pack が `1.0.3`、Resource Pack が `1.0.2`。両パックの `min_engine_version` は `1.21.110`。
+Behavior Pack はアイテム、レシピ、Script API の動作を定義する。Resource Pack は表示名と画像を提供する。Behavior Pack は Resource Pack と `@minecraft/server` 2.0.0 に依存する。現在のパックバージョンは Behavior Pack が `1.0.6`、Resource Pack が `1.0.3`。両パックの `min_engine_version` は `1.21.110`。
 
 ## 共通仕様
 
@@ -62,7 +67,7 @@ Windows 版 Minecraft Bedrock の開発用パックの配置先：
 
 - ソース検証では、3アイテムの定義、表示名キー、画像、3レシピの配置・素材・出力・アンロック設定、マニフェストの依存関係を確認する。
 - 実機では、両パックの読み込み、コンテンツログのエラー、日英の表示名、画像、3つのクラフト、各武器の動作、セーブ後の保持を確認する。確認項目は [test_checklist.md](../tests/test_checklist.md) に記録する。
-- ソース検証と開発用パックへの配置は完了している。現行ビルドの Minecraft 上での動作確認は未完了。
+- ソース検証は完了している。2026-09-21 に今回のライトボール変更を `./install-dev.ps1 -Update` で開発用パックへ配置し、`./tools/verify-dev.ps1` で Behavior Pack の9ファイルと Resource Pack の12ファイルがソースと一致することを確認した。Minecraft 上での動作確認は未実施。
 - 修理素材、エンチャント可否、パックアイコン、3Dモデル化、配布時のバランスは今後検討する。武器固有の未決事項は各設計書に記載する。
 
 ## 拡張とバランスの方針
