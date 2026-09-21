@@ -161,9 +161,13 @@ assert.match(script, /player\.dimension\.playSound\("random\.bow", player\.locat
 assert.match(script, /itemComponentRegistry\.registerCustomComponent\("bellity:freeze_nearby_enemies"/);
 assert.match(script, /const FREEZE_RADIUS = 7/);
 assert.match(script, /const FREEZE_DURATION_TICKS = 200/);
+assert.match(script, /const FREEZE_TREMBLE_DISTANCE = 0\.025/);
 assert.match(script, /families: \["monster"\]/);
-assert.match(script, /frozen\.entity\.teleport\(frozen\.location/);
+assert.match(script, /function getFreezeTrembleLocation\(frozen, tick\)/);
+assert.match(script, /frozen\.entity\.teleport\(getFreezeTrembleLocation\(frozen, tick\)/);
+assert.match(script, /frozen\.entity\.setRotation\(frozen\.rotation\)/);
 assert.match(script, /frozen\.entity\.clearVelocity\(\)/);
+assert.match(script, /function releaseFrozenEntity\(frozen\)/);
 assert.match(script, /spawnParticle\(/);
 assert.doesNotMatch(script, /^const whiteParticleVariables = new MolangVariableMap\(\);/m);
 assert.match(script, /function getWhiteParticleVariables\(\)/);

@@ -6,6 +6,7 @@ const CREEPY_HORSE_EYE_ID = "bellity:creepy_horse_eye";
 const EXTRA_KNOCKBACK_STRENGTH = 0.4;
 const FREEZE_RADIUS = 7;
 const FREEZE_DURATION_TICKS = 200;
+const FREEZE_TREMBLE_DISTANCE = 0.025;
 const FREEZE_PARTICLE_INTERVAL_TICKS = 10;
 const FREEZE_PARTICLES_PER_BURST = 16;
 const FREEZE_PARTICLE_ID = "minecraft:colored_flame_particle";
@@ -160,12 +161,34 @@ function spawnFreezeParticles(zone) {
   }
 }
 
-function holdFrozenEntity(frozen) {
+function getFreezeTrembleLocation(frozen, tick) {
+  const step = (tick + frozen.tremblePhase) % 4;
+  const offsetX = step === 0 ? FREEZE_TREMBLE_DISTANCE : step === 2 ? -FREEZE_TREMBLE_DISTANCE : 0;
+  const offsetZ = step === 1 ? FREEZE_TREMBLE_DISTANCE : step === 3 ? -FREEZE_TREMBLE_DISTANCE : 0;
+  return {
+    x: frozen.location.x + offsetX,
+    y: frozen.location.y,
+    z: frozen.location.z + offsetZ,
+  };
+}
+
+function holdFrozenEntity(frozen, tick) {
+  frozen.entity.teleport(getFreezeTrembleLocation(frozen, tick), {
+    dimension: frozen.dimension,
+    keepVelocity: false,
+    rotation: frozen.rotation,
+  });
+  frozen.entity.setRotation(frozen.rotation);
+  frozen.entity.clearVelocity();
+}
+
+function releaseFrozenEntity(frozen) {
   frozen.entity.teleport(frozen.location, {
     dimension: frozen.dimension,
     keepVelocity: false,
     rotation: frozen.rotation,
   });
+  frozen.entity.setRotation(frozen.rotation);
   frozen.entity.clearVelocity();
 }
 
@@ -199,9 +222,10 @@ function freezeNearbyEnemies(event) {
           dimension,
           location: { ...entity.location },
           rotation: entity.getRotation(),
+          tremblePhase: Math.floor(Math.random() * 4),
           untilTick,
         };
-        holdFrozenEntity(frozen);
+        holdFrozenEntity(frozen, system.currentTick);
         frozenEntities.set(entity.id, frozen);
       } catch (error) {
         console.warn(`Creepy Horse Eye could not freeze ${entity.id}: ${error}`);
@@ -225,7 +249,7 @@ function updateCreepyHorseEyeEffects() {
   const now = system.currentTick;
 
   for (const [entityId, frozen] of frozenEntities) {
-    if (now >= frozen.untilTick || !frozen.entity.isValid) {
+    if (!frozen.entity.isValid) {
       frozenEntities.delete(entityId);
       continue;
     }
@@ -235,7 +259,12 @@ function updateCreepyHorseEyeEffects() {
         frozenEntities.delete(entityId);
         continue;
       }
-      holdFrozenEntity(frozen);
+      if (now >= frozen.untilTick) {
+        releaseFrozenEntity(frozen);
+        frozenEntities.delete(entityId);
+        continue;
+      }
+      holdFrozenEntity(frozen, now);
     } catch (error) {
       frozenEntities.delete(entityId);
       console.warn(`Creepy Horse Eye freeze failed for ${entityId}: ${error}`);

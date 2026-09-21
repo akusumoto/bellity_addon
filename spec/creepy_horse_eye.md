@@ -4,25 +4,25 @@
 
 ## Item Specifications
 
-| Item | Specification | 
- | ----- | ----- | 
-| Category | Usable Item (Not a sword, axe, or throwable weapon) | 
-| Japanese Name | クリーピーホースの目 | 
-| English Name | Creepy Horse Eye | 
-| Display Name Key | `item.bellity:creepy_horse_eye.name` | 
-| How to Use | Hold in hand and right-click on the spot to use | 
-| Effect Area | A spherical area equivalent to a radius of 7 blocks centered on the player upon use, 15 blocks in diameter including the center. | 
-| Freeze Duration | 10 seconds (200 game ticks) | 
-| Cooldown Time | 20 seconds (400 game ticks) | 
-| Maximum Stack Size | 1 (Unstackable) | 
-| Image | `resource_pack/textures/items/creepy_horse_eye.png` | 
-| Production Assets | `model_data/creepy_horse_eye.png`, `model_data/creepy_horse_eye.bbmodel` | 
+| Item | Specification |
+|---|---|
+| Category | Usable item (not a sword, axe, or throwable weapon) |
+| Japanese Name | クリーピーホースの目 |
+| English Name | Creepy Horse Eye |
+| Display Name Key | `item.bellity:creepy_horse_eye.name` |
+| How to Use | Hold the item and right-click to use it at the player's current position |
+| Effect Area | A sphere with a 7-block radius centered on the player at activation (15 blocks across when including the center) |
+| Freeze Duration | 10 seconds (200 game ticks) |
+| Cooldown | 20 seconds (400 game ticks) |
+| Maximum Stack Size | 1 (unstackable) |
+| Image | `resource_pack/textures/items/creepy_horse_eye.png` |
+| Production Assets | `model_data/creepy_horse_eye.png`, `model_data/creepy_horse_eye.bbmodel` |
 
-Display in the equipment category in the creative inventory, and enable handheld display and the use button for touch operations. It does not generate a projectile when used; it instantly activates the ability with the player's current position as the center of the effect area. Use duration is 0.1 seconds, and movement multiplier during use is 1.0. Cannot be reused for 20 seconds after activation. Durability is not set, and the item is not consumed upon use.
+Display the item in the equipment category of the Creative inventory, use the handheld presentation, and enable the use button for touch controls. Using the item does not create a projectile; it activates immediately with the player's current position as the center of the effect area. The use duration is 0.1 seconds and the movement multiplier while using it is 1.0. The item cannot be used again for 20 seconds after activation. It has no durability and is not consumed when used.
 
 ## Crafting
 
-Craft 1 item on the crafting table from the following 3x3 layout.
+Craft one item at a crafting table with this 3x3 layout:
 
 ```text
 S S S
@@ -30,36 +30,41 @@ S E S
 S S S
 ```
 
-| Symbol | Material ID | Material Name | 
- | ----- | ----- | ----- | 
-| S | `minecraft:coal` | Coal | 
-| E | `minecraft:ender_eye` | Ender Eye | 
+| Symbol | Material ID | Material Name |
+|---|---|---|
+| S | `minecraft:coal` | Coal |
+| E | `minecraft:ender_eye` | Ender Eye |
 
-Surround 1 Ender Eye with 8 Coals to craft 1 item using `minecraft:recipe_shaped`. The recipe ID and output are `bellity:creepy_horse_eye`. As per common specifications, specify the crafting table tag and `AlwaysUnlocked`. Also make it obtainable via the creative inventory and `/give @s bellity:creepy_horse_eye`.
+Surround one Ender Eye with eight Coal and produce one item using `minecraft:recipe_shaped`. The recipe ID and output are both `bellity:creepy_horse_eye`. In accordance with the common specifications, include the crafting-table tag and `AlwaysUnlocked`. The item must also be obtainable from the Creative inventory and with `/give @s bellity:creepy_horse_eye`.
 
 ## Special Ability
 
-Confirm a spherical target area centered on the player's position at the exact moment of use (right-click), and freeze enemies within that area for 10 seconds. Do not add enemies that enter the area after activation to the targets; even if an enemy targeted at activation tries to leave the area, it remains frozen for the duration of the effect.
+At the moment of use, establish a spherical target area centered on the player's position and freeze enemies within it for 10 seconds. Enemies entering the area after activation are not added as targets. An enemy captured at activation remains frozen for the full duration even if it attempts to leave the area.
 
-Targets shall be entities belonging to the `monster` family in Bedrock. This check excludes players, friendly mobs, items, and projectiles. Because the check uses the family rather than whether they are currently targeting the player, mobs like Endermen, Spiders, and Piglins are targeted even in a neutral state. Conversely, entities with hostile behavior that lack the `monster` family are excluded.
+Targets are entities in Bedrock's `monster` family. This excludes players, friendly mobs, items, and projectiles. Because selection is based on family rather than current hostility, neutral Endermen, Spiders, Piglins, and similar mobs are included. Conversely, an entity with hostile behavior but without the `monster` family is excluded.
 
-During a freeze, return the target to the position and rotation recorded at activation every game tick, and set its velocity to 0. This stops spontaneous movement such as walking or flying, as well as movement from knockback, falling, or water currents. Because Script API 2.0.0 lacks a stable API to universally stop AI or model animations, stopping attack processing, AI internal timers, Creeper fuses, and model animations is not guaranteed.
+In this specification, "freeze" means stopping the target's normal self-directed motion—including walking, flying, falling, knockback, movement caused by water currents, and changes to its body or head direction—while retaining the position and direction captured at activation. To make the frozen state visible, apply a slight tremble of no more than 0.025 blocks around the anchor position every tick without cumulative drift. At the end of the effect, restore the exact anchor position and direction so normal movement can resume.
 
-The space of the effect area will display `minecraft:colored_flame_particle` specified as white at 16 random points within the sphere every 10 game ticks, making it appear slightly whiter than usual only during the freeze. The types and states of the blocks themselves are not changed. After 10 seconds, stop generating new particles, returning to normal appearance as the remaining particles disappear. Check the ease of recognizing the sphere, whiteness, impact on visibility, appearance from multiple players, and rendering load on an actual device.
+The implementation stores the target's location and rotation, teleports it to a tiny offset from the anchor every tick, reapplies its captured rotation, and clears its velocity. This corrects movement, primary body rotation, and the head direction of most mobs. However, stable Script API 2.0.0 has no API that can individually and comprehensively suspend AI, attacks, internal timers, model animations, vocalizations, or attack sounds for every arbitrary vanilla mob. Sound stopping operates by listener or sound ID and would affect unrelated sounds, so it is not used. These behaviors are not guaranteed to stop completely and any remaining behavior must be recorded during device verification.
 
-Implement the processing in the custom item component `bellity:freeze_nearby_enemies` and `behavior_pack/scripts/main.js`. Manage the effect end time and freeze position for each target, leaving no exceptions or permanent suspended states even if the target dies/despawns, changes dimensions, or the world reloads. If effects overlap on the same target, maintain the first freeze position and extend the end time until 10 seconds after the later-activated effect.
+Within the effect area, display white `minecraft:colored_flame_particle` particles at 16 random points inside the sphere every 10 game ticks. Do not change any block type or state. Stop generating particles after 10 seconds; the appearance returns to normal as the remaining particles disappear. Verify the sphere's visibility, whiteness, effect on visibility, appearance to multiple players, and rendering load on a device.
+
+Implement the behavior in the `bellity:freeze_nearby_enemies` custom item component and `behavior_pack/scripts/main.js`. Do not leave exceptions or permanently suspended state when a target dies, despawns, changes dimensions, or the world reloads. If effects overlap on the same target, retain the first anchor position and rotation and extend the end time until 10 seconds after the later activation.
 
 ## Implementation Files and Verification
 
-* Item: `behavior_pack/items/creepy_horse_eye.json`
-* Recipe: `behavior_pack/recipes/creepy_horse_eye.json`
-* Special Ability: `behavior_pack/scripts/main.js`
-* Display Name: `resource_pack/texts/ja_JP.lang`, `resource_pack/texts/en_US.lang`
-* Item Image: `resource_pack/textures/items/creepy_horse_eye.png`
-* Image Registration: `resource_pack/textures/item_texture.json`
-* On actual devices, verify the Japanese/English display names, image, specified recipe and obtaining method, on-the-spot activation via right-click, that the effect area is a sphere with a radius of 7 blocks, that only enemies in the area at activation stop for 10 seconds, and that it cannot be reused for 20 seconds after activation.
-* Verify the boundary between inside and outside the area, airborne/underwater enemies, enemies taking knockback or falling, death/despawn/dimension transfer during the effect, simultaneous application to multiple entities, and overlapping use by multiple players.
-* Verify that the white appearance matches the effect area and time, does not remain after deactivation, the appearance from players outside the area, and the rendering load.
-* On 2026-09-21, ran `./build.ps1`, and source verification of 5 items/5 recipes, images, display names, 20-second cooldown, freeze processing, and generation of `dist/bellity_addon.mcaddon` succeeded. Confirmed that item definitions, recipes, scripts, and images are included in the distribution archive. Operation checks on Minecraft have not yet been conducted.
-* On 2026-09-21, updated the development pack via `./install-dev.ps1 -Update`, and confirmed via `./tools/verify-dev.ps1` that the 13 Behavior Pack files and 14 Resource Pack files match the source. This is a deployment check; operation checks on Minecraft have not yet been conducted.
-* 2026-09-21 の実機実行で、early execution 中の `MolangVariableMap` 生成により `main.js` が停止するエラーが報告された。白色パーティクル用の変数マップをエフェクト初回実行時に遅延初期化するよう修正し、`node --check behavior_pack/scripts/main.js` と `node tools/validate.mjs` が成功した。修正版の Minecraft 上での再確認は未実施。
+- Item: `behavior_pack/items/creepy_horse_eye.json`
+- Recipe: `behavior_pack/recipes/creepy_horse_eye.json`
+- Special ability: `behavior_pack/scripts/main.js`
+- Display names: `resource_pack/texts/ja_JP.lang`, `resource_pack/texts/en_US.lang`
+- Item image: `resource_pack/textures/items/creepy_horse_eye.png`
+- Image registration: `resource_pack/textures/item_texture.json`
+- On a device, verify the Japanese and English display names, image, specified recipe, obtaining methods, activation at the player's current position, 7-block-radius spherical area, 10-second freeze of only the enemies present in the area at activation, and 20-second cooldown.
+- Verify that body and head direction, walking, flying, knockback, falling, and movement caused by water currents are corrected every tick; that the slight tremble does not accumulate into drift; and that the target returns to its anchor and resumes normal motion when the effect ends.
+- For each tested mob, record any AI attacks, Creeper fuse progress, model animations, vocalizations, or attack sounds that remain because the API cannot guarantee their complete suspension.
+- Verify the inside/outside boundary, airborne and underwater enemies, death, despawning, dimension changes, simultaneous application to multiple entities, and overlapping use by multiple players.
+- Verify that the white appearance matches the effect area and duration, does not remain after deactivation, appears correctly to players outside the area, and has acceptable rendering cost.
+- On 2026-09-21, `./build.ps1` passed source validation for five items, five recipes, images, display names, the 20-second cooldown, and freeze processing, and generated `dist/bellity_addon.mcaddon`. The item definition, recipe, script, and image were confirmed in the distribution archive. Minecraft operation was not verified.
+- On 2026-09-21, the development packs were updated with `./install-dev.ps1 -Update`, and `./tools/verify-dev.ps1` confirmed that 13 Behavior Pack files and 14 Resource Pack files matched the source. This was a deployment check, not Minecraft operation verification.
+- On 2026-09-21, a device run reported that constructing `MolangVariableMap` during early execution stopped `main.js`. The white-particle variable map was changed to initialize lazily when the effect first runs. `node --check behavior_pack/scripts/main.js` and `node tools/validate.mjs` passed, but the corrected behavior has not yet been retested in Minecraft.
+- On 2026-09-21, the freeze definition was updated to anchor position and direction while applying a slight tremble, and source validation passed. The tremble, head direction, release behavior, and sounds, AI, or animations remaining because of API limitations have not yet been verified in Minecraft.

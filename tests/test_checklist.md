@@ -33,9 +33,12 @@ Target Version: ____ Date Checked: ____
 - [ ] After applying or reloading the packs, `main.js` loads without an early-execution `MolangVariableMap` constructor error in the Content Log.
 - [ ] Holding the Creepy Horse Eye and right-clicking activates it on the spot without consuming the item.
 - [ ] On the first activation after loading the world, white particles appear without a script error in the Content Log.
-- [ ] Only enemies in the `monster` family within a 7-block radius of the player at the time of activation are frozen in their position and rotation for 10 seconds.
+- [ ] Only enemies in the `monster` family within a 7-block radius of the player at activation remain anchored and retain their captured body/head direction for 10 seconds.
 - [ ] Enemies outside the effect range, enemies that enter the range after activation, players, friendly mobs, items, and projectiles do not freeze.
-- [ ] During the freeze, movement by walking, flying, knockback, falling, and water currents is stopped, and they can move again after 10 seconds.
+- [ ] During the freeze, walking, flying, turning, knockback, falling, and movement by water currents are corrected every tick.
+- [ ] Frozen enemies visibly tremble slightly around the captured position without drifting away, and return to the exact captured position when the effect ends.
+- [ ] After 10 seconds, frozen enemies can move and turn normally again.
+- [ ] Verify and record any attacks, ability processing, vocalizations, or model animations that continue during the freeze; stable Script API 2.0.0 cannot universally suspend these for arbitrary vanilla mobs.
 - [ ] Cannot be reused for 20 seconds after activation, and can be reused after 20 seconds.
 - [ ] White particles are displayed within a 7-block radius sphere only during the effect, and do not remain after it wears off.
 - [ ] No script error appears in the Content Log even with enemy death, despawning, dimension travel, multiple entities, or overlapping use by multiple players.

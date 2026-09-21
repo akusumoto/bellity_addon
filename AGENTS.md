@@ -2,7 +2,8 @@
 
 ## Design Document Structure
 
-- Place all design documents in `spec/` and write them in Japanese.
+- Write all project documentation in English, including design documents in `spec/`, the user-facing `README.md`, and verification records in `tests/`.
+- Place all design documents in `spec/`.
 - Treat `spec/README.md` as the main design document, describing the overall purpose of the addon, its structure, common specifications, a list of weapons, and the installation/verification policy.
 - Document the details of each item in `spec/<item_id>.md` (one file per item). Summarize the ID, display name, performance, recipes, special abilities, implementation files, and device verification items in that file.
 - Link to each item's design document from the weapon list in the main design document. Do not duplicate weapon-specific details in the main design document.
