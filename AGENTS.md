@@ -1,22 +1,22 @@
-# Codex への指示
+# Instructions for Codex
 
-## 設計書の構成
+## Design Document Structure
 
-- 設計書はすべて `spec/` に置き、日本語で記述する。
-- `spec/README.md` をメイン設計書とし、アドオン全体の目的、構成、共通仕様、武器一覧、導入・検証方針を記載する。
-- 各アイテムの詳細は `spec/<item_id>.md` に1アイテム1ファイルで記載する。ID、表示名、性能、レシピ、特殊能力、実装ファイル、実機確認項目をそのファイルにまとめる。
-- メイン設計書の武器一覧から各アイテムの設計書へリンクする。武器固有の詳細をメイン設計書へ重複して書かない。
-- レシピの追加や不具合修正で仕様が変わったときは、該当するメイン設計書またはアイテム設計書を更新する。レシピ専用・修正履歴専用の設計書を新設しない。
-- `README.md` は利用者向けの導入案内、`tests/test_checklist.md` は実機確認の記録として扱う。設計上の決定は `spec/` に記載する。
+- Place all design documents in `spec/` and write them in Japanese.
+- Treat `spec/README.md` as the main design document, describing the overall purpose of the addon, its structure, common specifications, a list of weapons, and the installation/verification policy.
+- Document the details of each item in `spec/<item_id>.md` (one file per item). Summarize the ID, display name, performance, recipes, special abilities, implementation files, and device verification items in that file.
+- Link to each item's design document from the weapon list in the main design document. Do not duplicate weapon-specific details in the main design document.
+- When specifications change due to recipe additions or bug fixes, update the corresponding main design document or item design document. Do not create new design documents exclusively for recipes or revision histories.
+- Treat `README.md` as an installation guide for users, and `tests/test_checklist.md` as a record of device verification. Document design decisions in `spec/`.
 
-## 変更時の確認
+## Checks When Making Changes
 
-- 作業前に関連する設計書と実装を読み、食い違いがあれば現在の要件に合わせて整理する。
-- アイテムを追加するときは個別設計書を作り、`spec/README.md` の一覧とリンクを更新する。
-- 変更後は古い記述や切れたリンクが残っていないか確認する。ゲーム内で未確認の動作は、確認済みと書かない。
+- Before starting work, read the related design documents and implementations. If there are discrepancies, reorganize them to match the current requirements.
+- When adding an item, create an individual design document and update the list and links in `spec/README.md`.
+- After making changes, ensure that no outdated descriptions or broken links remain. Do not state that an unverified in-game behavior has been verified.
 
-## サブエージェントの活用
+## Utilizing Sub-Agents
 
-- 実装、テスト、ドキュメントの微修正など、独立して進められる具体的な作業は下位のサブエージェントに委任する。
-- 委任する際は担当範囲と期待する成果を明確にし、同じファイルを複数のエージェントが同時に編集しないようにする。
-- メインエージェントは成果を確認・統合し、全体の整合性と最終的な検証を担当する。
+- Delegate concrete tasks that can proceed independently, such as implementation, testing, and minor document corrections, to lower-level sub-agents.
+- When delegating, clarify the scope of responsibility and expected outcomes to prevent multiple agents from editing the same file simultaneously.
+- The main agent is responsible for confirming and integrating the results, ensuring overall consistency, and performing the final verification.

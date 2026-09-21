@@ -1,20 +1,20 @@
-# ベリティアドオン
+# Bellity Addon
 
-Minecraft Bedrock Edition 1.21.110 以降向けの武器アドオンです。共通仕様と各武器の詳細は [設計書一覧](spec/README.md) にまとめています。
+This is a weapon addon for Minecraft Bedrock Edition 1.21.110 or later. Common specifications and details for each weapon are summarized in the [Design Document List](spec/README.md).
 
-| 武器 | 入手方法 | 詳細 |
+| Weapon | Obtaining Method | Details |
 |---|---|---|
-| ベリティソード | 作業台、クリエイティブ、`/give` | [設計書](spec/bellity_sword.md) |
-| ちょっとネザライトの斧 | 作業台、クリエイティブ、`/give` | [設計書](spec/noboru_netherite_axe.md) |
-| 太陽の巨人の光 | 作業台、クリエイティブ、`/give` | [設計書](spec/sun_bigman_light.md) |
+| Bellity Sword | Crafting Table, Creative, `/give` | [Design Document](spec/bellity_sword.md) |
+| Slightly Netherite Axe | Crafting Table, Creative, `/give` | [Design Document](spec/noboru_netherite_axe.md) |
+| Sun Bigman Light | Crafting Table, Creative, `/give` | [Design Document](spec/sun_bigman_light.md) |
 
-## ビルドと導入
+## Build and Installation
 
-PowerShell でプロジェクト直下から `./build.ps1` を実行します。検証に成功すると `dist/bellity_addon.mcaddon` を生成します。このファイルを Minecraft にインポートし、ワールドで Behavior Pack と Resource Pack の両方を有効にしてください。
+Run `./build.ps1` from the root of the project using PowerShell. If verification succeeds, it generates `dist/bellity_addon.mcaddon`. Import this file into Minecraft and enable both the Behavior Pack and Resource Pack in your world.
 
-開発用パックは、初回に `./install-dev.ps1` で配置します。既存の Bellity 開発用パックを更新する場合は `./install-dev.ps1 -Update` を実行し、`./tools/verify-dev.ps1` で配置先とソースの一致を確認します。更新後はワールドを再読み込みしてください。
+Development packs are deployed initially using `./install-dev.ps1`. To update existing Bellity development packs, run `./install-dev.ps1 -Update`, and use `./tools/verify-dev.ps1` to verify that the destination matches the source. Reload the world after updating.
 
-取得コマンド：
+Obtaining commands:
 
 ```text
 /give @s bellity:bellity_sword
@@ -22,6 +22,6 @@ PowerShell でプロジェクト直下から `./build.ps1` を実行します。
 /give @s bellity:sun_bigman_light
 ```
 
-## 実機確認
+## Device Verification
 
-日英の表示名、画像、3つのクラフト、各武器の性能を [実機チェックリスト](tests/test_checklist.md) に沿って確認します。コンテンツログは `%appdata%\Minecraft Bedrock\logs` にあります。現行ビルドの Minecraft 上での動作確認は未完了です。
+Verify Japanese and English display names, images, three crafting recipes, and the performance of each weapon along the [Device CheckList](tests/test_checklist.md). Content logs are located at `%appdata%\Minecraft Bedrock\logs`. Operation checks on Minecraft for the current build are incomplete.

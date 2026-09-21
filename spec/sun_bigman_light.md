@@ -1,26 +1,26 @@
-# 太陽の巨人の光
+# Sun Bigman Light
 
-[共通仕様](README.md) / アイテムID：`bellity:sun_bigman_light`
+[Common Specifications](README.md) / Item ID: `bellity:sun_bigman_light`
 
-## アイテム仕様
+## Item Specifications
 
-| 項目 | 仕様 |
+| Item | Specification |
 |---|---|
-| 分類 | 投擲武器 |
-| 日本語名 | 太陽の巨人の光 |
-| 英語名 | Sun Bigman Light |
-| 表示名キー | `item.bellity:sun_bigman_light.name` |
-| 命中時の追加ダメージ | 10 |
-| 最大耐久値 | 500 |
-| 最大スタック数 | 1 |
-| 画像 | `resource_pack/textures/items/sun_bigman_light.png` |
-| 制作素材 | `model_data/sun_bigman_light.png`、`model_data/sun_bigman_light.bbmodel` |
+| Category | Throwable Weapon |
+| Japanese Name | 太陽の巨人の光 |
+| English Name | Sun Bigman Light |
+| Display Name Key | `item.bellity:sun_bigman_light.name` |
+| Additional Damage on Hit | 10 |
+| Maximum Durability | 500 |
+| Maximum Stack Size | 1 |
+| Image | `resource_pack/textures/items/sun_bigman_light.png` |
+| Production Assets | `model_data/sun_bigman_light.png`, `model_data/sun_bigman_light.bbmodel` |
 
-クリエイティブインベントリでは装備カテゴリに表示し、手持ち表示を有効にする。`minecraft:use_modifiers` の使用時間は0.1、移動倍率は1.0。`minecraft:cooldown` のカテゴリは `sun_bigman_light`、時間は0.35秒。
+Display in the equipment category in the creative inventory and enable handheld display. The `minecraft:use_modifiers` use duration is 0.1, movement multiplier is 1.0. The `minecraft:cooldown` category is `sun_bigman_light`, duration is 0.35 seconds.
 
-## クラフト
+## Crafting
 
-作業台で次の3×3配置から1個作る。`-` は空欄。
+Craft 1 item on the crafting table from the following 3x3 layout. `-` is empty.
 
 ```text
 T - -
@@ -28,27 +28,27 @@ T - -
 - - R
 ```
 
-| 記号 | 素材ID | 素材名 |
+| Symbol | Material ID | Material Name |
 |---|---|---|
-| T | `minecraft:torch` | 松明 |
-| A | `minecraft:arrow` | 矢 |
-| R | `minecraft:trident` | トライデント |
+| T | `minecraft:torch` | Torch |
+| A | `minecraft:arrow` | Arrow |
+| R | `minecraft:trident` | Trident |
 
-レシピIDと出力は `bellity:sun_bigman_light`。共通仕様どおり、作業台タグと `AlwaysUnlocked` を指定する。
+The recipe ID and output are `bellity:sun_bigman_light`. As per common specifications, specify the crafting table tag and `AlwaysUnlocked`.
 
-## 投擲処理
+## Throwing Processing
 
-`bellity:throw_light` の使用イベントで、プレイヤーの視線方向へ専用投射物「ライトボール」（`bellity:light_ball`）を発射する。投げたアイテム本体は消費せず、成功した投擲ごとに耐久値を1減らす。耐久値が尽きる投擲では手持ちアイテムを取り除く。連続投擲の間隔は最低7ゲームティック。
+In the use event of `bellity:throw_light`, fire a dedicated projectile "Light Ball" (`bellity:light_ball`) in the player's line of sight. The thrown item itself is not consumed; reduce durability by 1 for each successful throw. Remove the handheld item on the throw that exhausts durability. The interval for consecutive throws is a minimum of 7 game ticks.
 
-投擲時の初速、軌道、重力、飛距離、当たり判定、投擲音、命中時の音とパーティクルは標準の雪玉に合わせる。投擲音は `random.bow`、音量は0.5、ピッチは0.33から0.5の範囲とする。命中時は標準の雪玉と同様に独自の音を再生せず、`snowballpoof` を6個表示する。
+The initial velocity, trajectory, gravity, flight distance, hitbox, throwing sound, and sound/particles upon hitting are matched to the standard snowball. The throwing sound is `random.bow`, volume is 0.5, and pitch ranges from 0.33 to 0.5. Upon hitting, do not play a unique sound, similar to a standard snowball, and display 6 `snowballpoof` particles.
 
-この武器から発射したライトボールがエンティティに命中した場合、対象へ10ダメージを与え、5秒間炎上させる。ブロック命中時は追跡対象から外す。投射物の画像の制作元は `model_data/sunlight_ball.png`、配布用テクスチャは `resource_pack/textures/entity/light_ball.png` とする。処理は `behavior_pack/scripts/main.js` に実装し、例外時はコンテンツログに警告を出す。
+If the Light Ball fired from this weapon hits an entity, it deals 10 damage to the target and sets them on fire for 5 seconds. If it hits a block, remove it from the tracking target. The production asset for the projectile's image is `model_data/sunlight_ball.png`, and the distribution texture is `resource_pack/textures/entity/light_ball.png`. Implement the processing in `behavior_pack/scripts/main.js` and output a warning to the content log upon exception.
 
-## 実装ファイルと確認
+## Implementation Files and Verification
 
-- アイテム：`behavior_pack/items/sun_bigman_light.json`
-- レシピ：`behavior_pack/recipes/sun_bigman_light.json`
-- 投射物：`behavior_pack/entities/light_ball.json`
-- 投射物の表示：`resource_pack/entity/light_ball.entity.json`、`resource_pack/animations/light_ball.animation.json`、`resource_pack/render_controllers/light_ball.render_controllers.json`、`resource_pack/textures/entity/light_ball.png`。モデルには組み込みの `geometry.item_sprite` を使う。
-- 実機では表示名・画像・クラフト、ライトボールの発射と外観、雪玉と同じ初速・軌道・重力・飛距離・当たり判定・投擲音・命中音・命中パーティクル、命中ダメージ、炎上、耐久消費、連続投擲の制限を確認する。
-- 投射物の回収仕様は今後検討する。
+- Item: `behavior_pack/items/sun_bigman_light.json`
+- Recipe: `behavior_pack/recipes/sun_bigman_light.json`
+- Projectile: `behavior_pack/entities/light_ball.json`
+- Projectile Display: `resource_pack/entity/light_ball.entity.json`, `resource_pack/animations/light_ball.animation.json`, `resource_pack/render_controllers/light_ball.render_controllers.json`, `resource_pack/textures/entity/light_ball.png`. For the model, use the built-in `geometry.item_sprite`.
+- On actual devices, verify the display name, image, crafting, firing and appearance of the Light Ball, the same initial velocity/trajectory/gravity/flight distance/hitbox/throwing sound/hitting sound/hitting particles as a snowball, hit damage, burning, durability consumption, and the restriction on consecutive throws.
+- Projectile recovery specifications will be considered in the future.
