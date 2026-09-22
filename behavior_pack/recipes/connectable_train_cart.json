@@ -1,0 +1,14 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shaped": {
+    "description": { "identifier": "bellity:connectable_train_cart" },
+    "tags": ["crafting_table"],
+    "unlock": { "context": "AlwaysUnlocked" },
+    "pattern": ["   ", " MC", "   "],
+    "key": {
+      "M": { "item": "minecraft:minecart" },
+      "C": { "item": "minecraft:chain" }
+    },
+    "result": { "item": "bellity:connectable_train_cart", "count": 1 }
+  }
+}

@@ -5,6 +5,21 @@ import { resolve } from "node:path";
 const root = resolve(import.meta.dirname, "..");
 const json = (path) => JSON.parse(readFileSync(resolve(root, path), "utf8"));
 
+function validateJsonTree(relativeDirectory) {
+  const directory = resolve(root, relativeDirectory);
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    const relativePath = `${relativeDirectory}/${entry.name}`;
+    if (entry.isDirectory()) {
+      validateJsonTree(relativePath);
+    } else if (entry.name.endsWith(".json")) {
+      json(relativePath);
+    }
+  }
+}
+
+validateJsonTree("behavior_pack");
+validateJsonTree("resource_pack");
+
 const bp = json("behavior_pack/manifest.json");
 const rp = json("resource_pack/manifest.json");
 assert.equal(bp.header.name, "ベリティアドオン");
@@ -97,6 +112,10 @@ for (const [file, expectedRows, expectedKey] of [
     S: { item: "minecraft:coal" },
     E: { item: "minecraft:ender_eye" },
   }],
+  ["connectable_train_cart", ["   ", " MC", "   "], {
+    M: { item: "minecraft:minecart" },
+    C: { item: "minecraft:chain" },
+  }],
   ["gizagiza_sword", [" I ", "III", " B "], {
     I: { item: "minecraft:iron_ingot" },
     B: { item: "minecraft:stick" },
@@ -126,6 +145,7 @@ const recipeFiles = readdirSync(resolve(root, "behavior_pack/recipes"))
   .sort();
 assert.deepEqual(recipeFiles, [
   "bellity_sword.json",
+  "connectable_train_cart.json",
   "creepy_horse_eye.json",
   "gizagiza_sword.json",
   "noboru_netherite_axe.json",
@@ -190,4 +210,75 @@ assert.doesNotMatch(script, /^const whiteParticleVariables = new MolangVariableM
 assert.match(script, /function getWhiteParticleVariables\(\)/);
 assert.match(script, /getWhiteParticleVariables\(\),/);
 
-console.log("Bellity pack validation passed: 5 items, 5 recipes, light ball, freeze effect, textures, names, manifests.");
+const trainCartId = "bellity:connectable_train_cart";
+const trainCart = json("behavior_pack/entities/connectable_train_cart.json")["minecraft:entity"];
+assert.equal(trainCart.description.identifier, trainCartId);
+assert.equal(trainCart.description.runtime_identifier, "minecraft:minecart");
+assert.equal(trainCart.description.is_spawnable, true);
+assert.equal(trainCart.description.is_summonable, true);
+assert.equal(trainCart.components["minecraft:damage_sensor"].triggers.deals_damage, "no");
+const trainHeadMode = trainCart.component_groups["bellity:head_mode"];
+const trainFollowerMode = trainCart.component_groups["bellity:follower_mode"];
+assert.equal(trainHeadMode["minecraft:rail_movement"].max_speed, 0.4);
+assert.deepEqual(trainHeadMode["minecraft:rail_sensor"], { eject_on_activate: true });
+assert.equal(trainHeadMode["minecraft:pushable"].is_pushable, true);
+assert.equal(trainFollowerMode["minecraft:pushable"].is_pushable, false);
+assert.deepEqual(trainCart.events["bellity:set_follower"].remove.component_groups, ["bellity:head_mode"]);
+assert.deepEqual(trainCart.events["bellity:set_follower"].add.component_groups, ["bellity:follower_mode"]);
+assert.deepEqual(trainCart.events["bellity:set_head"].remove.component_groups, ["bellity:follower_mode"]);
+assert.deepEqual(trainCart.events["bellity:set_head"].add.component_groups, ["bellity:head_mode"]);
+
+const clientTrainCart = json("resource_pack/entity/connectable_train_cart.entity.json")
+  ["minecraft:client_entity"].description;
+assert.equal(clientTrainCart.identifier, trainCartId);
+assert.equal(clientTrainCart.textures.default, "textures/entity/connectable_train_cart");
+assert.equal(clientTrainCart.geometry.default, "geometry.bellity.connectable_train_cart");
+assert(json("resource_pack/render_controllers/connectable_train_cart.render_controllers.json")
+  .render_controllers[clientTrainCart.render_controllers[0]]);
+const trainGeometry = json("resource_pack/models/entity/connectable_train_cart.geo.json")["minecraft:geometry"];
+assert.equal(trainGeometry[0].description.identifier, "geometry.bellity.connectable_train_cart");
+assert.deepEqual(
+  readFileSync(resolve(root, "resource_pack/textures/entity/connectable_train_cart.png")),
+  readFileSync(resolve(root, "model_data/connectable_train_cart.png")),
+);
+assert(readFileSync(resolve(root, "resource_pack/texts/ja_JP.lang"), "utf8")
+  .split(/\r?\n/).includes("entity.bellity:connectable_train_cart.name=連結トロッコ"));
+assert(readFileSync(resolve(root, "resource_pack/texts/en_US.lang"), "utf8")
+  .split(/\r?\n/).includes("entity.bellity:connectable_train_cart.name=Connectable Train Cart"));
+const trainCartItem = json("behavior_pack/items/connectable_train_cart.json")["minecraft:item"];
+assert.equal(trainCartItem.description.identifier, trainCartId);
+assert.deepEqual(trainCartItem.description.menu_category, {
+  category: "items",
+  group: "minecraft:itemGroup.name.minecart",
+});
+assert.equal(trainCartItem.components["minecraft:display_name"].value,
+  "item.bellity:connectable_train_cart.name");
+assert.equal(trainCartItem.components["minecraft:icon"], "minecart_normal");
+assert.equal(trainCartItem.components["minecraft:max_stack_size"], 1);
+assert.deepEqual(trainCartItem.components["minecraft:entity_placer"], {
+  entity: trainCartId,
+  use_on: ["minecraft:rail", "minecraft:golden_rail", "minecraft:detector_rail", "minecraft:activator_rail"],
+});
+for (const locale of languages) {
+  assert(readFileSync(resolve(root, `resource_pack/texts/${locale}.lang`), "utf8")
+    .split(/\r?\n/).includes(`item.${trainCartId}.name=${locale === "ja_JP" ? "連結トロッコ" : "Connectable Train Cart"}`));
+}
+
+assert.match(script, /const CONNECTABLE_TRAIN_CART_ID = "bellity:connectable_train_cart"/);
+assert.match(script, /const TRAIN_SPACING = 1\.5/);
+assert.match(script, /const TRAIN_MAX_CARS = 8/);
+assert.match(script, /const TRAIN_LINK_DISTANCE = 6/);
+assert.match(script, /const TRAIN_LENGTH_PROPERTY = "train_length"/);
+assert.match(script, /const PENDING_TRAIN_REPAIRS_PROPERTY = "bellity:pending_train_repairs"/);
+assert.match(script, /event\.itemStack\?\.typeId !== "minecraft:chain"/);
+assert.match(script, /target\.triggerEvent\("bellity:set_follower"\)/);
+assert.match(script, /cart\.triggerEvent\(newIndex === 0 \? "bellity:set_head" : "bellity:set_follower"\)/);
+assert.match(script, /sampleTrainHistory\(history\.points, index \* TRAIN_SPACING\)/);
+assert.match(script, /target\.teleport\(placement\.location/);
+assert.match(script, /if \(!hasCompleteTrain\(members, trainLength\)\)/);
+assert.match(script, /persistPendingTrainRepairs\(\)/);
+assert.match(script, /restorePendingTrainRepairs\(\)/);
+assert.match(script, /Only a standalone cart can be appended; trains cannot be merged\./);
+assert.match(script, /world\.afterEvents\.entityDie\.subscribe/);
+
+console.log("Bellity pack validation passed: 6 items, 6 recipes, light ball, freeze effect, connectable train cart, textures, names, manifests.");

@@ -1,86 +1,87 @@
-# ベリティアドオン 設計書
+# Bellity Addon Design
 
-## 目的と範囲
+## Purpose and Scope
 
-Minecraft Bedrock Edition に固有の武器と使用型アイテムを追加するアドオン。Behavior Pack と Resource Pack のゲーム内表示名は「ベリティアドオン」とする。アイテム定義、レシピ、画像はアイテムごとに分離し、名前空間は `bellity`、対象バージョンは Minecraft Bedrock 1.21.110 以降とする。
+Bellity is a Minecraft Bedrock Edition add-on that provides custom weapons, use-activated items, and entities. The Behavior Pack and Resource Pack use the display name "ベリティアドオン." Definitions, recipes, and images are separated by feature, the namespace is `bellity`, and the target version is Minecraft Bedrock 1.21.110 or later.
 
-現在の個別仕様：
+Current feature specifications:
 
-| アイテム | ID | 分類 | 状態 | 詳細 |
+| Feature | ID | Category | Status | Details |
 |---|---|---|---|---|
-| ベリティソード | `bellity:bellity_sword` | 剣 | 実装済み | [bellity_sword.md](bellity_sword.md) |
-| ちょっとネザライトの斧 | `bellity:noboru_netherite_axe` | 斧 | 実装済み | [noboru_netherite_axe.md](noboru_netherite_axe.md) |
-| 太陽の巨人の光 | `bellity:sun_bigman_light` | 投擲武器 | 実装済み | [sun_bigman_light.md](sun_bigman_light.md) |
-| ギザギザ剣 | `bellity:gizagiza_sword` | 剣 | 実装済み | [gizagiza_sword.md](gizagiza_sword.md) |
-| クリーピーホースの目 | `bellity:creepy_horse_eye` | 使用型アイテム | 実装済み・実機未確認 | [creepy_horse_eye.md](creepy_horse_eye.md) |
+| Bellity Sword | `bellity:bellity_sword` | Sword | Implemented | [bellity_sword.md](bellity_sword.md) |
+| Slightly Netherite Axe | `bellity:noboru_netherite_axe` | Axe | Implemented | [noboru_netherite_axe.md](noboru_netherite_axe.md) |
+| Sun Bigman Light | `bellity:sun_bigman_light` | Throwable weapon | Implemented | [sun_bigman_light.md](sun_bigman_light.md) |
+| Gizagiza Sword | `bellity:gizagiza_sword` | Sword | Implemented | [gizagiza_sword.md](gizagiza_sword.md) |
+| Creepy Horse Eye | `bellity:creepy_horse_eye` | Use-activated item | Implemented; device verification pending | [creepy_horse_eye.md](creepy_horse_eye.md) |
+| Connectable Train Cart | `bellity:connectable_train_cart` | Entity | Implemented; device verification pending | [connectable_train_cart.md](connectable_train_cart.md) |
 
-## パック構成
+## Pack Structure
 
 ```text
 behavior_pack/
 ├─ manifest.json
-├─ items/                 # 各アイテムの定義
-├─ recipes/               # 作業台レシピ
-├─ entities/              # ライトボールの投射物定義
-└─ scripts/main.js        # 命中・投擲・フリーズ処理
+├─ items/                 # Item definitions
+├─ recipes/               # Crafting recipes
+├─ entities/              # Custom entity definitions
+└─ scripts/main.js        # Script API behavior
 resource_pack/
 ├─ manifest.json
-├─ entity/                # ライトボールの表示定義
-├─ animations/            # ライトボールの表示アニメーション
-├─ render_controllers/    # ライトボールの描画設定
+├─ entity/                # Client entity definitions
+├─ animations/            # Display animations
+├─ render_controllers/    # Render controllers
+├─ models/                # Runtime geometry
 ├─ textures/item_texture.json
-├─ textures/items/        # 各アイテム画像
-├─ textures/entity/       # ライトボール画像
-└─ texts/                 # 言語ファイル
-model_data/                # Blockbench 制作素材
-tools/validate.mjs         # ソース検証
-tests/test_checklist.md    # 実機確認項目
-dist/bellity_addon.mcaddon # 配布用パック
+├─ textures/items/        # Item textures
+├─ textures/entity/       # Entity textures
+└─ texts/                 # Language files
+model_data/                        # Editable source assets
+tools/validate.mjs                 # Source validation
+tests/test_checklist.md            # Device-verification record
+dist/bellity_addon.mcaddon         # Distribution package
 ```
 
-Behavior Pack はアイテム、レシピ、Script API の動作を定義し、Resource Pack は表示名と画像を提供する。Behavior Pack は Resource Pack と `@minecraft/server` 2.0.0 に依存する。現在のパックバージョンは Behavior Pack が `1.0.9`、Resource Pack が `1.0.5`。両パックの `min_engine_version` は `1.21.110` とする。
+The Behavior Pack defines items, recipes, entities, and Script API behavior. The Resource Pack provides display names, textures, geometry, and rendering data. The Behavior Pack depends on the Resource Pack and `@minecraft/server` 2.0.0. Consult the manifests for the current pack versions. Both packs use `min_engine_version` 1.21.110.
 
-## 共通仕様
+## Common Specifications
 
-- アイテムIDは `bellity:<item_id>`、ファイル名は英小文字・数字・アンダースコアを使用する。
-- 各アイテムは `minecraft:display_name` から `item.bellity:<item_id>.name` を参照し、同じキーを `ja_JP.lang` と `en_US.lang` に定義する。
-- 各アイテム画像を `resource_pack/textures/items/` に置き、`item_texture.json` に登録する。元画像は `model_data/` に保存する。
-- 5個の作業台レシピは `minecraft:recipe_shaped`、`format_version: 1.20.10`、`crafting_table` タグ、`AlwaysUnlocked` を使用する。配置と素材は各アイテム設計書に記載する。
-- アイテム定義は `format_version: 1.21.110` を使用する。特殊処理が必要なアイテムだけカスタムアイテムコンポーネントを使い、`scripts/main.js` に登録する。
-- 現在の実装では実験機能を使用しない。将来必要になった場合は互換性と実装条件を個別に検討する。
+- Feature IDs use `bellity:<feature_id>`, and file names use lowercase English letters, digits, and underscores.
+- Each item references `item.bellity:<item_id>.name` through `minecraft:display_name`, with matching entries in `ja_JP.lang` and `en_US.lang`.
+- Item textures are stored in `resource_pack/textures/items/` and registered in `item_texture.json`; editable source assets are retained in `model_data/`.
+- Crafting recipes use `minecraft:recipe_shaped`, format version 1.20.10, the `crafting_table` tag, and `AlwaysUnlocked`. Each feature specification records its exact layout and ingredients.
+- Item definitions use format version 1.21.110. Custom item components and Script API code are used only when a feature requires them.
+- Experimental features are avoided unless a feature specification explicitly documents why they are required and how to enable them.
 
-## ビルドと開発パック
+## Build and Development Packs
 
-プロジェクト直下で `./build.ps1` を実行する。スクリプト構文と `tools/validate.mjs` の検証に成功すると、両パックを `dist/bellity_addon.mcaddon` にまとめる。配布パックを使う場合は Minecraft にインポートし、Behavior Pack と Resource Pack の両方をワールドで有効にする。
+Run `./build.ps1` from the project root. After JavaScript syntax and `tools/validate.mjs` checks pass, the script packages both packs as `dist/bellity_addon.mcaddon`. Import that package into Minecraft and enable both the Behavior Pack and Resource Pack in the world.
 
-Windows版 Minecraft Bedrock の開発パック配置先：
+Development-pack locations for Minecraft Bedrock on Windows are:
 
 ```text
 %appdata%\Minecraft Bedrock\Users\Shared\games\com.mojang\development_behavior_packs\Bellity_BP
 %appdata%\Minecraft Bedrock\Users\Shared\games\com.mojang\development_resource_packs\Bellity_RP
 ```
 
-初回は `./install-dev.ps1`、既存の開発パック更新は `./install-dev.ps1 -Update` を使う。更新後は `./tools/verify-dev.ps1` でソースと配置済みファイルを照合し、Minecraft のワールドを再読み込みする。
+Use `./install-dev.ps1` for the initial installation and `./install-dev.ps1 -Update` to update existing development packs. After updating, use `./tools/verify-dev.ps1` to compare the source and installed files, then reload the Minecraft world.
 
-## 検証基準と未確認事項
+## Verification Policy
 
-- ソース検証では5アイテムの定義、表示名キー、画像、5レシピの配置・素材・出力・アンロック設定、マニフェスト依存関係、ライトボールとクリーピーホースの目の主要スクリプト処理を確認する。
-- 実機検証では両パックの読み込み、Content Log、日英表示名、画像、取得方法、各アイテムの動作、保存後の保持を確認する。確認項目は [test_checklist.md](../tests/test_checklist.md) に記録する。
-- 2026-09-21 に `./build.ps1` を実行し、5アイテム・5レシピのソース検証と `dist/bellity_addon.mcaddon` の生成が成功した。アーカイブ内にクリーピーホースの目のアイテム定義、レシピ、スクリプト、画像が含まれることを確認した。
-- 同日に `./install-dev.ps1 -Update` で開発パックを更新し、`./tools/verify-dev.ps1` で Behavior Pack 13ファイル、Resource Pack 14ファイルがソースと一致することを確認した。Minecraft 上でのクリーピーホースの目の動作確認は未実施。
-- 修理素材、エンチャント可否、パックアイコン、3Dモデル、配布向けバランスは今後検討する。アイテム固有の未確認事項は各設計書に記載する。
+- Source validation checks definitions, identifiers, localization keys, assets, recipes, manifest dependencies, and selected script invariants. It does not demonstrate runtime behavior.
+- Device verification checks pack loading, the Content Log, names and appearances, acquisition methods, feature behavior, and persistence after saving and reloading. Results are recorded in [test_checklist.md](../tests/test_checklist.md).
+- A packaged archive and matching development-pack hashes prove file inclusion and deployment only. They do not prove in-game behavior.
+- Do not mark behavior as verified until it has been observed in Minecraft Bedrock. Record feature-specific pending checks in its design document and the device checklist.
 
-## 拡張とバランス方針
+## Extension and Balance Policy
 
-剣、斧、投擲武器、使用型アイテムを基礎に、槍、短剣、ハンマー、手裏剣、投げナイフなどを追加できる構成とする。攻撃力だけでなく、射程、使用間隔、耐久値、素材の入手難度、特殊能力を含めて調整し、強力な武器はPvEとPvPの両方で検証する。
+The project can extend its weapon and item base with spears, daggers, hammers, shuriken, throwing knives, and other features. Balance considers reach, use interval, durability, material availability, special abilities, and attack damage. Powerful weapons require both PvE and PvP device verification.
 
-画像は透過PNGのピクセルアートとし、Blockbenchの制作素材を保持する。16×16と32×32の統一、輪郭、光源方向、色数は今後調整する。3Dモデルは現在の範囲外とし、採用時は一人称・三人称表示、持ち方、attachableを個別に確認する。
+Item images use transparent pixel-art PNGs, with editable assets retained in `model_data/`. Resolution, outlines, lighting direction, and color count should remain consistent. When a feature uses geometry or an attachable, verify first-person and third-person presentation separately.
 
-アイテムコンポーネントで実現できる機能を優先し、命中、投擲、フリーズなど必要な処理に Script API を使う。マルチプレイ、保存後の保持、ワールド再読み込み時の動作も実機確認対象とする。
+Prefer item and entity components for behavior they can express reliably. Use the Script API for behavior such as hit handling, throwing, freezing, or train coordination. Multiplayer behavior, persistence, and world-reload recovery are device-verification targets.
 
-## アイテム追加手順
+## Feature Addition Procedure
 
-1. ID、名称、性能、取得方法、未解決事項をこの一覧と個別設計書に記録する。
-2. アイテム定義、画像、画像登録、日英翻訳を追加し、必要に応じてレシピとスクリプトを追加する。
-3. `tools/validate.mjs` と実機チェックリストを更新し、`./build.ps1` で検証・梱包する。
-4. 開発パックまたは配布パックで実機検証し、結果をチェックリストに記録する。
+1. Record the ID, names, behavior, acquisition method, and unresolved decisions in an individual specification, then link it from the feature table above.
+2. Add definitions, assets, localization, and any required recipes and scripts.
+3. Update `tools/validate.mjs` and `tests/test_checklist.md`, then run the relevant source checks.
+4. Package only when requested, install or update the development packs, and record separately what source/deployment checks and in-game checks established.

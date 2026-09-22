@@ -1,0 +1,24 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "bellity:connectable_train_cart",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/entity/connectable_train_cart"
+      },
+      "geometry": {
+        "default": "geometry.bellity.connectable_train_cart"
+      },
+      "render_controllers": [
+        "controller.render.bellity_connectable_train_cart"
+      ],
+      "spawn_egg": {
+        "base_color": "#5C5C5C",
+        "overlay_color": "#A7A7A7"
+      }
+    }
+  }
+}

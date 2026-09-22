@@ -44,3 +44,27 @@ Target Version: ____ Date Checked: ____
 - [ ] White particles are displayed within a 7-block radius sphere only during the effect, and do not remain after it wears off.
 - [ ] No script error appears in the Content Log even with enemy death, despawning, dimension travel, multiple entities, or overlapping use by multiple players.
 - [ ] Weapons are retained even if you save and reload the world.
+
+## Connectable Train Cart
+
+- [ ] The exact 3x3 recipe with a Minecart in the center and a Chain to its right produces one Connectable Train Cart placement item.
+- [ ] The placement item appears in the Items tab's Minecarts group in the Creative inventory, can be obtained with `/give @s bellity:connectable_train_cart`, has the expected minecart icon and localized name, and stacks to one.
+- [ ] In Survival, using the placement item on normal, powered, detector, and activator rails consumes one item and creates `bellity:connectable_train_cart` on the selected rail.
+- [ ] Using the placement item away from a supported rail does not place the entity or consume the item.
+- [ ] The entity can also be created with `/summon bellity:connectable_train_cart ~ ~ ~`.
+- [ ] Its Japanese name is "連結トロッコ," its English name is "Connectable Train Cart," and its appearance matches a vanilla minecart.
+- [ ] While holding a Chain, interacting with a head, standalone cart, or member of a train selects the corresponding train and gives clear selection feedback.
+- [ ] After selecting a train, interacting with a standalone cart within 6 blocks of its tail appends it after the current tail and gives clear success feedback.
+- [ ] Connecting a cart does not consume the Chain.
+- [ ] The newly connected cart is immediately moved behind the preceding tail instead of remaining at its old position, with approximately 1.5 blocks between cart centers.
+- [ ] A cart more than 6 blocks from the selected train's tail is not connected and clear rejection feedback is given.
+- [ ] Selecting a train and then interacting with a cart that already belongs to another train does not merge the trains.
+- [ ] A ninth cart cannot be appended to an eight-cart train, and rejection does not change the existing train.
+- [ ] Only the head accelerates independently on powered rails; followers remain subordinate and maintain approximately 1.5-block center spacing.
+- [ ] Followers reproduce the head's route around straight rails, curves, ascending rails, and descending rails without visibly cutting corners, derailing, or accumulating separation.
+- [ ] Destroying the head promotes the second cart, preserves the remaining order, and allows the promoted cart to move as a head.
+- [ ] Saving and reloading the world preserves train membership and order without snapping followers to invalid positions or producing Content Log errors.
+- [ ] Unloading and reloading chunks containing all or part of a train does not scatter or delete carts and produces no repeated Content Log errors.
+- [ ] Two players connecting or operating different trains do not overwrite each other's selection or train state.
+
+All Connectable Train Cart checks above are pending in-game verification. Source validation or matching deployed-file hashes must not be used to mark them complete.
