@@ -48,11 +48,12 @@ Target Version: ____ Date Checked: ____
 ## Connectable Train Cart
 
 - [ ] The exact 3x3 recipe with a Minecart in the center and a Chain to its right produces one Connectable Train Cart placement item.
-- [ ] The placement item appears in the Items tab's Minecarts group in the Creative inventory, can be obtained with `/give @s bellity:connectable_train_cart`, has the expected minecart icon and localized name, and stacks to one.
+- [ ] The placement item appears in the Items tab's Minecarts group in the Creative inventory, can be obtained with `/give @s bellity:connectable_train_cart`, displays the supplied Connectable Train Cart icon and localized name, and stacks to one.
 - [ ] In Survival, using the placement item on normal, powered, detector, and activator rails consumes one item and creates `bellity:connectable_train_cart` on the selected rail.
 - [ ] Using the placement item away from a supported rail does not place the entity or consume the item.
 - [ ] The entity can also be created with `/summon bellity:connectable_train_cart ~ ~ ~`.
 - [ ] Its Japanese name is "連結トロッコ," its English name is "Connectable Train Cart," and its appearance matches a vanilla minecart.
+- [ ] The cart body is aligned lengthwise with straight rails rather than rendered sideways, and its orientation follows curves and slopes correctly.
 - [ ] While holding a Chain, interacting with a head, standalone cart, or member of a train selects the corresponding train and gives clear selection feedback.
 - [ ] After selecting a train, interacting with a standalone cart within 6 blocks of its tail appends it after the current tail and gives clear success feedback.
 - [ ] Connecting a cart does not consume the Chain.

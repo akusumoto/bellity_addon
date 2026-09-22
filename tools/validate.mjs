@@ -237,6 +237,8 @@ assert(json("resource_pack/render_controllers/connectable_train_cart.render_cont
   .render_controllers[clientTrainCart.render_controllers[0]]);
 const trainGeometry = json("resource_pack/models/entity/connectable_train_cart.geo.json")["minecraft:geometry"];
 assert.equal(trainGeometry[0].description.identifier, "geometry.bellity.connectable_train_cart");
+assert.deepEqual(trainGeometry[0].bones.find((bone) => bone.name === "root")?.rotation, [0, 90, 0]);
+assert.deepEqual(trainGeometry, json("model_data/connectable_train_cart.geo.json")["minecraft:geometry"]);
 assert.deepEqual(
   readFileSync(resolve(root, "resource_pack/textures/entity/connectable_train_cart.png")),
   readFileSync(resolve(root, "model_data/connectable_train_cart.png")),
@@ -253,7 +255,15 @@ assert.deepEqual(trainCartItem.description.menu_category, {
 });
 assert.equal(trainCartItem.components["minecraft:display_name"].value,
   "item.bellity:connectable_train_cart.name");
-assert.equal(trainCartItem.components["minecraft:icon"], "minecart_normal");
+assert.equal(trainCartItem.components["minecraft:icon"], "connectable_train_cart");
+assert.equal(atlas.connectable_train_cart.textures, "textures/items/connectable_train_cart");
+const trainCartIcon = readFileSync(resolve(root, "resource_pack/textures/items/connectable_train_cart.png"));
+assert.equal(trainCartIcon.subarray(0, 8).toString("hex"), "89504e470d0a1a0a");
+assert(trainCartIcon.readUInt32BE(16) > 0 && trainCartIcon.readUInt32BE(20) > 0);
+assert.deepEqual(
+  trainCartIcon,
+  readFileSync(resolve(root, "model_data/connectable_train_cart_icon.png")),
+);
 assert.equal(trainCartItem.components["minecraft:max_stack_size"], 1);
 assert.deepEqual(trainCartItem.components["minecraft:entity_placer"], {
   entity: trainCartId,

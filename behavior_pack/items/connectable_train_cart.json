@@ -10,7 +10,7 @@
     },
     "components": {
       "minecraft:display_name": { "value": "item.bellity:connectable_train_cart.name" },
-      "minecraft:icon": "minecart_normal",
+      "minecraft:icon": "connectable_train_cart",
       "minecraft:max_stack_size": 1,
       "minecraft:entity_placer": {
         "entity": "bellity:connectable_train_cart",
