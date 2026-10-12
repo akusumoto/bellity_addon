@@ -4,6 +4,7 @@
   "padding": 8,
   "num_mip_levels": 4,
   "texture_data": {
-    "air_block": { "textures": "textures/blocks/air_block" }
+    "air_block": { "textures": "textures/blocks/air_block" },
+    "decorate_trapdoor": { "textures": "textures/blocks/decorate_trapdoor" }
   }
 }

@@ -8,3 +8,4 @@ item.bellity:sun_bigman_light.name=太陽の巨人の光
 entity.bellity:connectable_train_cart.name=連結トロッコ
 item.bellity:connectable_train_cart.name=連結トロッコ
 item.bellity:pallet.name=パレット
+tile.bellity:decorate_trapdoor.name=模様付きのトラップドア

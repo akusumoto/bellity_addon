@@ -110,6 +110,26 @@ All Air Block and Air Sword checks above are pending in-game verification. Sourc
 
 All Pallet checks above are pending in-game verification. Source validation and mock callbacks do not establish these runtime results.
 
+## Decorate Trapdoor
+
+- [ ] Japanese name is 模様付きのトラップドア; English name is Decorate Trapdoor. Creative grouping, `/give @s bellity:decorate_trapdoor`, and stack size 64 work.
+- [ ] Exact `QBQ / QSQ / QBQ` recipe consumes six Quartz Blocks, two Black Dyes, and one Sea Lantern, producing one trapdoor.
+- [ ] Supplied texture and model render in inventory, hand, and world without Content Log errors.
+- [ ] Check all four directions and top/bottom halves, including angled side placement. Hinge is against the support; closed plates are 3/16 block thick and open plates remain inside their cell.
+- [ ] Interaction toggles once and plays the appropriate trapdoor sound. Sneaking permits adjacent placement. Multiple players see the same state.
+- [ ] Collision and selection follow the plate in all 16 direction/half/open combinations; an open plate permits passage through the remaining cell.
+- [ ] Lever, button, dust, and powered-block rising/falling edges open/close the trapdoor. Manual toggles remain until the next power edge. Record directional repeater/comparator/observer polling limitations.
+- [ ] Breaking normally drops one trapdoor. Saving/reloading preserves placement and open state; loaded trapdoors resume power checks.
+- [ ] Test world-height and unloaded-neighbor boundaries without script errors. Waterlogging, ladder climbing, and piston parity are compatibility gaps and require separate follow-up.
+
+All Decorate Trapdoor checks above remain pending in Minecraft. On 2026-10-12, `node tools/validate.mjs`, syntax checks for all three Behavior Pack scripts, and `git diff --check` passed. Validation covers the exact recipe and texture, geometry variants, all 16 visual/collision permutations, six placement faces, and mocked manual/power transitions. Source checks and mocked callbacks do not establish in-game behavior.
+
+On 2026-10-12, source validation and syntax checks for `scripts/main.js`, `scripts/decorate_trapdoor.js`, and `scripts/pallet.js` passed before deployment. `install-dev.ps1 -Update` successfully updated both installed development packs, and `tools/verify-dev.ps1` confirmed matching file counts and SHA-256 hashes for all 28 Behavior Pack files and 28 Resource Pack files. No `.mcaddon` package was built. Reload the Minecraft world to load the updated packs; all Decorate Trapdoor in-game checks remain pending.
+
+### Decorate Trapdoor Parsing Fix: 2026-10-12
+
+The device Content Log reported that `itemGroup.name.trapdoor` lacked a namespace, preventing the block from parsing. The missing block then caused invalid recipe-result errors and an unused `bellity:trapdoor` component warning. Corrected the Creative group to `minecraft:itemGroup.name.trapdoor` and added source validation for namespaced block groups. Source validation passed. Updated both development packs and verified all 28 Behavior Pack files and 28 Resource Pack files by count and SHA-256. Rebuilt `dist/bellity_addon.mcaddon` and confirmed all 56 packaged files match the source. Reload the world and recheck the Content Log; device confirmation of this fix is pending.
+
 ## Development Deployment Record: 2026-10-12
 
 After correcting the Air Sword texture to use `model_data/air_sword.png`, source validation and both script syntax checks passed again. The installed Resource Pack still contained the previous Air Sword texture before the update. `install-dev.ps1 -Update` deployed the correction, and `tools/verify-dev.ps1` confirmed that all 24 Behavior Pack files and 26 Resource Pack files match the source by file count and SHA-256 hash. Reload the Minecraft world to load the corrected texture; its in-game appearance remains pending verification.

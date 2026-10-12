@@ -8,3 +8,4 @@ item.bellity:sun_bigman_light.name=Sun Bigman Light
 entity.bellity:connectable_train_cart.name=Connectable Train Cart
 item.bellity:connectable_train_cart.name=Connectable Train Cart
 item.bellity:pallet.name=Pallet
+tile.bellity:decorate_trapdoor.name=Decorate Trapdoor

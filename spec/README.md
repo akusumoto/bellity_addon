@@ -17,6 +17,7 @@ Current feature specifications:
 | Air Block | `bellity:air_block` | Placeable block | Implemented; device verification pending | [air_block.md](air_block.md) |
 | Air Sword | `bellity:air_sword` | Sword | Implemented; device verification pending | [air_sword.md](air_sword.md) |
 | Pallet | `bellity:pallet` | Use-activated item | Implemented; device verification pending | [pallet.md](pallet.md) |
+| Decorate Trapdoor | `bellity:decorate_trapdoor` | Placeable trapdoor | Implemented; device verification pending | [decorate_trapdoor.md](decorate_trapdoor.md) |
 
 ## Pack Structure
 

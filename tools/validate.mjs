@@ -13,7 +13,12 @@ function validateJsonTree(relativeDirectory) {
     if (entry.isDirectory()) {
       validateJsonTree(relativePath);
     } else if (entry.name.endsWith(".json")) {
-      json(relativePath);
+      const definition = json(relativePath);
+      const group = definition["minecraft:block"]?.description?.menu_category?.group;
+      if (group !== undefined) {
+        assert.match(group, /^[a-z0-9_.-]+:[a-zA-Z0-9_.-]+$/,
+          `${relativePath}: block menu category group must have a namespace`);
+      }
     }
   }
 }
@@ -136,6 +141,11 @@ for (const [file, expectedRows, expectedKey] of [
     I: { item: "minecraft:iron_ingot" },
     B: { item: "minecraft:stick" },
   }],
+  ["decorate_trapdoor", ["QBQ", "QSQ", "QBQ"], {
+    Q: { item: "minecraft:quartz_block" },
+    B: { item: "minecraft:black_dye" },
+    S: { item: "minecraft:sea_lantern" },
+  }],
   ["noboru_netherite_axe", ["NN ", " B ", " B "], {
     N: { item: "minecraft:netherite_ingot" },
     B: { item: "minecraft:stick" },
@@ -165,6 +175,7 @@ assert.deepEqual(recipeFiles, [
   "bellity_sword.json",
   "connectable_train_cart.json",
   "creepy_horse_eye.json",
+  "decorate_trapdoor.json",
   "gizagiza_sword.json",
   "noboru_netherite_axe.json",
   "pallet.json",
@@ -356,15 +367,170 @@ for (const [locale, blockName, swordName] of [
   assert(lines.includes(`item.bellity:air_sword.name=${swordName}`));
 }
 
+const decorateTrapdoorId = "bellity:decorate_trapdoor";
+const decorateTrapdoor = json("behavior_pack/blocks/decorate_trapdoor.json")["minecraft:block"];
+assert.equal(decorateTrapdoor.description.identifier, decorateTrapdoorId);
+assert.equal(decorateTrapdoor.description.menu_category.group, "minecraft:itemGroup.name.trapdoor");
+assert.deepEqual(decorateTrapdoor.description.states["bellity:open"], [false, true]);
+assert.deepEqual(decorateTrapdoor.description.states["bellity:powered"], [false, true]);
+assert(decorateTrapdoor.description.traits["minecraft:placement_direction"].enabled_states
+  .includes("minecraft:cardinal_direction"));
+assert(decorateTrapdoor.description.traits["minecraft:placement_position"].enabled_states
+  .includes("minecraft:vertical_half"));
+assert.equal(decorateTrapdoor.components["minecraft:display_name"], `tile.${decorateTrapdoorId}.name`);
+const decorateTrapdoorGeometry = json("resource_pack/models/blocks/decorate_trapdoor.geo.json");
+const suppliedTrapdoorGeometry = json("model_data/decorate_trapdoor.geo.json");
+assert.equal(decorateTrapdoorGeometry["minecraft:geometry"][0].description.identifier,
+  "geometry.bellity.decorate_trapdoor");
+assert.deepEqual(decorateTrapdoorGeometry["minecraft:geometry"][0].bones,
+  suppliedTrapdoorGeometry["minecraft:geometry"][0].bones);
+assert.equal(decorateTrapdoorGeometry["minecraft:geometry"][1].description.identifier,
+  "geometry.bellity.decorate_trapdoor.open");
+assert.deepEqual(decorateTrapdoorGeometry["minecraft:geometry"][1].bones[0].cubes,
+  suppliedTrapdoorGeometry["minecraft:geometry"][0].bones[0].cubes);
+assert.deepEqual(decorateTrapdoorGeometry["minecraft:geometry"][1].bones[0].pivot, [0, 8, 0]);
+assert.deepEqual(decorateTrapdoorGeometry["minecraft:geometry"][1].bones[0].rotation, [90, 0, 0]);
+assert.equal(decorateTrapdoor.permutations.length, 16);
+assert.deepEqual(decorateTrapdoor.components["bellity:trapdoor"], {});
+for (const direction of ["north", "south", "east", "west"]) {
+  for (const half of ["bottom", "top"]) {
+    for (const open of [false, true]) {
+      const states = {
+        "minecraft:cardinal_direction": direction,
+        "minecraft:vertical_half": half,
+        "bellity:open": open,
+      };
+      const matches = decorateTrapdoor.permutations.filter((permutation) =>
+        runInNewContext(permutation.condition, { q: { block_state: (key) => states[key] } }));
+      assert.equal(matches.length, 1, `${direction}/${half}/${open} needs one visual permutation`);
+      const components = matches[0].components;
+      assert.equal(components["minecraft:geometry"],
+        `geometry.bellity.decorate_trapdoor${open ? ".open" : ""}`);
+      assert.deepEqual(components["minecraft:collision_box"], {
+        origin: [-8, 0, -8], size: open ? [16, 16, 3] : [16, 3, 16],
+      });
+      assert.deepEqual(components["minecraft:selection_box"], components["minecraft:collision_box"]);
+      assert.deepEqual(components["minecraft:transformation"].translation,
+        [0, !open && half === "top" ? 13 / 16 : 0, 0]);
+    }
+  }
+}
+assert.equal(json("resource_pack/textures/terrain_texture.json").texture_data.decorate_trapdoor.textures,
+  "textures/blocks/decorate_trapdoor");
+assert.deepEqual(readFileSync(resolve(root, "resource_pack/textures/blocks/decorate_trapdoor.png")),
+  readFileSync(resolve(root, "model_data/decorate_trapdoor_texture.png")));
+assert.deepEqual(json(`behavior_pack/${decorateTrapdoor.components["minecraft:loot"]}`).pools, [{
+  rolls: 1,
+  entries: [{ type: "item", name: decorateTrapdoorId, weight: 1 }],
+}]);
+for (const [locale, name] of [["en_US", "Decorate Trapdoor"], ["ja_JP", "模様付きのトラップドア"]]) {
+  assert(readFileSync(resolve(root, `resource_pack/texts/${locale}.lang`), "utf8")
+    .split(/\r?\n/).includes(`tile.${decorateTrapdoorId}.name=${name}`));
+}
+assert.match(script, /registerDecorateTrapdoor\(blockComponentRegistry\)/);
+
+// Verify state transitions in isolation; Minecraft rendering and circuits need device checks.
+const trapdoorComponents = new Map();
+const trapdoorContext = { console: { warn: () => {} } };
+runInNewContext(readFileSync(resolve(root, "behavior_pack/scripts/decorate_trapdoor.js"), "utf8")
+  .replace(/^import .*;\r?\n/gm, "").replace(/^export /gm, ""), trapdoorContext);
+trapdoorContext.registerDecorateTrapdoor({
+  registerCustomComponent: (id, component) => trapdoorComponents.set(id, component),
+});
+const trapdoorCallbacks = trapdoorComponents.get("bellity:trapdoor");
+for (const callback of ["beforeOnPlayerPlace", "onPlayerInteract", "onTick", "onPlace"]) {
+  assert.equal(typeof trapdoorCallbacks?.[callback], "function");
+}
+let trapdoorStates = { "bellity:open": false, "bellity:powered": false };
+let trapdoorPower = 0;
+let neighboringPower = 0;
+let neighborUnavailable = false;
+const trapdoorSounds = [];
+const trapdoorPermutation = (states) => ({
+  getState: (key) => states[key],
+  withState: (key, value) => trapdoorPermutation({ ...states, [key]: value }),
+});
+for (const [face, expectedDirection] of [
+  ["North", "south"], ["South", "north"], ["East", "west"], ["West", "east"],
+  ["Up", "east"], ["Down", "east"],
+]) {
+  for (const half of ["top", "bottom"]) {
+    for (const open of [false, true]) {
+      const placement = {
+        face,
+        permutationToPlace: trapdoorPermutation({
+          "minecraft:cardinal_direction": "east",
+          "minecraft:vertical_half": half,
+          "bellity:open": open,
+          "bellity:powered": false,
+        }),
+      };
+      trapdoorCallbacks.beforeOnPlayerPlace(placement);
+      assert.equal(placement.permutationToPlace.getState("minecraft:cardinal_direction"), expectedDirection);
+      assert.equal(placement.permutationToPlace.getState("minecraft:vertical_half"), half);
+      assert.equal(placement.permutationToPlace.getState("bellity:open"), open);
+      assert.equal(placement.permutationToPlace.getState("bellity:powered"), false);
+    }
+  }
+}
+const mockTrapdoor = {
+  typeId: decorateTrapdoorId,
+  location: { x: 0, y: 0, z: 0 },
+  center: () => ({ x: 0.5, y: 0.5, z: 0.5 }),
+  dimension: { playSound: (...args) => trapdoorSounds.push(args) },
+  get permutation() { return trapdoorPermutation(trapdoorStates); },
+  setPermutation: (permutation) => {
+    trapdoorStates = {
+      "bellity:open": permutation.getState("bellity:open"),
+      "bellity:powered": permutation.getState("bellity:powered"),
+    };
+  },
+  getRedstonePower: () => trapdoorPower,
+  offset: () => {
+    if (neighborUnavailable) throw new Error("Unloaded neighbor");
+    return { getRedstonePower: () => neighboringPower };
+  },
+};
+const interactWithTrapdoor = (player = { isSneaking: false }) =>
+  trapdoorCallbacks.onPlayerInteract({ block: mockTrapdoor, player });
+const tickTrapdoor = () => trapdoorCallbacks.onTick({ block: mockTrapdoor });
+interactWithTrapdoor();
+assert.equal(trapdoorStates["bellity:open"], true);
+interactWithTrapdoor({ isSneaking: true });
+trapdoorCallbacks.onPlayerInteract({ block: mockTrapdoor });
+assert.equal(trapdoorStates["bellity:open"], true);
+interactWithTrapdoor();
+assert.equal(trapdoorStates["bellity:open"], false);
+trapdoorPower = 15;
+tickTrapdoor();
+assert.deepEqual(trapdoorStates, { "bellity:open": true, "bellity:powered": true });
+interactWithTrapdoor();
+tickTrapdoor();
+assert.deepEqual(trapdoorStates, { "bellity:open": false, "bellity:powered": true });
+trapdoorPower = 0;
+tickTrapdoor();
+assert.deepEqual(trapdoorStates, { "bellity:open": false, "bellity:powered": false });
+neighboringPower = 15;
+trapdoorCallbacks.onPlace({ block: mockTrapdoor });
+assert.deepEqual(trapdoorStates, { "bellity:open": true, "bellity:powered": true });
+neighboringPower = 0;
+tickTrapdoor();
+assert.deepEqual(trapdoorStates, { "bellity:open": false, "bellity:powered": false });
+neighborUnavailable = true;
+assert.doesNotThrow(tickTrapdoor);
+assert(trapdoorSounds.length > 0);
+
 // Exercise the registered hit callback without treating a mock as in-game proof.
 const registeredComponents = new Map();
 const subscribe = () => {};
 const warnings = [];
 runInNewContext(script.replace(/^import .*;\r?\n/gm, ""), {
   openPallet: () => {},
+  registerDecorateTrapdoor: () => {},
   system: {
     beforeEvents: { startup: { subscribe: (callback) => callback({
       itemComponentRegistry: { registerCustomComponent: (id, component) => registeredComponents.set(id, component) },
+      blockComponentRegistry: { registerCustomComponent: () => {} },
     }) } },
     runInterval: () => {},
   },
@@ -492,4 +658,4 @@ placed.length = 0;
 await usePallet();
 assert.equal(placed.length, 0);
 
-console.log("Bellity pack validation passed: 8 items, 1 block, 9 recipes, Pallet UI/placement callbacks, levitation callback, light ball, freeze effect, connectable train cart, textures, names, manifests.");
+console.log("Bellity pack validation passed: 8 items, 2 blocks, 10 recipes, trapdoor assets/state callbacks, Pallet UI/placement callbacks, levitation callback, light ball, freeze effect, connectable train cart, textures, names, manifests.");
