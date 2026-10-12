@@ -1,7 +1,10 @@
 item.bellity:bellity_sword.name=ベリティソード
 item.bellity:creepy_horse_eye.name=クリーピーホースの目
 item.bellity:gizagiza_sword.name=ギザギザ剣
+tile.bellity:air_block.name=空気ブロック
+item.bellity:air_sword.name=空気ソード
 item.bellity:noboru_netherite_axe.name=ちょっとネザライトの斧
 item.bellity:sun_bigman_light.name=太陽の巨人の光
 entity.bellity:connectable_train_cart.name=連結トロッコ
 item.bellity:connectable_train_cart.name=連結トロッコ
+item.bellity:pallet.name=パレット

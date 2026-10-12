@@ -2,7 +2,7 @@
 
 ## Purpose and Scope
 
-Bellity is a Minecraft Bedrock Edition add-on that provides custom weapons, use-activated items, and entities. The Behavior Pack and Resource Pack use the display name "ベリティアドオン." Definitions, recipes, and images are separated by feature, the namespace is `bellity`, and the target version is Minecraft Bedrock 1.21.110 or later.
+Bellity is a Minecraft Bedrock Edition add-on that provides custom weapons, use-activated items, placeable blocks, and entities. The Behavior Pack and Resource Pack use the display name "ベリティアドオン." Definitions, recipes, and images are separated by feature, the namespace is `bellity`, and the target version is Minecraft Bedrock 1.21.110 or later.
 
 Current feature specifications:
 
@@ -13,7 +13,10 @@ Current feature specifications:
 | Sun Bigman Light | `bellity:sun_bigman_light` | Throwable weapon | Implemented | [sun_bigman_light.md](sun_bigman_light.md) |
 | Gizagiza Sword | `bellity:gizagiza_sword` | Sword | Implemented | [gizagiza_sword.md](gizagiza_sword.md) |
 | Creepy Horse Eye | `bellity:creepy_horse_eye` | Use-activated item | Implemented; device verification pending | [creepy_horse_eye.md](creepy_horse_eye.md) |
-| Connectable Train Cart | `bellity:connectable_train_cart` | Entity | Implemented; device verification pending | [connectable_train_cart.md](connectable_train_cart.md) |
+| Connectable Train Cart | `bellity:connectable_train_cart` | Entity and placement item | Implemented; device verification pending | [connectable_train_cart.md](connectable_train_cart.md) |
+| Air Block | `bellity:air_block` | Placeable block | Implemented; device verification pending | [air_block.md](air_block.md) |
+| Air Sword | `bellity:air_sword` | Sword | Implemented; device verification pending | [air_sword.md](air_sword.md) |
+| Pallet | `bellity:pallet` | Use-activated item | Implemented; device verification pending | [pallet.md](pallet.md) |
 
 ## Pack Structure
 
@@ -21,6 +24,8 @@ Current feature specifications:
 behavior_pack/
 ├─ manifest.json
 ├─ items/                 # Item definitions
+├─ blocks/                # Custom block definitions
+├─ loot_tables/blocks/    # Block drops
 ├─ recipes/               # Crafting recipes
 ├─ entities/              # Custom entity definitions
 └─ scripts/main.js        # Script API behavior
@@ -30,8 +35,11 @@ resource_pack/
 ├─ animations/            # Display animations
 ├─ render_controllers/    # Render controllers
 ├─ models/                # Runtime geometry
+├─ models/blocks/         # Block geometry
 ├─ textures/item_texture.json
 ├─ textures/items/        # Item textures
+├─ textures/blocks/       # Block textures
+├─ textures/terrain_texture.json
 ├─ textures/entity/       # Entity textures
 └─ texts/                 # Language files
 model_data/                        # Editable source assets
@@ -40,13 +48,14 @@ tests/test_checklist.md            # Device-verification record
 dist/bellity_addon.mcaddon         # Distribution package
 ```
 
-The Behavior Pack defines items, recipes, entities, and Script API behavior. The Resource Pack provides display names, textures, geometry, and rendering data. The Behavior Pack depends on the Resource Pack and `@minecraft/server` 2.0.0. Consult the manifests for the current pack versions. Both packs use `min_engine_version` 1.21.110.
+The Behavior Pack defines items, blocks, recipes, entities, and Script API behavior. The Resource Pack provides display names, textures, geometry, and rendering data. The Behavior Pack depends on the Resource Pack, `@minecraft/server` 2.0.0, and `@minecraft/server-ui` 2.0.0. `scripts/main.js` registers custom item components; `scripts/pallet.js` implements the Pallet form and placement. Consult the manifests for the current pack versions. Both packs use `min_engine_version` 1.21.110.
 
 ## Common Specifications
 
 - Feature IDs use `bellity:<feature_id>`, and file names use lowercase English letters, digits, and underscores.
 - Each item references `item.bellity:<item_id>.name` through `minecraft:display_name`, with matching entries in `ja_JP.lang` and `en_US.lang`.
 - Item textures are stored in `resource_pack/textures/items/` and registered in `item_texture.json`; editable source assets are retained in `model_data/`.
+- Block definitions are stored in `behavior_pack/blocks/`. Block names use `tile.bellity:<block_id>.name`; block textures are stored in `resource_pack/textures/blocks/` and registered in `terrain_texture.json`, with geometry in `resource_pack/models/blocks/` and block drops in `behavior_pack/loot_tables/blocks/`.
 - Crafting recipes use `minecraft:recipe_shaped`, format version 1.20.10, the `crafting_table` tag, and `AlwaysUnlocked`. Each feature specification records its exact layout and ingredients.
 - Item definitions use format version 1.21.110. Custom item components and Script API code are used only when a feature requires them.
 - Experimental features are avoided unless a feature specification explicitly documents why they are required and how to enable them.

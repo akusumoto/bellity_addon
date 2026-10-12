@@ -1,0 +1,11 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shaped": {
+    "description": { "identifier": "bellity:air_block" },
+    "tags": ["crafting_table"],
+    "unlock": { "context": "AlwaysUnlocked" },
+    "pattern": ["WWW", "WWW", "WWW"],
+    "key": { "W": { "item": "minecraft:white_concrete" } },
+    "result": { "item": "bellity:air_block", "count": 1 }
+  }
+}

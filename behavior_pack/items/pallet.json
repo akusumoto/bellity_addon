@@ -1,0 +1,17 @@
+{
+  "format_version": "1.21.110",
+  "minecraft:item": {
+    "description": {
+      "identifier": "bellity:pallet",
+      "menu_category": { "category": "items" }
+    },
+    "components": {
+      "minecraft:display_name": { "value": "item.bellity:pallet.name" },
+      "minecraft:icon": "pallet",
+      "minecraft:max_stack_size": 1,
+      "minecraft:interact_button": true,
+      "minecraft:use_modifiers": { "use_duration": 0.1, "movement_modifier": 1.0 },
+      "bellity:open_pallet": {}
+    }
+  }
+}

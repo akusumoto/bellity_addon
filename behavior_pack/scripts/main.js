@@ -1,4 +1,5 @@
 import { EquipmentSlot, ItemStack, MolangVariableMap, system, world } from "@minecraft/server";
+import { openPallet } from "./pallet.js";
 
 const LIGHT_ID = "bellity:sun_bigman_light";
 const LIGHT_BALL_ID = "bellity:light_ball";
@@ -16,6 +17,7 @@ const TRAIN_HISTORY_MARGIN = 1.5;
 const PENDING_TRAIN_REPAIRS_PROPERTY = "bellity:pending_train_repairs";
 const CREEPY_HORSE_EYE_ACTIVATE_SOUND = "bellity.creepy_horse_eye_activate";
 const EXTRA_KNOCKBACK_STRENGTH = 0.4;
+const AIR_SWORD_LEVITATION_TICKS = 200;
 const FREEZE_RADIUS = 7;
 const FREEZE_DURATION_TICKS = 200;
 const FREEZE_TREMBLE_DISTANCE = 0.025;
@@ -546,6 +548,19 @@ function applyDoubleKnockback(event) {
   });
 }
 
+function applyAirSwordLevitation(event) {
+  if (!event.hadEffect) return;
+
+  try {
+    event.hitEntity.addEffect("levitation", AIR_SWORD_LEVITATION_TICKS, {
+      amplifier: 0,
+      showParticles: true,
+    });
+  } catch (error) {
+    console.warn(`Air Sword levitation failed: ${error}`);
+  }
+}
+
 function throwLight(event) {
   const player = event.source;
   const now = system.currentTick;
@@ -755,11 +770,17 @@ function updateCreepyHorseEyeEffects() {
 }
 
 system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {
+  itemComponentRegistry.registerCustomComponent("bellity:open_pallet", {
+    onUse: openPallet,
+  });
   itemComponentRegistry.registerCustomComponent("bellity:random_drop_on_hit", {
     onHitEntity: dropRandomItem,
   });
   itemComponentRegistry.registerCustomComponent("bellity:double_knockback_on_hit", {
     onHitEntity: applyDoubleKnockback,
+  });
+  itemComponentRegistry.registerCustomComponent("bellity:levitation_on_hit", {
+    onHitEntity: applyAirSwordLevitation,
   });
   itemComponentRegistry.registerCustomComponent("bellity:throw_light", {
     onUse: throwLight,

@@ -6,8 +6,8 @@
 Target Version: ____ Date Checked: ____
 
 - [ ] Can apply the Bellity Addon BP/RP to the world, and there are no errors in the Content Log.
-- [ ] The 5 items can be obtained with `/give`.
-- [ ] The Japanese and English display names and the 5 images are correct.
+- [ ] All custom items and the Air Block can be obtained with `/give`.
+- [ ] The Japanese and English display names, inventory images, and placed-block rendering are correct.
 - [ ] The Bellity Sword can be crafted with the specified 3x3 layout.
 - [ ] The Bellity Sword has an attack damage of 32 and a durability of 1233.
 - [ ] One item from the candidates drops on every valid hit with the Bellity Sword.
@@ -69,3 +69,49 @@ Target Version: ____ Date Checked: ____
 - [ ] Two players connecting or operating different trains do not overwrite each other's selection or train state.
 
 All Connectable Train Cart checks above are pending in-game verification. Source validation or matching deployed-file hashes must not be used to mark them complete.
+
+## Air Block
+
+- [ ] `/give @s bellity:air_block` and the Creative inventory provide the block, with the Japanese name "空気ブロック" and English name "Air Block".
+- [ ] The exact nine-White-Concrete crafting recipe produces one Air Block.
+- [ ] Air Blocks stack to 64.
+- [ ] Inventory rendering and the placed model match `model_data/air_block.geo.json` and `model_data/air_block_texture.png` from all sides without missing textures or geometry errors.
+- [ ] Placement, default solid cube collision, and selection work correctly.
+- [ ] Breaking and dropped-item behavior work correctly; record observed breaking time and blast behavior while explicit balance values remain TODO.
+- [ ] Placed blocks remain correct after saving and reloading the world.
+
+## Air Sword
+
+- [ ] `/give @s bellity:air_sword` and the Creative inventory provide the sword, with the Japanese name "空気ソード", English name "Air Sword", and unchanged image from `model_data/air_sword.png`.
+- [ ] The exact recipe with Air Blocks in the top-center and middle-center slots and Black Concrete in the bottom-center slot produces one Air Sword.
+- [ ] Air Swords stack to one and appear in the sword equipment group with correct handheld rendering.
+- [ ] Under controlled conditions, total attack damage is 6.
+- [ ] Repeated successful hits and normal sword use never consume durability or break the sword.
+- [ ] Successful hits apply Levitation I for 10 seconds to eligible living targets; missed or unsuccessful attacks do not apply it.
+- [ ] Repeated hits refresh the effect duration without increasing its level.
+- [ ] Friendly mobs and players with damage enabled can receive the effect, and vanilla immune targets retain their immunity.
+- [ ] Target death, despawning, and overlapping multiplayer attacks do not produce Content Log errors.
+- [ ] Saving and reloading preserves the sword and its behavior.
+
+All Air Block and Air Sword checks above are pending in-game verification. Source checks do not establish these runtime results.
+
+## Pallet
+
+- [ ] The Creative inventory and `/give @s bellity:pallet` provide the item, with English name "Pallet", Japanese name "パレット", the unchanged image from `model_data/pallet.png`, and maximum stack size one.
+- [ ] The exact recipe `[" T ", "TBT", "TPT"]` using Spruce Planks, a Brush, and Purple Concrete produces one Pallet.
+- [ ] Using the item opens the server form with body "セットするコンクリートを選択" and ordered buttons "赤", "オレンジ", "黄色", "緑", "空色", "青", "紫", "桃", each with the matching concrete icon; "空色" uses Light Blue Concrete.
+- [ ] Each selection places one matching concrete block in the empty cell adjacent to the captured aimed face. Verify all eight colors and all six block faces.
+- [ ] The target is captured when the menu opens, with a six-block raycast; aiming elsewhere while choosing does not change the destination.
+- [ ] Cancellation, missing targets, occupied destinations, moving beyond the response reach, and dimension changes place no concrete. Existing blocks remain intact.
+- [ ] The Pallet is retained after use, and placement requires no concrete inventory.
+- [ ] Rapid repeated use does not open duplicate forms, and simultaneous players do not share targets or choices.
+- [ ] UI cancellation, player disconnection, unloaded destinations, and world-height boundaries produce no unhandled script errors; later uses still work.
+- [ ] Saving and reloading preserves the Pallet and placed concrete. Pack loading, menu icons, and use produce no Content Log errors.
+
+All Pallet checks above are pending in-game verification. Source validation and mock callbacks do not establish these runtime results.
+
+## Development Deployment Record: 2026-10-12
+
+After correcting the Air Sword texture to use `model_data/air_sword.png`, source validation and both script syntax checks passed again. The installed Resource Pack still contained the previous Air Sword texture before the update. `install-dev.ps1 -Update` deployed the correction, and `tools/verify-dev.ps1` confirmed that all 24 Behavior Pack files and 26 Resource Pack files match the source by file count and SHA-256 hash. Reload the Minecraft world to load the corrected texture; its in-game appearance remains pending verification.
+
+Source validation (`node tools/validate.mjs`) and JavaScript syntax checks for `scripts/main.js` and `scripts/pallet.js` passed. `install-dev.ps1 -Update` updated both installed development packs, including the current Air Block, Air Sword, and Pallet files. `tools/verify-dev.ps1` confirmed matching file counts and SHA-256 hashes for all 24 Behavior Pack files and 26 Resource Pack files. No `.mcaddon` package was built. Reload the Minecraft world to load the updated packs; Pallet device checks remain pending.

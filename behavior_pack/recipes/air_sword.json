@@ -1,0 +1,14 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shaped": {
+    "description": { "identifier": "bellity:air_sword" },
+    "tags": ["crafting_table"],
+    "unlock": { "context": "AlwaysUnlocked" },
+    "pattern": [" A ", " A ", " B "],
+    "key": {
+      "A": { "item": "bellity:air_block" },
+      "B": { "item": "minecraft:black_concrete" }
+    },
+    "result": { "item": "bellity:air_sword", "count": 1 }
+  }
+}

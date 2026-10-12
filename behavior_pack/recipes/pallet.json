@@ -1,0 +1,15 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shaped": {
+    "description": { "identifier": "bellity:pallet" },
+    "tags": ["crafting_table"],
+    "unlock": { "context": "AlwaysUnlocked" },
+    "pattern": [" T ", "TBT", "TPT"],
+    "key": {
+      "T": { "item": "minecraft:spruce_planks" },
+      "B": { "item": "minecraft:brush" },
+      "P": { "item": "minecraft:purple_concrete" }
+    },
+    "result": { "item": "bellity:pallet", "count": 1 }
+  }
+}

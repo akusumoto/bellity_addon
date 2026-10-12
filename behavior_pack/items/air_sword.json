@@ -1,0 +1,21 @@
+{
+  "format_version": "1.21.110",
+  "minecraft:item": {
+    "description": {
+      "identifier": "bellity:air_sword",
+      "menu_category": {
+        "category": "equipment",
+        "group": "minecraft:itemGroup.name.sword"
+      }
+    },
+    "components": {
+      "minecraft:display_name": { "value": "item.bellity:air_sword.name" },
+      "minecraft:icon": "air_sword",
+      "minecraft:max_stack_size": 1,
+      "minecraft:hand_equipped": true,
+      "minecraft:tags": { "tags": ["minecraft:is_sword"] },
+      "minecraft:damage": 5,
+      "bellity:levitation_on_hit": {}
+    }
+  }
+}

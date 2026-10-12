@@ -9,7 +9,10 @@ This is a custom-content addon for Minecraft Bedrock Edition 1.21.110 or later. 
 | Sun Bigman Light | Crafting Table, Creative, `/give` | [Design Document](spec/sun_bigman_light.md) |
 | Gizagiza Sword | Crafting Table, Creative, `/give` | [Design Document](spec/gizagiza_sword.md) |
 | Creepy Horse Eye | Crafting Table, Creative, `/give` | [Design Document](spec/creepy_horse_eye.md) |
-| Connectable Train Cart | Creative, `/summon` | [Design Document](spec/connectable_train_cart.md) |
+| Connectable Train Cart | Crafting Table, Creative, `/give`, `/summon` | [Design Document](spec/connectable_train_cart.md) |
+| Air Block | Crafting Table, Creative, `/give` | [Design Document](spec/air_block.md) |
+| Air Sword | Crafting Table, Creative, `/give` | [Design Document](spec/air_sword.md) |
+| Pallet | Crafting Table, Creative, `/give` | [Design Document](spec/pallet.md) |
 
 ## Build and Installation
 
@@ -53,11 +56,15 @@ Obtaining commands:
 /give @s bellity:sun_bigman_light
 /give @s bellity:gizagiza_sword
 /give @s bellity:creepy_horse_eye
+/give @s bellity:connectable_train_cart
+/give @s bellity:air_block
+/give @s bellity:air_sword
+/give @s bellity:pallet
 /summon bellity:connectable_train_cart ~ ~ ~
 ```
 
 ## Device Verification
 
-Verify Japanese and English display names, images, five crafting recipes, custom-entity appearance, and each feature's behavior along the [Device Checklist](tests/test_checklist.md). Content logs are located at `%appdata%\Minecraft Bedrock\logs`. Operation checks on Minecraft for the current build are incomplete.
+Verify Japanese and English display names, images, all crafting recipes, block placement, custom-entity appearance, and each feature's behavior along the [Device Checklist](tests/test_checklist.md). Content logs are located at `%appdata%\Minecraft Bedrock\logs`. Operation checks on Minecraft for the current build are incomplete.
 
-The Connectable Train Cart currently has no recipe or placement item. Obtain it from the Creative inventory or summon it with the command above. While holding a Chain, interact with a head/train cart and then with a standalone cart within 6 blocks of its tail. A successful connection does not consume the Chain and immediately places the new cart 1.5 blocks behind the train's tail. Existing trains cannot be merged. This behavior remains pending device verification.
+Craft or obtain the Connectable Train Cart placement item, then use it on normal, powered, detector, or activator rails. The entity can also be summoned with the command above. While holding a Chain, interact with a head/train cart and then with a standalone cart within 6 blocks of its tail. A successful connection does not consume the Chain and immediately places the new cart 1.5 blocks behind the train's tail. Existing trains cannot be merged. This behavior remains pending device verification.

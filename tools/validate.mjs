@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
+import { runInNewContext } from "node:vm";
 
 const root = resolve(import.meta.dirname, "..");
 const json = (path) => JSON.parse(readFileSync(resolve(root, path), "utf8"));
@@ -28,8 +29,11 @@ assert.notEqual(bp.header.uuid, rp.header.uuid);
 assert(bp.dependencies.some((d) => d.uuid === rp.header.uuid &&
   JSON.stringify(d.version) === JSON.stringify(rp.header.version)));
 assert(bp.dependencies.some((d) => d.module_name === "@minecraft/server"));
+assert(bp.dependencies.some((d) => d.module_name === "@minecraft/server-ui" && d.version === "2.0.0"));
 
 const weapons = [
+  ["pallet", "bellity:pallet", undefined, undefined, "bellity:open_pallet"],
+  ["air_sword", "bellity:air_sword", 5, undefined, "bellity:levitation_on_hit"],
   ["bellity_sword", "bellity:bellity_sword", 31, 1233],
   ["creepy_horse_eye", "bellity:creepy_horse_eye", undefined, undefined, "bellity:freeze_nearby_enemies"],
   ["noboru_netherite_axe", "bellity:noboru_netherite_axe", 5, 1200],
@@ -102,6 +106,18 @@ assert.deepEqual(creepyHorseEye.components["minecraft:cooldown"], {
 });
 
 for (const [file, expectedRows, expectedKey] of [
+  ["pallet", [" T ", "TBT", "TPT"], {
+    T: { item: "minecraft:spruce_planks" },
+    B: { item: "minecraft:brush" },
+    P: { item: "minecraft:purple_concrete" },
+  }],
+  ["air_block", ["WWW", "WWW", "WWW"], {
+    W: { item: "minecraft:white_concrete" },
+  }],
+  ["air_sword", [" A ", " A ", " B "], {
+    A: { item: "bellity:air_block" },
+    B: { item: "minecraft:black_concrete" },
+  }],
   ["bellity_sword", ["HG ", " C ", " B "], {
     H: { item: "minecraft:flint_and_steel" },
     G: { item: "minecraft:gold_ingot" },
@@ -144,11 +160,14 @@ const recipeFiles = readdirSync(resolve(root, "behavior_pack/recipes"))
   .filter((file) => file.endsWith(".json"))
   .sort();
 assert.deepEqual(recipeFiles, [
+  "air_block.json",
+  "air_sword.json",
   "bellity_sword.json",
   "connectable_train_cart.json",
   "creepy_horse_eye.json",
   "gizagiza_sword.json",
   "noboru_netherite_axe.json",
+  "pallet.json",
   "sun_bigman_light.json",
 ]);
 
@@ -291,4 +310,186 @@ assert.match(script, /restorePendingTrainRepairs\(\)/);
 assert.match(script, /Only a standalone cart can be appended; trains cannot be merged\./);
 assert.match(script, /world\.afterEvents\.entityDie\.subscribe/);
 
-console.log("Bellity pack validation passed: 6 items, 6 recipes, light ball, freeze effect, connectable train cart, textures, names, manifests.");
+const airSword = json("behavior_pack/items/air_sword.json")["minecraft:item"];
+assert.equal("minecraft:durability" in airSword.components, false);
+assert.equal(airSword.components["minecraft:icon"], "air_sword");
+assert.equal(airSword.components["minecraft:hand_equipped"], true);
+assert.deepEqual(airSword.components["minecraft:tags"], { tags: ["minecraft:is_sword"] });
+
+const airBlock = json("behavior_pack/blocks/air_block.json")["minecraft:block"];
+assert.equal(airBlock.description.identifier, "bellity:air_block");
+assert.equal(airBlock.description.menu_category.category, "construction");
+assert.equal(airBlock.components["minecraft:display_name"], "tile.bellity:air_block.name");
+assert.equal(airBlock.components["minecraft:collision_box"], true);
+assert.equal(airBlock.components["minecraft:selection_box"], true);
+const airGeometry = json("resource_pack/models/blocks/air_block.geo.json");
+assert.deepEqual(airGeometry, json("model_data/air_block.geo.json"));
+assert.equal(airBlock.components["minecraft:geometry"],
+  airGeometry["minecraft:geometry"][0].description.identifier);
+assert.deepEqual(airBlock.components["minecraft:material_instances"], {
+  "*": { texture: "air_block", render_method: "alpha_test" },
+});
+assert.deepEqual(airBlock.components["minecraft:item_visual"], {
+  geometry: airBlock.components["minecraft:geometry"],
+  material_instances: airBlock.components["minecraft:material_instances"],
+});
+assert.equal(json("resource_pack/textures/terrain_texture.json").texture_data.air_block.textures,
+  "textures/blocks/air_block");
+assert.deepEqual(json(`behavior_pack/${airBlock.components["minecraft:loot"]}`).pools, [{
+  rolls: 1,
+  entries: [{ type: "item", name: "bellity:air_block", weight: 1 }],
+}]);
+for (const [runtime, source] of [
+  ["textures/items/air_sword.png", "air_sword.png"],
+  ["textures/blocks/air_block.png", "air_block_texture.png"],
+  ["models/blocks/air_block.geo.json", "air_block.geo.json"],
+]) {
+  assert.deepEqual(readFileSync(resolve(root, `resource_pack/${runtime}`)),
+    readFileSync(resolve(root, `model_data/${source}`)));
+}
+for (const [locale, blockName, swordName] of [
+  ["en_US", "Air Block", "Air Sword"],
+  ["ja_JP", "空気ブロック", "空気ソード"],
+]) {
+  const lines = readFileSync(resolve(root, `resource_pack/texts/${locale}.lang`), "utf8").split(/\r?\n/);
+  assert(lines.includes(`tile.bellity:air_block.name=${blockName}`));
+  assert(lines.includes(`item.bellity:air_sword.name=${swordName}`));
+}
+
+// Exercise the registered hit callback without treating a mock as in-game proof.
+const registeredComponents = new Map();
+const subscribe = () => {};
+const warnings = [];
+runInNewContext(script.replace(/^import .*;\r?\n/gm, ""), {
+  openPallet: () => {},
+  system: {
+    beforeEvents: { startup: { subscribe: (callback) => callback({
+      itemComponentRegistry: { registerCustomComponent: (id, component) => registeredComponents.set(id, component) },
+    }) } },
+    runInterval: () => {},
+  },
+  world: {
+    beforeEvents: { playerInteractWithEntity: { subscribe } },
+    afterEvents: {
+      entityDie: { subscribe },
+      projectileHitEntity: { subscribe },
+      projectileHitBlock: { subscribe },
+    },
+  },
+  console: { warn: (message) => warnings.push(message) },
+});
+const levitate = registeredComponents.get("bellity:levitation_on_hit")?.onHitEntity;
+assert.equal(typeof levitate, "function");
+const effects = [];
+const hitEntity = { addEffect: (id, ticks, options) => effects.push({ id, ticks, ...options }) };
+levitate({ hadEffect: false, hitEntity });
+assert.equal(effects.length, 0);
+levitate({ hadEffect: true, hitEntity });
+levitate({ hadEffect: true, hitEntity });
+assert.deepEqual(effects, Array.from({ length: 2 }, () => ({
+  id: "levitation", ticks: 200, amplifier: 0, showParticles: true,
+})));
+levitate({ hadEffect: true, hitEntity: { addEffect: () => { throw new Error("Target unavailable"); } } });
+assert.equal(warnings.length, 1);
+
+assert.deepEqual(readFileSync(resolve(root, "resource_pack/textures/items/pallet.png")),
+  readFileSync(resolve(root, "model_data/pallet.png")));
+const pallet = json("behavior_pack/items/pallet.json")["minecraft:item"];
+assert.equal(pallet.components["minecraft:interact_button"], true);
+assert.deepEqual(pallet.components["minecraft:use_modifiers"], { use_duration: 0.1, movement_modifier: 1.0 });
+assert.equal(typeof registeredComponents.get("bellity:open_pallet")?.onUse, "function");
+for (const [locale, name] of [["en_US", "Pallet"], ["ja_JP", "パレット"]]) {
+  assert(readFileSync(resolve(root, `resource_pack/texts/${locale}.lang`), "utf8")
+    .split(/\r?\n/).includes(`item.bellity:pallet.name=${name}`));
+}
+
+// Mock UI and world access to check placement and asynchronous failure paths.
+const forms = [];
+const placed = [];
+const messages = [];
+let result = { canceled: false, selection: 0 };
+let onShow = () => {};
+let empty = true;
+const destination = { isAir: true, setType: (id) => placed.push(id) };
+const dimension = { id: "overworld", getBlock: (location) => {
+  destination.isAir = empty;
+  placed.push({ ...location });
+  return destination;
+} };
+const player = {
+  id: "pallet-player", typeId: "minecraft:player", isValid: true,
+  location: { x: 0, y: 0, z: 0 }, dimension,
+  getBlockFromViewDirection: (options) => {
+    assert.equal(options.maxDistance, 6);
+    return { face: "Up", block: { location: { x: 0, y: 0, z: 0 } } };
+  },
+  sendMessage: (message) => messages.push(message),
+};
+const palletContext = {
+  Direction: Object.fromEntries(["Down", "Up", "North", "South", "West", "East"].map((face) => [face, face])),
+  ActionFormData: class {
+    constructor() { this.buttons = []; forms.push(this); }
+    title(value) { this.titleValue = value; return this; }
+    body(value) { this.bodyValue = value; return this; }
+    button(label, icon) { this.buttons.push([label, icon]); return this; }
+    show(source) { assert.equal(source, player); onShow(); return Promise.resolve(result); }
+  },
+  console: { warn: (message) => warnings.push(message) },
+};
+runInNewContext(readFileSync(resolve(root, "behavior_pack/scripts/pallet.js"), "utf8")
+  .replace(/^import .*;\r?\n/gm, "").replace("export async function", "async function"), palletContext);
+const usePallet = () => palletContext.openPallet({ source: player });
+const colors = ["red", "orange", "yellow", "green", "light_blue", "blue", "purple", "pink"];
+for (let selection = 0; selection < colors.length; selection++) {
+  result = { canceled: false, selection };
+  placed.length = 0;
+  await usePallet();
+  assert.deepEqual(placed, [{ x: 0, y: 1, z: 0 }, `minecraft:${colors[selection]}_concrete`]);
+}
+assert.equal(forms[0].bodyValue, "セットするコンクリートを選択");
+assert.equal(forms[0].titleValue.translate, "item.bellity:pallet.name");
+assert.deepEqual(forms[0].buttons, ["赤", "オレンジ", "黄色", "緑", "空色", "青", "紫", "桃"]
+  .map((label, index) => [label, `textures/blocks/concrete_${colors[index]}`]));
+for (const [face, location] of [
+  ["Down", { x: 0, y: -1, z: 0 }], ["Up", { x: 0, y: 1, z: 0 }],
+  ["North", { x: 0, y: 0, z: -1 }], ["South", { x: 0, y: 0, z: 1 }],
+  ["West", { x: -1, y: 0, z: 0 }], ["East", { x: 1, y: 0, z: 0 }],
+]) {
+  player.getBlockFromViewDirection = () => ({ face, block: { location: { x: 0, y: 0, z: 0 } } });
+  placed.length = 0;
+  await usePallet();
+  assert.deepEqual(placed[0], location);
+}
+placed.length = 0;
+result = { canceled: true };
+await usePallet();
+assert.equal(placed.length, 0);
+result = { canceled: false, selection: 0 };
+empty = false;
+await usePallet();
+assert.equal(placed.some((entry) => typeof entry === "string"), false);
+empty = true;
+placed.length = 0;
+onShow = () => { player.dimension = { id: "nether" }; };
+await usePallet();
+assert.equal(placed.length, 0);
+player.dimension = dimension;
+onShow = () => { player.location = { x: 100, y: 0, z: 0 }; };
+await usePallet();
+assert.equal(placed.length, 0);
+player.location = { x: 0, y: 0, z: 0 };
+onShow = () => { throw new Error("UI unavailable"); };
+const warningCount = warnings.length;
+await usePallet();
+assert.equal(warnings.length, warningCount + 1);
+onShow = () => {};
+const countBefore = forms.length;
+await Promise.all([usePallet(), usePallet()]);
+assert.equal(forms.length, countBefore + 1);
+assert.equal(placed.at(-1), "minecraft:red_concrete");
+player.getBlockFromViewDirection = () => undefined;
+placed.length = 0;
+await usePallet();
+assert.equal(placed.length, 0);
+
+console.log("Bellity pack validation passed: 8 items, 1 block, 9 recipes, Pallet UI/placement callbacks, levitation callback, light ball, freeze effect, connectable train cart, textures, names, manifests.");

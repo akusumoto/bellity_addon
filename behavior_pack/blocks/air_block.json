@@ -1,0 +1,25 @@
+{
+  "format_version": "1.21.110",
+  "minecraft:block": {
+    "description": {
+      "identifier": "bellity:air_block",
+      "menu_category": { "category": "construction" }
+    },
+    "components": {
+      "minecraft:display_name": "tile.bellity:air_block.name",
+      "minecraft:geometry": "geometry.unknown",
+      "minecraft:material_instances": {
+        "*": { "texture": "air_block", "render_method": "alpha_test" }
+      },
+      "minecraft:item_visual": {
+        "geometry": "geometry.unknown",
+        "material_instances": {
+          "*": { "texture": "air_block", "render_method": "alpha_test" }
+        }
+      },
+      "minecraft:collision_box": true,
+      "minecraft:selection_box": true,
+      "minecraft:loot": "loot_tables/blocks/air_block.json"
+    }
+  }
+}
