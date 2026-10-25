@@ -1,0 +1,6 @@
+{
+  "pools": [{
+    "rolls": 1,
+    "entries": [{ "type": "item", "name": "bellity:kakejiku_banner", "weight": 1 }]
+  }]
+}

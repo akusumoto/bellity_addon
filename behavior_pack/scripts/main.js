@@ -1,6 +1,7 @@
 import { EquipmentSlot, ItemStack, MolangVariableMap, system, world } from "@minecraft/server";
 import { openPallet } from "./pallet.js";
 import { registerDecorateTrapdoor } from "./decorate_trapdoor.js";
+import { registerKakejikuBanner } from "./kakejiku_banner.js";
 
 const LIGHT_ID = "bellity:sun_bigman_light";
 const LIGHT_BALL_ID = "bellity:light_ball";
@@ -772,6 +773,7 @@ function updateCreepyHorseEyeEffects() {
 
 system.beforeEvents.startup.subscribe(({ itemComponentRegistry, blockComponentRegistry }) => {
   registerDecorateTrapdoor(blockComponentRegistry);
+  registerKakejikuBanner(blockComponentRegistry);
   itemComponentRegistry.registerCustomComponent("bellity:open_pallet", {
     onUse: openPallet,
   });

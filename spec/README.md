@@ -19,6 +19,7 @@ Current feature specifications:
 | Pallet | `bellity:pallet` | Use-activated item | Implemented; device verification pending | [pallet.md](pallet.md) |
 | Decorate Trapdoor | `bellity:decorate_trapdoor` | Placeable trapdoor | Implemented; device verification pending | [decorate_trapdoor.md](decorate_trapdoor.md) |
 | Gold Shield | `bellity:gold_shield` | Offhand item | Item, recipe, and model implemented; blocking TODO; device verification pending | [gold_shield.md](gold_shield.md) |
+| Kakejiku Banner | `bellity:kakejiku_banner` | Decorative banner block and item | Implemented; native banner compatibility gaps and device verification pending | [kakejiku_banner.md](kakejiku_banner.md) |
 
 ## Pack Structure
 

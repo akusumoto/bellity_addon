@@ -9,4 +9,6 @@ entity.bellity:connectable_train_cart.name=連結トロッコ
 item.bellity:connectable_train_cart.name=連結トロッコ
 item.bellity:pallet.name=パレット
 item.bellity:gold_shield.name=ゴールド盾
+item.bellity:kakejiku_banner.name=掛け軸
+tile.bellity:kakejiku_banner.name=掛け軸
 tile.bellity:decorate_trapdoor.name=模様付きのトラップドア

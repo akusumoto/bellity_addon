@@ -564,6 +564,7 @@ const warnings = [];
 runInNewContext(script.replace(/^import .*;\r?\n/gm, ""), {
   openPallet: () => {},
   registerDecorateTrapdoor: () => {},
+  registerKakejikuBanner: () => {},
   system: {
     beforeEvents: { startup: { subscribe: (callback) => callback({
       itemComponentRegistry: { registerCustomComponent: (id, component) => registeredComponents.set(id, component) },
@@ -695,4 +696,101 @@ placed.length = 0;
 await usePallet();
 assert.equal(placed.length, 0);
 
-console.log("Bellity pack validation passed: 9 items, 2 blocks, 11 recipes, Gold Shield assets/attachable, trapdoor assets/state callbacks, Pallet UI/placement callbacks, levitation callback, light ball, freeze effect, connectable train cart, textures, names, manifests.");
+const bannerId = "bellity:kakejiku_banner";
+const banner = json("behavior_pack/blocks/kakejiku_banner.json")["minecraft:block"];
+const bannerItem = json("behavior_pack/items/kakejiku_banner.json")["minecraft:item"];
+assert.equal(banner.description.identifier, bannerId);
+assert.equal(bannerItem.description.identifier, bannerId);
+assert.equal(bannerItem.components["minecraft:max_stack_size"], 16);
+assert.deepEqual(bannerItem.components["minecraft:block_placer"], { block: bannerId, replace_block_item: true });
+assert.equal(banner.components["minecraft:collision_box"], false);
+assert.equal(banner.components["minecraft:light_dampening"], 0);
+assert.equal(banner.components["minecraft:destructible_by_mining"].seconds_to_destroy, 1.5);
+assert.equal(banner.components["minecraft:destructible_by_explosion"].explosion_resistance, 1);
+assert.equal(json("resource_pack/blocks.json")[bannerId].sound, "wood");
+assert.deepEqual(json(`behavior_pack/${banner.components["minecraft:loot"]}`).pools, [{
+  rolls: 1, entries: [{ type: "item", name: bannerId, weight: 1 }],
+}]);
+const bannerTexture = readFileSync(resolve(root, "resource_pack/textures/blocks/kakejiku_banner_texture.png"));
+assert.deepEqual(bannerTexture, readFileSync(resolve(root, "model_data/kakejiku_banner_texture.png")));
+assert.equal(json("resource_pack/textures/terrain_texture.json").texture_data.kakejiku_banner.textures,
+  "textures/blocks/kakejiku_banner_texture");
+const sourceBanner = json("model_data/kakejiku_banner.geo.json")["minecraft:geometry"][0];
+assert.equal(bannerTexture.readUInt32BE(16), sourceBanner.description.texture_width);
+assert.equal(bannerTexture.readUInt32BE(20), sourceBanner.description.texture_height);
+const bannerGeometries = json("resource_pack/models/blocks/kakejiku_banner.geo.json")["minecraft:geometry"];
+assert.equal(bannerGeometries.length, 17);
+for (let rotation = 0; rotation < 16; rotation++) {
+  const expected = structuredClone(sourceBanner);
+  expected.description.identifier = `geometry.bellity.kakejiku_banner.floor_${rotation}`;
+  if (rotation !== 0) expected.bones[0].rotation = [0, rotation * 22.5, 0];
+  assert.deepEqual(bannerGeometries[rotation], expected);
+}
+const wallBanner = bannerGeometries[16];
+assert.equal(wallBanner.description.identifier, "geometry.bellity.kakejiku_banner.wall");
+assert.deepEqual(wallBanner.bones[0].cubes, sourceBanner.bones[0].cubes.slice(1).map((cube) => ({
+  ...cube, origin: [cube.origin[0], cube.origin[1] - 16, cube.origin[2] + 7],
+})));
+const bannerVariants = (mount, rotation, face) => banner.permutations.filter((entry) =>
+  runInNewContext(entry.condition, { q: { block_state: (key) => ({
+    "bellity:mount": mount, "bellity:rotation": rotation, "minecraft:block_face": face,
+  })[key] } }));
+for (const [mount, rotations] of [["floor", Array.from({ length: 16 }, (_, i) => i)], ["wall", [0, 4, 8, 12]]]) {
+  for (const rotation of rotations) {
+    const face = mount === "floor" ? "up" : { 0: "north", 4: "west", 8: "south", 12: "east" }[rotation];
+    const matches = bannerVariants(mount, rotation, face);
+    assert.equal(matches.length, 2);
+    const visual = matches.find((entry) => entry.components["minecraft:geometry"]).components;
+    const selection = visual["minecraft:selection_box"];
+    for (let axis = 0; axis < 3; axis++) {
+      const lower = axis === 1 ? 0 : -8;
+      const upper = axis === 1 ? 16 : 8;
+      assert(selection.origin[axis] >= lower && selection.origin[axis] + selection.size[axis] <= upper,
+        `Banner selection bounds outside cell: ${mount}/${rotation}/${axis}`);
+    }
+    assert.equal(visual["minecraft:geometry"], mount === "floor"
+      ? `geometry.bellity.kakejiku_banner.floor_${rotation}` : "geometry.bellity.kakejiku_banner.wall");
+    if (mount === "wall") assert.deepEqual(visual["minecraft:transformation"].rotation, [0, rotation * 22.5, 0]);
+    assert.deepEqual(matches.find((entry) => entry.components["minecraft:placement_filter"])
+      .components["minecraft:placement_filter"].conditions, [{ allowed_faces: [face] }]);
+  }
+}
+for (const [locale, name] of [["en_US", "Kakejiku Banner"], ["ja_JP", "掛け軸"]]) {
+  const lines = readFileSync(resolve(root, `resource_pack/texts/${locale}.lang`), "utf8").split(/\r?\n/);
+  for (const prefix of ["item", "tile"]) assert(lines.includes(`${prefix}.${bannerId}.name=${name}`));
+}
+const bannerCallbacks = new Map();
+const bannerContext = { console: { warn: () => {} } };
+runInNewContext(readFileSync(resolve(root, "behavior_pack/scripts/kakejiku_banner.js"), "utf8")
+  .replace(/^export /gm, ""), bannerContext);
+bannerContext.registerKakejikuBanner({ registerCustomComponent: (id, component) => bannerCallbacks.set(id, component) });
+const placeBanner = bannerCallbacks.get("bellity:banner").beforeOnPlayerPlace;
+const bannerPermutation = (states = {}) => ({
+  getState: (key) => states[key],
+  withState: (key, value) => bannerPermutation({ ...states, [key]: value }),
+});
+for (let rotation = 0; rotation < 16; rotation++) {
+  for (const turns of [-720, 0, 720]) {
+    const event = { face: "Up", player: { getRotation: () => ({ y: rotation * 22.5 - 180 + turns }) }, permutationToPlace: bannerPermutation() };
+    placeBanner(event);
+    assert.notEqual(event.cancel, true);
+    assert.equal(event.permutationToPlace.getState("bellity:mount"), "floor");
+    assert.equal(event.permutationToPlace.getState("bellity:rotation"), rotation);
+  }
+}
+for (const [face, rotation] of [["North", 0], ["West", 4], ["South", 8], ["East", 12]]) {
+  const event = { face, permutationToPlace: bannerPermutation() };
+  placeBanner(event);
+  assert.notEqual(event.cancel, true);
+  assert.equal(event.permutationToPlace.getState("bellity:mount"), "wall");
+  assert.equal(event.permutationToPlace.getState("bellity:rotation"), rotation);
+}
+for (const event of [{ face: "Down" }, { face: "invalid" }, { face: "Up" },
+  { face: "Up", player: { getRotation: () => ({ y: NaN }) } },
+  { face: "Up", player: { getRotation: () => { throw new Error("Disconnected"); } } }]) {
+  placeBanner(event);
+  assert.equal(event.cancel, true);
+}
+assert.match(script, /registerKakejikuBanner\(blockComponentRegistry\)/);
+
+console.log("Bellity pack validation passed: 10 items, 3 blocks, 11 recipes, Kakejiku Banner assets/20 placement states/callbacks, Gold Shield assets/attachable, trapdoor assets/state callbacks, Pallet UI/placement callbacks, levitation callback, light ball, freeze effect, connectable train cart, textures, names, manifests.");

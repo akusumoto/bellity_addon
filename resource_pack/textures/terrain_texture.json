@@ -5,6 +5,7 @@
   "num_mip_levels": 4,
   "texture_data": {
     "air_block": { "textures": "textures/blocks/air_block" },
-    "decorate_trapdoor": { "textures": "textures/blocks/decorate_trapdoor" }
+    "decorate_trapdoor": { "textures": "textures/blocks/decorate_trapdoor" },
+    "kakejiku_banner": { "textures": "textures/blocks/kakejiku_banner_texture" }
   }
 }

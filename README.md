@@ -14,6 +14,7 @@ This is a custom-content addon for Minecraft Bedrock Edition 1.21.110 or later. 
 | Air Sword | Crafting Table, Creative, `/give` | [Design Document](spec/air_sword.md) |
 | Pallet | Crafting Table, Creative, `/give` | [Design Document](spec/pallet.md) |
 | Gold Shield | Crafting Table, Creative, `/give` | [Design Document](spec/gold_shield.md) |
+| Kakejiku Banner | Creative, `/give` | [Design Document](spec/kakejiku_banner.md) |
 
 ## Build and Installation
 
@@ -62,6 +63,7 @@ Obtaining commands:
 /give @s bellity:air_sword
 /give @s bellity:pallet
 /give @s bellity:gold_shield
+/give @s bellity:kakejiku_banner
 /summon bellity:connectable_train_cart ~ ~ ~
 ```
 

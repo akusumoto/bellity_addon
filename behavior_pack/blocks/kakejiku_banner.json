@@ -1,0 +1,545 @@
+{
+  "format_version": "1.21.110",
+  "minecraft:block": {
+    "description": {
+      "identifier": "bellity:kakejiku_banner",
+      "menu_category": {
+        "category": "items",
+        "group": "minecraft:itemGroup.name.banner"
+      },
+      "traits": {
+        "minecraft:placement_position": {
+          "enabled_states": [
+            "minecraft:block_face"
+          ]
+        }
+      },
+      "states": {
+        "bellity:mount": [
+          "floor",
+          "wall"
+        ],
+        "bellity:rotation": {
+          "values": {
+            "min": 0,
+            "max": 15
+          }
+        }
+      }
+    },
+    "components": {
+      "minecraft:display_name": "tile.bellity:kakejiku_banner.name",
+      "minecraft:geometry": "geometry.bellity.kakejiku_banner.floor_0",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "kakejiku_banner",
+          "render_method": "alpha_test"
+        }
+      },
+      "minecraft:item_visual": {
+        "geometry": "geometry.bellity.kakejiku_banner.floor_0",
+        "material_instances": {
+          "*": {
+            "texture": "kakejiku_banner",
+            "render_method": "alpha_test"
+          }
+        }
+      },
+      "minecraft:collision_box": false,
+      "minecraft:selection_box": {
+        "origin": [
+          -7,
+          0,
+          -2
+        ],
+        "size": [
+          14,
+          16,
+          3
+        ]
+      },
+      "minecraft:light_dampening": 0,
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 1.5
+      },
+      "minecraft:destructible_by_explosion": {
+        "explosion_resistance": 1
+      },
+      "minecraft:placement_filter": {
+        "conditions": [
+          {
+            "allowed_faces": [
+              "up",
+              "north",
+              "south",
+              "east",
+              "west"
+            ]
+          }
+        ]
+      },
+      "minecraft:loot": "loot_tables/blocks/kakejiku_banner.json",
+      "bellity:banner": {}
+    },
+    "permutations": [
+      {
+        "condition": "q.block_state('bellity:mount') == 'floor' && q.block_state('bellity:rotation') == 0",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.floor_0",
+          "minecraft:selection_box": {
+            "origin": [
+              -7,
+              0,
+              -2
+            ],
+            "size": [
+              14,
+              16,
+              3
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('bellity:mount') == 'floor' && q.block_state('bellity:rotation') == 1",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.floor_1",
+          "minecraft:selection_box": {
+            "origin": [
+              -7.232523592309186,
+              0,
+              -4.526543091578202
+            ],
+            "size": [
+              14.082363752253283,
+              16,
+              8.129206650645116
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('bellity:mount') == 'floor' && q.block_state('bellity:rotation') == 2",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.floor_2",
+          "minecraft:selection_box": {
+            "origin": [
+              -6.363961030678928,
+              0,
+              -6.363961030678927
+            ],
+            "size": [
+              12.020815280171307,
+              16,
+              12.020815280171306
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('bellity:mount') == 'floor' && q.block_state('bellity:rotation') == 3",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.floor_3",
+          "minecraft:selection_box": {
+            "origin": [
+              -4.526543091578203,
+              0,
+              -7.232523592309187
+            ],
+            "size": [
+              8.12920665064512,
+              16,
+              14.082363752253283
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('bellity:mount') == 'floor' && q.block_state('bellity:rotation') == 4",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.floor_4",
+          "minecraft:selection_box": {
+            "origin": [
+              -2.0000000000000004,
+              0,
+              -7
+            ],
+            "size": [
+              3.000000000000001,
+              16,
+              14
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('bellity:mount') == 'floor' && q.block_state('bellity:rotation') == 5",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.floor_5",
+          "minecraft:selection_box": {
+            "origin": [
+              -4.526543091578201,
+              0,
+              -6.849840159944097
+            ],
+            "size": [
+              8.129206650645116,
+              16,
+              14.082363752253283
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('bellity:mount') == 'floor' && q.block_state('bellity:rotation') == 6",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.floor_6",
+          "minecraft:selection_box": {
+            "origin": [
+              -6.363961030678927,
+              0,
+              -5.65685424949238
+            ],
+            "size": [
+              12.020815280171306,
+              16,
+              12.020815280171307
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('bellity:mount') == 'floor' && q.block_state('bellity:rotation') == 7",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.floor_7",
+          "minecraft:selection_box": {
+            "origin": [
+              -7.232523592309187,
+              0,
+              -3.602663559066916
+            ],
+            "size": [
+              14.082363752253283,
+              16,
+              8.12920665064512
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('bellity:mount') == 'floor' && q.block_state('bellity:rotation') == 8",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.floor_8",
+          "minecraft:selection_box": {
+            "origin": [
+              -7,
+              0,
+              -1.0000000000000009
+            ],
+            "size": [
+              14,
+              16,
+              3.0000000000000018
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('bellity:mount') == 'floor' && q.block_state('bellity:rotation') == 9",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.floor_9",
+          "minecraft:selection_box": {
+            "origin": [
+              -6.8498401599440975,
+              0,
+              -3.6026635590669147
+            ],
+            "size": [
+              14.082363752253285,
+              16,
+              8.129206650645116
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('bellity:mount') == 'floor' && q.block_state('bellity:rotation') == 10",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.floor_10",
+          "minecraft:selection_box": {
+            "origin": [
+              -5.6568542494923815,
+              0,
+              -5.65685424949238
+            ],
+            "size": [
+              12.020815280171309,
+              16,
+              12.020815280171307
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('bellity:mount') == 'floor' && q.block_state('bellity:rotation') == 11",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.floor_11",
+          "minecraft:selection_box": {
+            "origin": [
+              -3.6026635590669187,
+              0,
+              -6.849840159944097
+            ],
+            "size": [
+              8.129206650645123,
+              16,
+              14.082363752253283
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('bellity:mount') == 'floor' && q.block_state('bellity:rotation') == 12",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.floor_12",
+          "minecraft:selection_box": {
+            "origin": [
+              -1.0000000000000013,
+              0,
+              -7
+            ],
+            "size": [
+              3.0000000000000027,
+              16,
+              14
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('bellity:mount') == 'floor' && q.block_state('bellity:rotation') == 13",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.floor_13",
+          "minecraft:selection_box": {
+            "origin": [
+              -3.6026635590669165,
+              0,
+              -7.232523592309186
+            ],
+            "size": [
+              8.12920665064512,
+              16,
+              14.082363752253283
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('bellity:mount') == 'floor' && q.block_state('bellity:rotation') == 14",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.floor_14",
+          "minecraft:selection_box": {
+            "origin": [
+              -5.65685424949238,
+              0,
+              -6.3639610306789285
+            ],
+            "size": [
+              12.020815280171307,
+              16,
+              12.020815280171309
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('bellity:mount') == 'floor' && q.block_state('bellity:rotation') == 15",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.floor_15",
+          "minecraft:selection_box": {
+            "origin": [
+              -6.849840159944097,
+              0,
+              -4.526543091578206
+            ],
+            "size": [
+              14.082363752253283,
+              16,
+              8.129206650645125
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('bellity:mount') == 'wall' && q.block_state('bellity:rotation') == 0",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.wall",
+          "minecraft:transformation": {
+            "rotation": [
+              0,
+              0,
+              0
+            ]
+          },
+          "minecraft:selection_box": {
+            "origin": [
+              -7,
+              0,
+              5
+            ],
+            "size": [
+              14,
+              14,
+              3
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('bellity:mount') == 'wall' && q.block_state('bellity:rotation') == 4",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.wall",
+          "minecraft:transformation": {
+            "rotation": [
+              0,
+              90,
+              0
+            ]
+          },
+          "minecraft:selection_box": {
+            "origin": [
+              -7,
+              0,
+              5
+            ],
+            "size": [
+              14,
+              14,
+              3
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('bellity:mount') == 'wall' && q.block_state('bellity:rotation') == 8",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.wall",
+          "minecraft:transformation": {
+            "rotation": [
+              0,
+              180,
+              0
+            ]
+          },
+          "minecraft:selection_box": {
+            "origin": [
+              -7,
+              0,
+              5
+            ],
+            "size": [
+              14,
+              14,
+              3
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('bellity:mount') == 'wall' && q.block_state('bellity:rotation') == 12",
+        "components": {
+          "minecraft:geometry": "geometry.bellity.kakejiku_banner.wall",
+          "minecraft:transformation": {
+            "rotation": [
+              0,
+              270,
+              0
+            ]
+          },
+          "minecraft:selection_box": {
+            "origin": [
+              -7,
+              0,
+              5
+            ],
+            "size": [
+              14,
+              14,
+              3
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('minecraft:block_face') == 'up'",
+        "components": {
+          "minecraft:placement_filter": {
+            "conditions": [
+              {
+                "allowed_faces": [
+                  "up"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('minecraft:block_face') == 'north'",
+        "components": {
+          "minecraft:placement_filter": {
+            "conditions": [
+              {
+                "allowed_faces": [
+                  "north"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('minecraft:block_face') == 'south'",
+        "components": {
+          "minecraft:placement_filter": {
+            "conditions": [
+              {
+                "allowed_faces": [
+                  "south"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('minecraft:block_face') == 'east'",
+        "components": {
+          "minecraft:placement_filter": {
+            "conditions": [
+              {
+                "allowed_faces": [
+                  "east"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('minecraft:block_face') == 'west'",
+        "components": {
+          "minecraft:placement_filter": {
+            "conditions": [
+              {
+                "allowed_faces": [
+                  "west"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

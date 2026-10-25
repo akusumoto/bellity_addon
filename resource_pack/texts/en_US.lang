@@ -9,4 +9,6 @@ entity.bellity:connectable_train_cart.name=Connectable Train Cart
 item.bellity:connectable_train_cart.name=Connectable Train Cart
 item.bellity:pallet.name=Pallet
 item.bellity:gold_shield.name=Gold Shield
+item.bellity:kakejiku_banner.name=Kakejiku Banner
+tile.bellity:kakejiku_banner.name=Kakejiku Banner
 tile.bellity:decorate_trapdoor.name=Decorate Trapdoor

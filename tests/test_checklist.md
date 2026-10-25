@@ -143,6 +143,22 @@ All Gold Shield checks above are pending in-game verification. Blocking behavior
 
 On 2026-10-25, `node tools/validate.mjs`, syntax checks for all three Behavior Pack scripts, and `git diff --check` passed. Validation covers durability 551, the exact recipe, both names, the byte-identical supplied texture, unchanged geometry except its namespaced identifier, and attachable animation/render references. `install-dev.ps1 -Update` updated both development packs; `tools/verify-dev.ps1` confirmed matching file counts and SHA-256 hashes for all 30 Behavior Pack files and 33 Resource Pack files. No `.mcaddon` package was built. Reload the world for device verification.
 
+## Kakejiku Banner
+
+- [ ] Creative inventory and `/give @s bellity:kakejiku_banner` provide the item, with English name "Kakejiku Banner", Japanese name "掛け軸", and maximum stack size 16.
+- [ ] Inventory, handheld, standing, and wall appearances match the supplied `model_data/kakejiku_banner_texture.png` and `model_data/kakejiku_banner.geo.json`, without Content Log errors.
+- [ ] Floor placement supports all 16 headings in 22.5-degree steps; wall placement supports all four horizontal directions and removes the standing pole.
+- [ ] Ceiling placement is rejected; floor and wall placements require support. Record behavior when support is removed.
+- [ ] Survival placement consumes one item and Creative placement retains it; invalid placement does not consume the item.
+- [ ] Players can pass through the banner, light is not dampened, and selection remains within the base cell. The model extends above that cell; verify upper-cloth targeting and nearby-block overlap.
+- [ ] Breaking normally drops one banner. Check approximately 1.5-second bare-hand breaking, blast resistance behavior, and wood sounds under controlled conditions.
+- [ ] Placement state and appearance survive saving and reloading. Multiple players and world-height or unloaded-neighbor boundaries cause no script errors.
+- [ ] Record loom, dye, pattern, map marker, waving, furnace fuel, axe speed, water, and piston behavior separately. Native banner parity for these features remains TODO; no crafting recipe is provided pending the wool-color decision.
+
+All Kakejiku Banner checks above are pending in-game verification. Source validation and matching development-pack hashes do not establish these runtime results.
+
+On 2026-10-25, `node tools/validate.mjs`, syntax checks for the modified main script, new banner script, and generator, and `git diff --check` passed. Source checks cover the supplied texture, derived geometry, stack size, names, drops, all 20 visual states and their selection bounds/support filters, and mocked placement callbacks including ceiling rejection and invalid-player handling. `install-dev.ps1 -Update` updated both development packs; `tools/verify-dev.ps1` confirmed matching file counts and SHA-256 hashes for all 34 Behavior Pack files and 36 Resource Pack files. No `.mcaddon` was built. Reload the world for device verification.
+
 ## Development Deployment Record: 2026-10-12
 
 After correcting the Air Sword texture to use `model_data/air_sword.png`, source validation and both script syntax checks passed again. The installed Resource Pack still contained the previous Air Sword texture before the update. `install-dev.ps1 -Update` deployed the correction, and `tools/verify-dev.ps1` confirmed that all 24 Behavior Pack files and 26 Resource Pack files match the source by file count and SHA-256 hash. Reload the Minecraft world to load the corrected texture; its in-game appearance remains pending verification.
