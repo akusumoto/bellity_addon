@@ -1,0 +1,24 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:attachable": {
+    "description": {
+      "identifier": "bellity:gold_shield",
+      "materials": { "default": "entity_alphatest" },
+      "textures": { "default": "textures/items/gold_shield" },
+      "geometry": { "default": "geometry.bellity.gold_shield" },
+      "animations": {
+        "first_person_main": "animation.bellity.gold_shield.first_person_main",
+        "first_person_off": "animation.bellity.gold_shield.first_person_off",
+        "third_person": "animation.bellity.gold_shield.third_person"
+      },
+      "scripts": {
+        "animate": [
+          { "first_person_main": "c.is_first_person && c.item_slot == 'main_hand'" },
+          { "first_person_off": "c.is_first_person && c.item_slot == 'off_hand'" },
+          { "third_person": "!c.is_first_person" }
+        ]
+      },
+      "render_controllers": ["controller.render.bellity.gold_shield"]
+    }
+  }
+}

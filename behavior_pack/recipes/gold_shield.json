@@ -1,0 +1,14 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shaped": {
+    "description": { "identifier": "bellity:gold_shield" },
+    "tags": ["crafting_table"],
+    "unlock": { "context": "AlwaysUnlocked" },
+    "pattern": ["WGW", "WWW", " W "],
+    "key": {
+      "W": { "item": "minecraft:warped_planks" },
+      "G": { "item": "minecraft:gold_ingot" }
+    },
+    "result": { "item": "bellity:gold_shield", "count": 1 }
+  }
+}

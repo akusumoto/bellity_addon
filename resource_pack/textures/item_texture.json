@@ -7,6 +7,7 @@
     "connectable_train_cart": { "textures": "textures/items/connectable_train_cart" },
     "creepy_horse_eye": { "textures": "textures/items/creepy_horse_eye" },
     "gizagiza_sword": { "textures": "textures/items/gizagiza_sword" },
+    "gold_shield": { "textures": "textures/items/gold_shield" },
     "noboru_netherite_axe": { "textures": "textures/items/noboru_netherite_axe" },
     "pallet": { "textures": "textures/items/pallet" },
     "sun_bigman_light": { "textures": "textures/items/sun_bigman_light" }

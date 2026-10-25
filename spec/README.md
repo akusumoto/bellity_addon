@@ -18,6 +18,7 @@ Current feature specifications:
 | Air Sword | `bellity:air_sword` | Sword | Implemented; device verification pending | [air_sword.md](air_sword.md) |
 | Pallet | `bellity:pallet` | Use-activated item | Implemented; device verification pending | [pallet.md](pallet.md) |
 | Decorate Trapdoor | `bellity:decorate_trapdoor` | Placeable trapdoor | Implemented; device verification pending | [decorate_trapdoor.md](decorate_trapdoor.md) |
+| Gold Shield | `bellity:gold_shield` | Offhand item | Item, recipe, and model implemented; blocking TODO; device verification pending | [gold_shield.md](gold_shield.md) |
 
 ## Pack Structure
 

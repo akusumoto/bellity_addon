@@ -1,0 +1,27 @@
+{
+  "format_version": "1.10.0",
+  "animations": {
+    "animation.bellity.gold_shield.first_person_main": {
+      "loop": true,
+      "bones": {
+        "shield": { "position": [0, -14, -4], "rotation": [0, 0, 0] }
+      }
+    },
+    "animation.bellity.gold_shield.first_person_off": {
+      "loop": true,
+      "bones": {
+        "shield": { "position": [0, -14, -4], "rotation": [0, 0, 0] }
+      }
+    },
+    "animation.bellity.gold_shield.third_person": {
+      "loop": true,
+      "bones": {
+        "shield": {
+          "position": ["c.item_slot == 'main_hand' ? -0.4 : -1.6", 9, 9.3],
+          "rotation": [-90, 0, 90],
+          "scale": ["c.item_slot == 'main_hand' ? 1 : -1", -1, "c.item_slot == 'main_hand' ? -1 : 1"]
+        }
+      }
+    }
+  }
+}

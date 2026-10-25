@@ -130,6 +130,19 @@ On 2026-10-12, source validation and syntax checks for `scripts/main.js`, `scrip
 
 The device Content Log reported that `itemGroup.name.trapdoor` lacked a namespace, preventing the block from parsing. The missing block then caused invalid recipe-result errors and an unused `bellity:trapdoor` component warning. Corrected the Creative group to `minecraft:itemGroup.name.trapdoor` and added source validation for namespaced block groups. Source validation passed. Updated both development packs and verified all 28 Behavior Pack files and 28 Resource Pack files by count and SHA-256. Rebuilt `dist/bellity_addon.mcaddon` and confirmed all 56 packaged files match the source. Reload the world and recheck the Content Log; device confirmation of this fix is pending.
 
+## Gold Shield
+
+- [ ] `/give @s bellity:gold_shield` and the Creative inventory provide the item, with English name "Gold Shield", Japanese name "ゴールド盾", and maximum stack size one.
+- [ ] The exact `["WGW", "WWW", " W "]` crafting-table recipe consumes six Warped Planks and one Gold Ingot and produces one Gold Shield.
+- [ ] The item has maximum durability 551 and can be placed in the offhand slot.
+- [ ] The inventory image matches `model_data/gold_shield.png`; the held model matches the bones and UV data from `model_data/gold_shield.geo.json`, using the unchanged supplied texture and namespaced runtime geometry without Content Log errors.
+- [ ] Check first-person and third-person rendering in the main hand and offhand, including ordinary held and sneaking poses.
+- [ ] Saving and reloading preserves the item. Record observed damage and durability behavior separately; shield blocking, damage protection, and durability consumption on blocking are not implemented.
+
+All Gold Shield checks above are pending in-game verification. Blocking behavior remains TODO. Source validation and matching deployed-file hashes do not establish in-game behavior.
+
+On 2026-10-25, `node tools/validate.mjs`, syntax checks for all three Behavior Pack scripts, and `git diff --check` passed. Validation covers durability 551, the exact recipe, both names, the byte-identical supplied texture, unchanged geometry except its namespaced identifier, and attachable animation/render references. `install-dev.ps1 -Update` updated both development packs; `tools/verify-dev.ps1` confirmed matching file counts and SHA-256 hashes for all 30 Behavior Pack files and 33 Resource Pack files. No `.mcaddon` package was built. Reload the world for device verification.
+
 ## Development Deployment Record: 2026-10-12
 
 After correcting the Air Sword texture to use `model_data/air_sword.png`, source validation and both script syntax checks passed again. The installed Resource Pack still contained the previous Air Sword texture before the update. `install-dev.ps1 -Update` deployed the correction, and `tools/verify-dev.ps1` confirmed that all 24 Behavior Pack files and 26 Resource Pack files match the source by file count and SHA-256 hash. Reload the Minecraft world to load the corrected texture; its in-game appearance remains pending verification.

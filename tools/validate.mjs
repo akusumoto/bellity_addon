@@ -37,6 +37,7 @@ assert(bp.dependencies.some((d) => d.module_name === "@minecraft/server"));
 assert(bp.dependencies.some((d) => d.module_name === "@minecraft/server-ui" && d.version === "2.0.0"));
 
 const weapons = [
+  ["gold_shield", "bellity:gold_shield", undefined, 551],
   ["pallet", "bellity:pallet", undefined, undefined, "bellity:open_pallet"],
   ["air_sword", "bellity:air_sword", 5, undefined, "bellity:levitation_on_hit"],
   ["bellity_sword", "bellity:bellity_sword", 31, 1233],
@@ -75,6 +76,37 @@ assert.deepEqual(
   readFileSync(resolve(root, "resource_pack/textures/items/creepy_horse_eye.png")),
   readFileSync(resolve(root, "model_data/creepy_horse_eye.png")),
 );
+const goldShield = json("behavior_pack/items/gold_shield.json")["minecraft:item"];
+assert.equal(goldShield.components["minecraft:icon"], "gold_shield");
+assert.equal(goldShield.components["minecraft:allow_off_hand"], true);
+assert.deepEqual(readFileSync(resolve(root, "resource_pack/textures/items/gold_shield.png")),
+  readFileSync(resolve(root, "model_data/gold_shield.png")));
+const goldShieldSource = json("model_data/gold_shield.geo.json");
+const goldShieldGeometry = json("resource_pack/models/entity/gold_shield.geo.json");
+goldShieldSource["minecraft:geometry"][0].description.identifier = "geometry.bellity.gold_shield";
+assert.deepEqual(goldShieldGeometry, goldShieldSource);
+const goldShieldModel = goldShieldGeometry["minecraft:geometry"][0];
+const goldShieldTexture = readFileSync(resolve(root, "resource_pack/textures/items/gold_shield.png"));
+assert.equal(goldShieldTexture.readUInt32BE(16), goldShieldModel.description.texture_width);
+assert.equal(goldShieldTexture.readUInt32BE(20), goldShieldModel.description.texture_height);
+const goldShieldAttachable = json("resource_pack/attachables/gold_shield.json")["minecraft:attachable"].description;
+assert.equal(goldShieldAttachable.identifier, "bellity:gold_shield");
+assert.equal(goldShieldAttachable.geometry.default, goldShieldModel.description.identifier);
+assert.equal(goldShieldAttachable.textures.default, atlas.gold_shield.textures);
+const goldShieldAnimations = json("resource_pack/animations/gold_shield.animation.json").animations;
+for (const [alias, animation] of Object.entries(goldShieldAttachable.animations)) {
+  assert(goldShieldAnimations[animation], `Missing Gold Shield animation: ${animation}`);
+  assert(goldShieldAttachable.scripts.animate.some((entry) => alias in entry));
+  for (const bone of Object.keys(goldShieldAnimations[animation].bones)) {
+    assert(goldShieldModel.bones.some((entry) => entry.name === bone));
+  }
+}
+assert(json("resource_pack/render_controllers/gold_shield.render_controllers.json")
+  .render_controllers[goldShieldAttachable.render_controllers[0]]);
+for (const [locale, name] of [["en_US", "Gold Shield"], ["ja_JP", "ゴールド盾"]]) {
+  assert(readFileSync(resolve(root, `resource_pack/texts/${locale}.lang`), "utf8")
+    .split(/\r?\n/).includes(`item.bellity:gold_shield.name=${name}`));
+}
 const creepyHorseEyeSoundId = "bellity.creepy_horse_eye_activate";
 const creepyHorseEyeSounds = json("resource_pack/sounds/sound_definitions.json").sound_definitions;
 assert.deepEqual(creepyHorseEyeSounds[creepyHorseEyeSoundId], {
@@ -111,6 +143,10 @@ assert.deepEqual(creepyHorseEye.components["minecraft:cooldown"], {
 });
 
 for (const [file, expectedRows, expectedKey] of [
+  ["gold_shield", ["WGW", "WWW", " W "], {
+    W: { item: "minecraft:warped_planks" },
+    G: { item: "minecraft:gold_ingot" },
+  }],
   ["pallet", [" T ", "TBT", "TPT"], {
     T: { item: "minecraft:spruce_planks" },
     B: { item: "minecraft:brush" },
@@ -177,6 +213,7 @@ assert.deepEqual(recipeFiles, [
   "creepy_horse_eye.json",
   "decorate_trapdoor.json",
   "gizagiza_sword.json",
+  "gold_shield.json",
   "noboru_netherite_axe.json",
   "pallet.json",
   "sun_bigman_light.json",
@@ -658,4 +695,4 @@ placed.length = 0;
 await usePallet();
 assert.equal(placed.length, 0);
 
-console.log("Bellity pack validation passed: 8 items, 2 blocks, 10 recipes, trapdoor assets/state callbacks, Pallet UI/placement callbacks, levitation callback, light ball, freeze effect, connectable train cart, textures, names, manifests.");
+console.log("Bellity pack validation passed: 9 items, 2 blocks, 11 recipes, Gold Shield assets/attachable, trapdoor assets/state callbacks, Pallet UI/placement callbacks, levitation callback, light ball, freeze effect, connectable train cart, textures, names, manifests.");

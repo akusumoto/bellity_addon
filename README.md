@@ -13,6 +13,7 @@ This is a custom-content addon for Minecraft Bedrock Edition 1.21.110 or later. 
 | Air Block | Crafting Table, Creative, `/give` | [Design Document](spec/air_block.md) |
 | Air Sword | Crafting Table, Creative, `/give` | [Design Document](spec/air_sword.md) |
 | Pallet | Crafting Table, Creative, `/give` | [Design Document](spec/pallet.md) |
+| Gold Shield | Crafting Table, Creative, `/give` | [Design Document](spec/gold_shield.md) |
 
 ## Build and Installation
 
@@ -60,6 +61,7 @@ Obtaining commands:
 /give @s bellity:air_block
 /give @s bellity:air_sword
 /give @s bellity:pallet
+/give @s bellity:gold_shield
 /summon bellity:connectable_train_cart ~ ~ ~
 ```
 
