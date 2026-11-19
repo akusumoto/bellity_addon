@@ -16,6 +16,8 @@ Current feature specifications:
 | Connectable Train Cart | `bellity:connectable_train_cart` | Entity and placement item | Implemented; device verification pending | [connectable_train_cart.md](connectable_train_cart.md) |
 | Air Block | `bellity:air_block` | Placeable block | Implemented; device verification pending | [air_block.md](air_block.md) |
 | Air Sword | `bellity:air_sword` | Sword | Implemented; device verification pending | [air_sword.md](air_sword.md) |
+| Wind Sword | `bellity:wind_sword` | Sword | Implemented with temporary image; corrected movement confirmed by user | [wind_sword.md](wind_sword.md) |
+| Osu Sword | `bellity:osu_sword` | Sword | Implemented with temporary image; corrected movement confirmed by user | [osu_sword.md](osu_sword.md) |
 | Pallet | `bellity:pallet` | Use-activated item | Implemented; device verification pending | [pallet.md](pallet.md) |
 | Decorate Trapdoor | `bellity:decorate_trapdoor` | Placeable trapdoor | Implemented; device verification pending | [decorate_trapdoor.md](decorate_trapdoor.md) |
 | Gold Shield | `bellity:gold_shield` | Offhand item | Item, recipe, and model implemented; blocking TODO; device verification pending | [gold_shield.md](gold_shield.md) |

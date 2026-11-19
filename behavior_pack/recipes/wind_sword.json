@@ -1,0 +1,17 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shaped": {
+    "description": { "identifier": "bellity:wind_sword" },
+    "tags": ["crafting_table"],
+    "unlock": { "context": "AlwaysUnlocked" },
+    "pattern": [" C ", "GWG", "DSD"],
+    "key": {
+      "C": { "item": "minecraft:wind_charge" },
+      "G": { "item": "minecraft:short_grass" },
+      "W": { "item": "minecraft:stick" },
+      "D": { "item": "minecraft:potion", "data": 0 },
+      "S": { "item": "minecraft:stick" }
+    },
+    "result": { "item": "bellity:wind_sword", "count": 1 }
+  }
+}

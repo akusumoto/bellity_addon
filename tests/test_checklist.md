@@ -1,5 +1,43 @@
 # Bellity Addon Device Checklist
 
+## Distribution Package: 2026-11-19
+
+Created `dist/bellity_addon.mcaddon` after user confirmation of the corrected sword movement. The archive contains Behavior Pack 1.0.12 and Resource Pack 1.0.8; the BP dependency matches RP 1.0.8. All Behavior Pack script syntax checks and source validation passed. Package verification confirmed all 78 archive files match the source by SHA-256, with forward-slash entry paths and no unexpected or duplicate entries. Package import on another device remains unverified. This packaging step did not update installed development packs.
+
+## Wind Sword and Osu Sword
+
+The user has confirmed the corrected main movement behavior in Minecraft Bedrock; other checks in this section remain pending. Generated images are temporary. Source validation and mock tests do not establish rendering, damage, collision, or movement distances. Deployment and packaging results are recorded separately below.
+
+Source verification on 2026-11-19 passed pack validation, syntax checks for both modified/new runtime scripts, and 15 isolated knockback-sword tests. Tests cover positive melee attribution, event ordering, projectile and unrelated-damage rejection, native-motion resistance estimates, additive sprint/enchantment velocity, repeated slides, obstacle stalling, and invalid/dimension-changed targets. Movement distances and the resistance estimate remain unverified in Minecraft. No `.mcaddon` was built and no installed development packs were updated.
+
+Subsequent development deployment on 2026-11-19: repeated source validation, both script syntax checks, all 15 mock tests, and `git diff --check` passed. `install-dev.ps1 -Update` updated the existing Bellity BP and RP. `tools/verify-dev.ps1` confirmed matching file counts and SHA-256 hashes for all 39 Behavior Pack files and 38 Resource Pack files, including both swords, recipes, the shared script, and temporary textures. No `.mcaddon` was built. Reload the Minecraft world; all device checks below remain pending.
+
+Device failure reported on 2026-11-19: Osu Sword hits did not produce the requested 10-block slide, and Wind Sword hits did not produce the requested 7-block rise and 5-block horizontal travel. These were failed device results, despite the preceding source and deployment checks. The runtime correction removes velocity-sample inference as an activation gate and replaces same-tick contact matching with sword-specific hit callbacks correlated with positive melee damage within two ticks. This failure record is superseded for the main movement behavior by the user confirmation below; resistance and other detailed behavior remain unverified.
+
+Correction deployed on 2026-11-19 as Behavior Pack version 1.0.12: pack validation, syntax checks for `main.js`, `knockback_swords.js`, and `knockback_resistance.js`, all 23 regression/model tests, and `git diff --check` passed. Regression tests include first hits without native velocity changes and events crossing tick boundaries. Isolated motion models cover the approximate 7-block rise/5-block horizontal launch and 10-block slide; they do not establish Minecraft results. `install-dev.ps1 -Update` updated both development packs, and `tools/verify-dev.ps1` confirmed matching counts and SHA-256 hashes for all 40 Behavior Pack files and 38 Resource Pack files. No `.mcaddon` was built. Reload the world and retest both swords on unobstructed flat ground against a non-resistant mob without sprinting or Knockback enchantments.
+
+User confirmation on 2026-11-19: after the correction was deployed, the user confirmed that both reported movement issues were fixed in Minecraft. This records successful correction of the Osu Sword's requested slide and the Wind Sword's requested launch. No exact measurement log, tested entity, device details, or separate results for recipes, enchantments, resistance, water, or multiplayer were supplied.
+
+- [ ] Both swords load without Content Log errors, appear in the Creative sword group, stack to one, and are obtainable with `/give @s bellity:wind_sword` and `/give @s bellity:osu_sword`.
+- [ ] Names are Wind Sword / ウィンドソード and Osu Sword / オスソード; the two temporary images render in inventory and first-person and third-person hand views.
+- [ ] Wind Sword has total attack damage 9 and maximum durability 1927; Osu Sword has total attack damage 6 and maximum durability 2032. Check durability consumption and breakage separately.
+- [ ] Wind Sword recipe ` C /GWG/DSD` consumes one Wind Charge, two Short Grass, two Sticks, and two Water Bottles, producing one sword. Tall Grass, Grass Blocks, diamonds, empty bottles, and non-water potions are rejected.
+- [ ] Osu Sword recipe `AAP/AAP/ S ` consumes four custom Air Blocks, two Poppies, and one Stick, producing one sword.
+- [ ] Both swords support vanilla Bedrock sword enchantments, levels, mutual exclusions, and acquisition methods. No unspecified material repair is available.
+- [ ] Damaging melee hits against hostile mobs, passive mobs, and damage-enabled players activate the ability; misses, fully blocked hits, PvP-disabled damage, projectile damage, and other unrelated damage do not.
+- [ ] Wind Sword produces a vanilla Wind Charge impact visual and sound at the struck target, without a projectile, area damage, separate impact damage, or block interaction.
+- [x] User confirmed that the corrected Wind Sword resolves the reported 7-block rise and 5-block horizontal-travel behavior on 2026-11-19. Exact measurements, target, device, and conditions were not supplied.
+- [x] User confirmed that the corrected Osu Sword resolves the reported 10-block slide behavior on 2026-11-19. Exact measurements, target, device, and conditions were not supplied.
+- [ ] Record measured baseline distances for both swords on unobstructed flat ground, against a stationary target without resistance, sprinting, or Knockback enchantments. Check separately that Osu Sword adds no upward launch.
+- [ ] Normal sprint and Knockback-enchantment bonuses remain additive for each sword, including when both bonuses apply together.
+- [ ] Resistance reduces the special movement and immunity prevents it, including bosses and players wearing resistant equipment. Record resistance-helper coverage and limitations for custom entities.
+- [ ] Walls and ceilings block movement; neither sword teleports targets through terrain. Slopes, cliffs, water, currents, and airborne motion affect distance naturally.
+- [ ] Targets retain normal fall damage. Damaging hits while airborne or already sliding can reactivate the appropriate movement, with no additional cooldown.
+- [ ] A new Osu Sword hit restarts sliding from the current position away from the latest attacker, rather than extending the previous destination.
+- [ ] Target death, despawning, dimension changes, repeated attacks, and multiple attackers cause no stale movement state or Content Log errors. Reloading the world preserves the items and resumes normal behavior.
+
+## General Weapons and Pack Loading
+
 - [ ] Chotto Netherite Axe crafts at a crafting table with Netherite Ingots in the top left and top middle slots, and Sticks in the center and bottom center slots.
 - [ ] No recipe error appears in the Content Log after reloading the updated development pack.
 

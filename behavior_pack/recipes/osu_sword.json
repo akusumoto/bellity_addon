@@ -1,0 +1,15 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shaped": {
+    "description": { "identifier": "bellity:osu_sword" },
+    "tags": ["crafting_table"],
+    "unlock": { "context": "AlwaysUnlocked" },
+    "pattern": ["AAP", "AAP", " S "],
+    "key": {
+      "A": { "item": "bellity:air_block" },
+      "P": { "item": "minecraft:poppy" },
+      "S": { "item": "minecraft:stick" }
+    },
+    "result": { "item": "bellity:osu_sword", "count": 1 }
+  }
+}

@@ -9,7 +9,9 @@
     "gizagiza_sword": { "textures": "textures/items/gizagiza_sword" },
     "gold_shield": { "textures": "textures/items/gold_shield" },
     "noboru_netherite_axe": { "textures": "textures/items/noboru_netherite_axe" },
+    "osu_sword": { "textures": "textures/items/osu_sword" },
     "pallet": { "textures": "textures/items/pallet" },
-    "sun_bigman_light": { "textures": "textures/items/sun_bigman_light" }
+    "sun_bigman_light": { "textures": "textures/items/sun_bigman_light" },
+    "wind_sword": { "textures": "textures/items/wind_sword" }
   }
 }

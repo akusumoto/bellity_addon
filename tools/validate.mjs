@@ -40,6 +40,8 @@ const weapons = [
   ["gold_shield", "bellity:gold_shield", undefined, 551],
   ["pallet", "bellity:pallet", undefined, undefined, "bellity:open_pallet"],
   ["air_sword", "bellity:air_sword", 5, undefined, "bellity:levitation_on_hit"],
+  ["wind_sword", "bellity:wind_sword", 8, 1927, "bellity:wind_sword_hit"],
+  ["osu_sword", "bellity:osu_sword", 5, 2032, "bellity:osu_sword_hit"],
   ["bellity_sword", "bellity:bellity_sword", 31, 1233],
   ["creepy_horse_eye", "bellity:creepy_horse_eye", undefined, undefined, "bellity:freeze_nearby_enemies"],
   ["noboru_netherite_axe", "bellity:noboru_netherite_axe", 5, 1200],
@@ -69,6 +71,27 @@ for (const [file, id, damage, durability, customComponent] of weapons) {
   for (const locale of languages) {
     const lines = readFileSync(resolve(root, `resource_pack/texts/${locale}.lang`), "utf8").split(/\r?\n/);
     assert(lines.some((line) => line.startsWith(`${nameKey}=`) && line.length > nameKey.length + 1));
+  }
+}
+
+for (const [file, english, japanese] of [
+  ["wind_sword", "Wind Sword", "ウィンドソード"],
+  ["osu_sword", "Osu Sword", "オスソード"],
+]) {
+  const components = json(`behavior_pack/items/${file}.json`)["minecraft:item"].components;
+  assert.deepEqual(components["minecraft:enchantable"], { slot: "sword", value: 14 });
+  assert.equal(components["minecraft:hand_equipped"], true);
+  assert.deepEqual(components["minecraft:tags"], { tags: ["minecraft:is_sword"] });
+  assert.equal(components["minecraft:repairable"], undefined, "No unspecified repair material");
+  const temporaryPng = readFileSync(resolve(root, `resource_pack/textures/items/${file}.png`));
+  assert.equal(temporaryPng.readUInt32BE(16), 64);
+  assert.equal(temporaryPng.readUInt32BE(20), 64);
+  assert.equal(temporaryPng[25], 6, "Temporary texture must retain RGBA");
+  assert.deepEqual(readFileSync(resolve(root, `resource_pack/textures/items/${file}.png`)),
+    readFileSync(resolve(root, `model_data/${file}.png`)));
+  for (const [locale, name] of [["en_US", english], ["ja_JP", japanese]]) {
+    assert(readFileSync(resolve(root, `resource_pack/texts/${locale}.lang`), "utf8")
+      .split(/\r?\n/).includes(`item.bellity:${file}.name=${name}`));
   }
 }
 
@@ -159,6 +182,18 @@ for (const [file, expectedRows, expectedKey] of [
     A: { item: "bellity:air_block" },
     B: { item: "minecraft:black_concrete" },
   }],
+  ["wind_sword", [" C ", "GWG", "DSD"], {
+    C: { item: "minecraft:wind_charge" },
+    G: { item: "minecraft:short_grass" },
+    W: { item: "minecraft:stick" },
+    D: { item: "minecraft:potion", data: 0 },
+    S: { item: "minecraft:stick" },
+  }],
+  ["osu_sword", ["AAP", "AAP", " S "], {
+    A: { item: "bellity:air_block" },
+    P: { item: "minecraft:poppy" },
+    S: { item: "minecraft:stick" },
+  }],
   ["bellity_sword", ["HG ", " C ", " B "], {
     H: { item: "minecraft:flint_and_steel" },
     G: { item: "minecraft:gold_ingot" },
@@ -215,8 +250,10 @@ assert.deepEqual(recipeFiles, [
   "gizagiza_sword.json",
   "gold_shield.json",
   "noboru_netherite_axe.json",
+  "osu_sword.json",
   "pallet.json",
   "sun_bigman_light.json",
+  "wind_sword.json",
 ]);
 
 assert(existsSync(resolve(root, "behavior_pack/scripts/main.js")));
@@ -254,6 +291,8 @@ assert.deepEqual(
   readFileSync(resolve(root, "model_data/sunlight_ball.png")),
 );
 const script = readFileSync(resolve(root, "behavior_pack/scripts/main.js"), "utf8");
+assert.match(script, /import \{ registerKnockbackSwords \} from "\.\/knockback_swords\.js"/);
+assert.match(script, /registerKnockbackSwords\(itemComponentRegistry\)/);
 assert.match(script, /itemComponentRegistry\.registerCustomComponent\("bellity:double_knockback_on_hit"/);
 assert.match(script, /const EXTRA_KNOCKBACK_STRENGTH = 0\.4/);
 assert.match(script, /target\.applyKnockback\(horizontalForce, 0\)/);
@@ -565,6 +604,7 @@ runInNewContext(script.replace(/^import .*;\r?\n/gm, ""), {
   openPallet: () => {},
   registerDecorateTrapdoor: () => {},
   registerKakejikuBanner: () => {},
+  registerKnockbackSwords: () => {},
   system: {
     beforeEvents: { startup: { subscribe: (callback) => callback({
       itemComponentRegistry: { registerCustomComponent: (id, component) => registeredComponents.set(id, component) },
@@ -793,4 +833,4 @@ for (const event of [{ face: "Down" }, { face: "invalid" }, { face: "Up" },
 }
 assert.match(script, /registerKakejikuBanner\(blockComponentRegistry\)/);
 
-console.log("Bellity pack validation passed: 10 items, 3 blocks, 11 recipes, Kakejiku Banner assets/20 placement states/callbacks, Gold Shield assets/attachable, trapdoor assets/state callbacks, Pallet UI/placement callbacks, levitation callback, light ball, freeze effect, connectable train cart, textures, names, manifests.");
+console.log("Bellity pack validation passed: 12 items, 3 blocks, 13 recipes, Wind/Osu Sword definitions and temporary textures, Kakejiku Banner assets/20 placement states/callbacks, Gold Shield assets/attachable, trapdoor assets/state callbacks, Pallet UI/placement callbacks, levitation callback, light ball, freeze effect, connectable train cart, textures, names, manifests.");

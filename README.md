@@ -12,6 +12,8 @@ This is a custom-content addon for Minecraft Bedrock Edition 1.21.110 or later. 
 | Connectable Train Cart | Crafting Table, Creative, `/give`, `/summon` | [Design Document](spec/connectable_train_cart.md) |
 | Air Block | Crafting Table, Creative, `/give` | [Design Document](spec/air_block.md) |
 | Air Sword | Crafting Table, Creative, `/give` | [Design Document](spec/air_sword.md) |
+| Wind Sword | Crafting Table, Creative, `/give` | [Design Document](spec/wind_sword.md) |
+| Osu Sword | Crafting Table, Creative, `/give` | [Design Document](spec/osu_sword.md) |
 | Pallet | Crafting Table, Creative, `/give` | [Design Document](spec/pallet.md) |
 | Gold Shield | Crafting Table, Creative, `/give` | [Design Document](spec/gold_shield.md) |
 | Kakejiku Banner | Creative, `/give` | [Design Document](spec/kakejiku_banner.md) |
@@ -26,7 +28,7 @@ Run the following commands from the project root in PowerShell.
 ./build.ps1
 ```
 
-This command checks the JavaScript syntax, validates the pack files, and then creates `dist/bellity_addon.mcaddon`. Node.js must be available on `PATH`. Any existing package at that path is replaced. Import the generated file into Minecraft, then enable both the Behavior Pack and Resource Pack in your world.
+This command checks all Behavior Pack scripts for JavaScript syntax, validates the pack files, and then creates `dist/bellity_addon.mcaddon`. It verifies forward-slash ZIP entry paths and SHA-256 equality with every source pack file using `tools/verify-package.ps1`. Node.js must be available on `PATH`. Any existing package at that path is replaced. Import the generated file into Minecraft, then enable both the Behavior Pack and Resource Pack in your world.
 
 ### Install Development Packs
 
@@ -61,6 +63,8 @@ Obtaining commands:
 /give @s bellity:connectable_train_cart
 /give @s bellity:air_block
 /give @s bellity:air_sword
+/give @s bellity:wind_sword
+/give @s bellity:osu_sword
 /give @s bellity:pallet
 /give @s bellity:gold_shield
 /give @s bellity:kakejiku_banner

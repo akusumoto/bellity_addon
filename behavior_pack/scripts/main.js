@@ -2,6 +2,7 @@ import { EquipmentSlot, ItemStack, MolangVariableMap, system, world } from "@min
 import { openPallet } from "./pallet.js";
 import { registerDecorateTrapdoor } from "./decorate_trapdoor.js";
 import { registerKakejikuBanner } from "./kakejiku_banner.js";
+import { registerKnockbackSwords } from "./knockback_swords.js";
 
 const LIGHT_ID = "bellity:sun_bigman_light";
 const LIGHT_BALL_ID = "bellity:light_ball";
@@ -792,6 +793,7 @@ system.beforeEvents.startup.subscribe(({ itemComponentRegistry, blockComponentRe
   itemComponentRegistry.registerCustomComponent("bellity:freeze_nearby_enemies", {
     onUse: freezeNearbyEnemies,
   });
+  registerKnockbackSwords(itemComponentRegistry);
 });
 
 system.runInterval(updateCreepyHorseEyeEffects, 1);
