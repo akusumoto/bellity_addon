@@ -4,7 +4,7 @@
 
 ## Status
 
-Implemented in source with a generated temporary image. Replace the temporary image when the final artwork is supplied. Following the initial failed device test on 2026-11-19, the user confirmed that the revised movement corrected the reported 10-block slide behavior. Exact measurements, target, device, and test conditions were not supplied. Other verification items remain pending.
+Implemented in source. On 2026-11-20, user-supplied artwork replaced the generated temporary image; the PNG is copied unchanged from `model_data/osu_sword.png` to the runtime texture. The supplied Blockbench project is retained as an editable source, while runtime rendering remains a flat item icon with no geometry changes. New-image rendering requires device verification. Following the initial failed device test on 2026-11-19, the user confirmed that the revised movement corrected the reported 10-block slide behavior. Exact measurements, target, device, and test conditions were not supplied. Other verification items remain pending.
 
 ## Item Specifications
 
@@ -22,7 +22,8 @@ Implemented in source with a generated temporary image. Replace the temporary im
 | Activation Condition | Only attacks that deal damage to the target |
 | Enchantments | Same compatible enchantments as vanilla swords in Bedrock Edition, following vanilla levels and mutual exclusions |
 | Special Ability | The struck mob slides away from the attacker approximately 10 blocks on flat ground with an unobstructed path |
-| Image | Generated temporary PNG at `resource_pack/textures/items/osu_sword.png`; source copy at `model_data/osu_sword.png` |
+| Image | User-supplied PNG at `resource_pack/textures/items/osu_sword.png`, copied unchanged from `model_data/osu_sword.png` |
+| Editable Source | `model_data/osu_sword.bbmodel`; retained for editing, without runtime geometry changes |
 
 Use handheld display, the sword equipment group in the Creative inventory, and the `minecraft:is_sword` tag, following the common sword conventions. Obtain it with `/give @s bellity:osu_sword` or from the Creative inventory.
 
@@ -80,14 +81,16 @@ The previous implementation inferred resistance from pre-hit and post-hit veloci
 
 ## Implementation Files
 
-Runtime definitions and temporary assets are included at the following paths.
+Runtime definitions and user-supplied assets are included at the following paths.
 
 - Item definition: `behavior_pack/items/osu_sword.json`
 - Recipe: `behavior_pack/recipes/osu_sword.json`
 - Hit behavior: `behavior_pack/scripts/knockback_swords.js`, registered by `behavior_pack/scripts/main.js`
 - Resistance compatibility data and equipment handling: `behavior_pack/scripts/knockback_resistance.js`
-- Runtime image: `resource_pack/textures/items/osu_sword.png`, temporary
-- Image source: `model_data/osu_sword.png`, temporary; prompts and provenance in `model_data/temporary_sword_images.md`
+- Runtime image: `resource_pack/textures/items/osu_sword.png`, user-supplied artwork
+- Image source: `model_data/osu_sword.png`, copied unchanged to the runtime image
+- Editable Blockbench source: `model_data/osu_sword.bbmodel`; runtime remains a flat item icon
+- Historical generated image: `model_data/osu_sword_generated.png`; former temporary-asset prompts and provenance in `model_data/temporary_sword_images.md`
 - Image registration: `resource_pack/textures/item_texture.json`
 - Localization: `resource_pack/texts/ja_JP.lang`, `resource_pack/texts/en_US.lang`
 - Source validation: `tools/validate.mjs`
@@ -98,7 +101,7 @@ Runtime definitions and temporary assets are included at the following paths.
 
 The initial device test failed the requested slide-distance behavior. On 2026-11-19, the user confirmed the correction after testing the revised implementation in Minecraft. This confirms the reported slide behavior, without a detailed measurement or conditions log. The remaining checks are:
 
-- Check pack loading and Content Log errors, Japanese and English names, Creative availability, `/give`, sword handling, stack size one, and the current temporary image in first-person and third-person views. Repeat image checks when final artwork replaces it.
+- Check pack loading and Content Log errors, Japanese and English names, Creative availability, `/give`, sword handling, stack size one, and the user-supplied image added on 2026-11-20 in inventory, first-person, and third-person views. The new image is not yet device-verified.
 - Check the exact recipe, four custom Air Blocks, two Poppies, one Stick, the two empty lower corners, and output count one.
 - Measure total attack damage 6 without armor, enchantments, critical hits, or other damage modifiers.
 - Verify maximum durability 2032, durability consumption, and the observed number of uses before breakage under controlled conditions.

@@ -4,7 +4,7 @@
 
 ## Status
 
-Implemented in source with a generated temporary image. Replace the temporary image when the final artwork is supplied. Following the initial failed device test on 2026-11-19, the user confirmed that the revised movement corrected the reported 7-block rise and 5-block horizontal-travel behavior. Exact measurements, target, device, and test conditions were not supplied. Other verification items remain pending.
+Implemented in source. On 2026-11-20, user-supplied artwork replaced the generated temporary image; the PNG is copied unchanged from `model_data/wind_sword.png` to the runtime texture. The supplied Blockbench project is retained as an editable source, while runtime rendering remains a flat item icon with no geometry changes. New-image rendering requires device verification. Following the initial failed device test on 2026-11-19, the user confirmed that the revised movement corrected the reported 7-block rise and 5-block horizontal-travel behavior. Exact measurements, target, device, and test conditions were not supplied. Other verification items remain pending.
 
 ## Item Specifications
 
@@ -20,7 +20,8 @@ Implemented in source with a generated temporary image. Replace the temporary im
 | Maximum Stack Size | 1, following the existing sword convention |
 | Special Ability | Wind Charge impact visual effect and sound on a damaging hit against any mob, including players; launch the target approximately 7 blocks upward and 5 blocks horizontally under baseline conditions |
 | Enchantments | Same compatible enchantments as vanilla swords, following vanilla levels and mutual exclusions |
-| Image | Generated temporary PNG at `resource_pack/textures/items/wind_sword.png`; source copy at `model_data/wind_sword.png` |
+| Image | User-supplied PNG at `resource_pack/textures/items/wind_sword.png`, copied unchanged from `model_data/wind_sword.png` |
+| Editable Source | `model_data/wind_sword.bbmodel`; retained for editing, without runtime geometry changes |
 
 Follow the common sword conventions: handheld display, the sword equipment group in the Creative inventory, and the `minecraft:is_sword` tag. Obtain it with `/give @s bellity:wind_sword` or from the Creative inventory. The enchantable slot is `sword`, with value 14 as an implementation default. Vanilla sword enchantment compatibility requires device verification. Default rarity is retained. Repair material remains unspecified, so no material-repair component is configured.
 
@@ -74,14 +75,16 @@ Implementation references: [Mojang Wind Charge projectile](https://github.com/Mo
 
 ## Implementation Files
 
-Runtime definitions and temporary assets are included at the following paths.
+Runtime definitions and user-supplied assets are included at the following paths.
 
 - Item definition: `behavior_pack/items/wind_sword.json`
 - Recipe: `behavior_pack/recipes/wind_sword.json`
 - Hit behavior: `behavior_pack/scripts/knockback_swords.js`, registered by `behavior_pack/scripts/main.js`
 - Resistance compatibility data and equipment handling: `behavior_pack/scripts/knockback_resistance.js`
-- Runtime image: `resource_pack/textures/items/wind_sword.png`, temporary
-- Image source: `model_data/wind_sword.png`, temporary; prompts and provenance in `model_data/temporary_sword_images.md`
+- Runtime image: `resource_pack/textures/items/wind_sword.png`, user-supplied artwork
+- Image source: `model_data/wind_sword.png`, copied unchanged to the runtime image
+- Editable Blockbench source: `model_data/wind_sword.bbmodel`; runtime remains a flat item icon
+- Historical generated image: `model_data/wind_sword_generated.png`; former temporary-asset prompts and provenance in `model_data/temporary_sword_images.md`
 - Image registration: `resource_pack/textures/item_texture.json`
 - Localization: `resource_pack/texts/ja_JP.lang`, `resource_pack/texts/en_US.lang`
 - Source validation: `tools/validate.mjs`
@@ -92,7 +95,7 @@ Runtime definitions and temporary assets are included at the following paths.
 
 The initial device test failed the requested launch-distance behavior. On 2026-11-19, the user confirmed the correction after testing the revised implementation in Minecraft. This confirms the reported launch behavior, without a detailed measurement or conditions log. The remaining checks are:
 
-- Check pack loading and Content Log errors, both display names, Creative availability, `/give`, sword handling, stack size one, and the current temporary image in first-person and third-person views. Repeat image checks when final artwork replaces it.
+- Check pack loading and Content Log errors, both display names, Creative availability, `/give`, sword handling, stack size one, and the user-supplied image added on 2026-11-20 in inventory, first-person, and third-person views. The new image is not yet device-verified.
 - Check the exact recipe, Short Grass in both `G` slots, sticks in both the `W` and `S` slots, Water Bottles in both `D` slots, empty slots, and output count one. Confirm that tall grass and grass blocks do not satisfy `G`, and that diamonds, empty bottles, and other potion variants do not satisfy `D`.
 - Measure total attack power 9 under controlled conditions and verify maximum durability 1927 and durability consumption. Check compatibility with vanilla sword enchantments, their levels and mutual exclusions, and their normal acquisition methods.
 - Compare the hit visual effect and sound with a vanilla Wind Charge impact. Check the effect position and repeated hits.

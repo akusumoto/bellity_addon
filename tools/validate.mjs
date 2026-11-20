@@ -83,10 +83,8 @@ for (const [file, english, japanese] of [
   assert.equal(components["minecraft:hand_equipped"], true);
   assert.deepEqual(components["minecraft:tags"], { tags: ["minecraft:is_sword"] });
   assert.equal(components["minecraft:repairable"], undefined, "No unspecified repair material");
-  const temporaryPng = readFileSync(resolve(root, `resource_pack/textures/items/${file}.png`));
-  assert.equal(temporaryPng.readUInt32BE(16), 64);
-  assert.equal(temporaryPng.readUInt32BE(20), 64);
-  assert.equal(temporaryPng[25], 6, "Temporary texture must retain RGBA");
+  const suppliedPng = readFileSync(resolve(root, `resource_pack/textures/items/${file}.png`));
+  assert.equal(suppliedPng.readUInt32BE(16), suppliedPng.readUInt32BE(20), "Sword texture must be square");
   assert.deepEqual(readFileSync(resolve(root, `resource_pack/textures/items/${file}.png`)),
     readFileSync(resolve(root, `model_data/${file}.png`)));
   for (const [locale, name] of [["en_US", english], ["ja_JP", japanese]]) {
@@ -833,4 +831,4 @@ for (const event of [{ face: "Down" }, { face: "invalid" }, { face: "Up" },
 }
 assert.match(script, /registerKakejikuBanner\(blockComponentRegistry\)/);
 
-console.log("Bellity pack validation passed: 12 items, 3 blocks, 13 recipes, Wind/Osu Sword definitions and temporary textures, Kakejiku Banner assets/20 placement states/callbacks, Gold Shield assets/attachable, trapdoor assets/state callbacks, Pallet UI/placement callbacks, levitation callback, light ball, freeze effect, connectable train cart, textures, names, manifests.");
+console.log("Bellity pack validation passed: 12 items, 3 blocks, 13 recipes, Wind/Osu Sword definitions and supplied textures, Kakejiku Banner assets/20 placement states/callbacks, Gold Shield assets/attachable, trapdoor assets/state callbacks, Pallet UI/placement callbacks, levitation callback, light ball, freeze effect, connectable train cart, textures, names, manifests.");

@@ -1,12 +1,20 @@
 # Bellity Addon Device Checklist
 
+## Wind Sword Artwork Refresh: 2026-11-20
+
+Copied the updated `model_data/wind_sword.png` unchanged to `resource_pack/textures/items/wind_sword.png`. Source validation passed, including equality between the supplied and runtime PNGs. Updated the development packs to BP 1.0.14 and RP 1.0.10, with the matching RP dependency. Installed-file verification confirmed SHA-256 equality for all 40 BP files and 38 RP files. The new Wind Sword appearance remains pending in-game verification. No `.mcaddon` was rebuilt.
+
+## Sword Artwork Deployment: 2026-11-20
+
+Copied the user-supplied Wind Sword and Osu Sword PNGs unchanged from `model_data/` to their runtime item-texture paths. Source validation passed. `install-dev.ps1 -Update` deployed Behavior Pack 1.0.13 and Resource Pack 1.0.9, with the BP dependency matching RP 1.0.9. `tools/verify-dev.ps1` confirmed matching file counts and SHA-256 hashes for all 40 Behavior Pack files and 38 Resource Pack files. The supplied `.bbmodel` projects remain editable sources; runtime rendering remains a flat item icon with no geometry changes. New-image appearance in Minecraft remains pending verification. No `.mcaddon` was rebuilt; the existing distribution archive still contains the previous artwork.
+
 ## Distribution Package: 2026-11-19
 
 Created `dist/bellity_addon.mcaddon` after user confirmation of the corrected sword movement. The archive contains Behavior Pack 1.0.12 and Resource Pack 1.0.8; the BP dependency matches RP 1.0.8. All Behavior Pack script syntax checks and source validation passed. Package verification confirmed all 78 archive files match the source by SHA-256, with forward-slash entry paths and no unexpected or duplicate entries. Package import on another device remains unverified. This packaging step did not update installed development packs.
 
 ## Wind Sword and Osu Sword
 
-The user has confirmed the corrected main movement behavior in Minecraft Bedrock; other checks in this section remain pending. Generated images are temporary. Source validation and mock tests do not establish rendering, damage, collision, or movement distances. Deployment and packaging results are recorded separately below.
+The user has confirmed the corrected main movement behavior in Minecraft Bedrock; other checks in this section remain pending. User-supplied images replaced the generated placeholders on 2026-11-20; their in-game rendering remains unverified. Source validation and mock tests do not establish rendering, damage, collision, or movement distances. Deployment and packaging results are recorded separately below.
 
 Source verification on 2026-11-19 passed pack validation, syntax checks for both modified/new runtime scripts, and 15 isolated knockback-sword tests. Tests cover positive melee attribution, event ordering, projectile and unrelated-damage rejection, native-motion resistance estimates, additive sprint/enchantment velocity, repeated slides, obstacle stalling, and invalid/dimension-changed targets. Movement distances and the resistance estimate remain unverified in Minecraft. No `.mcaddon` was built and no installed development packs were updated.
 
@@ -18,8 +26,10 @@ Correction deployed on 2026-11-19 as Behavior Pack version 1.0.12: pack validati
 
 User confirmation on 2026-11-19: after the correction was deployed, the user confirmed that both reported movement issues were fixed in Minecraft. This records successful correction of the Osu Sword's requested slide and the Wind Sword's requested launch. No exact measurement log, tested entity, device details, or separate results for recipes, enchantments, resistance, water, or multiplayer were supplied.
 
+Artwork update on 2026-11-20: user-supplied `model_data/wind_sword.png` and `model_data/osu_sword.png` replace the generated temporary images at the runtime item-texture paths. The corresponding `.bbmodel` files remain editable source assets. Runtime rendering remains a flat item icon; no geometry changes are included. The original generated PNGs remain as historical assets. Inventory and handheld rendering of the new artwork require fresh device verification.
+
 - [ ] Both swords load without Content Log errors, appear in the Creative sword group, stack to one, and are obtainable with `/give @s bellity:wind_sword` and `/give @s bellity:osu_sword`.
-- [ ] Names are Wind Sword / ウィンドソード and Osu Sword / オスソード; the two temporary images render in inventory and first-person and third-person hand views.
+- [ ] Names are Wind Sword / ウィンドソード and Osu Sword / オスソード; the user-supplied images added on 2026-11-20 render correctly in inventory and first-person and third-person hand views.
 - [ ] Wind Sword has total attack damage 9 and maximum durability 1927; Osu Sword has total attack damage 6 and maximum durability 2032. Check durability consumption and breakage separately.
 - [ ] Wind Sword recipe ` C /GWG/DSD` consumes one Wind Charge, two Short Grass, two Sticks, and two Water Bottles, producing one sword. Tall Grass, Grass Blocks, diamonds, empty bottles, and non-water potions are rejected.
 - [ ] Osu Sword recipe `AAP/AAP/ S ` consumes four custom Air Blocks, two Poppies, and one Stick, producing one sword.
