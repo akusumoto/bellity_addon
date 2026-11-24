@@ -2,7 +2,7 @@
 
 ## Purpose and Scope
 
-Bellity is a Minecraft Bedrock Edition add-on that provides custom weapons, use-activated items, placeable blocks, and entities. The Behavior Pack and Resource Pack use the display name "ベリティアドオン." Definitions, recipes, and images are separated by feature, the namespace is `bellity`, and the target version is Minecraft Bedrock 1.21.110 or later.
+Bellity is a Minecraft Bedrock Edition add-on that provides custom weapons, armor, use-activated items, placeable blocks, and entities. The Behavior Pack and Resource Pack use the display name "ベリティアドオン." Definitions, recipes, and images are separated by feature, the namespace is `bellity`, and the target version is Minecraft Bedrock 1.21.110 or later.
 
 Current feature specifications:
 
@@ -22,6 +22,10 @@ Current feature specifications:
 | Decorate Trapdoor | `bellity:decorate_trapdoor` | Placeable trapdoor | Implemented; device verification pending | [decorate_trapdoor.md](decorate_trapdoor.md) |
 | Gold Shield | `bellity:gold_shield` | Offhand item | Item, recipe, and model implemented; blocking TODO; device verification pending | [gold_shield.md](gold_shield.md) |
 | Kakejiku Banner | `bellity:kakejiku_banner` | Decorative banner block and item | Implemented; native banner compatibility gaps and device verification pending | [kakejiku_banner.md](kakejiku_banner.md) |
+| Rainbow Helmet | `bellity:rainbow_helmet` | Armor | Design only; not implemented | [rainbow_helmet.md](rainbow_helmet.md) |
+| Rainbow Chestplate | `bellity:rainbow_chestplate` | Armor | Design only; not implemented | [rainbow_chestplate.md](rainbow_chestplate.md) |
+| Rainbow Leggings | `bellity:rainbow_leggings` | Armor | Design only; not implemented | [rainbow_leggings.md](rainbow_leggings.md) |
+| Rainbow Boots | `bellity:rainbow_boots` | Armor | Design only; not implemented | [rainbow_boots.md](rainbow_boots.md) |
 
 ## Pack Structure
 

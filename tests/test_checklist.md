@@ -1,5 +1,9 @@
 # Bellity Addon Device Checklist
 
+## Distribution Package: 2026-11-21
+
+Rebuilt `dist/bellity_addon.mcaddon` with the current user-supplied sword textures, Behavior Pack 1.0.14, and Resource Pack 1.0.10. All Behavior Pack script syntax checks and source validation passed. Package verification confirmed all 78 entries match the source by SHA-256 and use forward-slash paths, without unexpected or duplicate entries. This packaging step did not update installed development packs or establish additional in-game results.
+
 ## Wind Sword Artwork Refresh: 2026-11-20
 
 Copied the updated `model_data/wind_sword.png` unchanged to `resource_pack/textures/items/wind_sword.png`. Source validation passed, including equality between the supplied and runtime PNGs. Updated the development packs to BP 1.0.14 and RP 1.0.10, with the matching RP dependency. Installed-file verification confirmed SHA-256 equality for all 40 BP files and 38 RP files. The new Wind Sword appearance remains pending in-game verification. No `.mcaddon` was rebuilt.
