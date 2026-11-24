@@ -213,6 +213,8 @@ On 2026-10-25, `node tools/validate.mjs`, syntax checks for the modified main sc
 
 ## Rainbow Armor
 
+Packaging on 2026-11-24: at the user's explicit request, `build.ps1` created `dist/bellity_addon.mcaddon` after script syntax and source validation passed. `tools/verify-package.ps1` verified all 100 archive entries, forward-slash paths, and SHA-256 equality with source. The archive contains BP 1.0.15 and RP 1.0.11, including all four Rainbow Armor items and assets. Importing this archive and in-game behavior remain unverified.
+
 Later on 2026-11-24, after source validation, validation-module syntax checks, and `git diff --check` passed again, `install-dev.ps1 -Update` deployed Rainbow Armor to the existing Windows development packs. `tools/verify-dev.ps1` confirmed all 48 Behavior Pack files and 52 Resource Pack files match the source by file count and SHA-256. Installed versions are BP 1.0.15 and RP 1.0.11. No `.mcaddon` was built, and imported packs were not updated or removed. Reload Minecraft/the world before device verification; the checks below remain pending.
 
 At the initial implementation stage on 2026-11-24, `node tools/validate.mjs` passed for the complete pack (16 items, 3 blocks, 17 recipes), including all four Rainbow Armor definitions, exact Stone/Cobblestone recipes, localized names, byte-for-byte supplied icons and worn texture, attachable references, and slot-specific geometry. Syntax checks for both validation modules and `git diff --check` passed. Behavior Pack version is 1.0.15; Resource Pack version is 1.0.11. Deployment and packaging were not performed at that stage; the later development deployment is recorded above.
