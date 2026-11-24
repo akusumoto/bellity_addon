@@ -211,6 +211,32 @@ All Kakejiku Banner checks above are pending in-game verification. Source valida
 
 On 2026-10-25, `node tools/validate.mjs`, syntax checks for the modified main script, new banner script, and generator, and `git diff --check` passed. Source checks cover the supplied texture, derived geometry, stack size, names, drops, all 20 visual states and their selection bounds/support filters, and mocked placement callbacks including ceiling rejection and invalid-player handling. `install-dev.ps1 -Update` updated both development packs; `tools/verify-dev.ps1` confirmed matching file counts and SHA-256 hashes for all 34 Behavior Pack files and 36 Resource Pack files. No `.mcaddon` was built. Reload the world for device verification.
 
+## Rainbow Armor
+
+Later on 2026-11-24, after source validation, validation-module syntax checks, and `git diff --check` passed again, `install-dev.ps1 -Update` deployed Rainbow Armor to the existing Windows development packs. `tools/verify-dev.ps1` confirmed all 48 Behavior Pack files and 52 Resource Pack files match the source by file count and SHA-256. Installed versions are BP 1.0.15 and RP 1.0.11. No `.mcaddon` was built, and imported packs were not updated or removed. Reload Minecraft/the world before device verification; the checks below remain pending.
+
+At the initial implementation stage on 2026-11-24, `node tools/validate.mjs` passed for the complete pack (16 items, 3 blocks, 17 recipes), including all four Rainbow Armor definitions, exact Stone/Cobblestone recipes, localized names, byte-for-byte supplied icons and worn texture, attachable references, and slot-specific geometry. Syntax checks for both validation modules and `git diff --check` passed. Behavior Pack version is 1.0.15; Resource Pack version is 1.0.11. Deployment and packaging were not performed at that stage; the later development deployment is recorded above.
+
+All checks below are pending in Minecraft Bedrock. Item/recipe definitions, source-image equality, and rendering references can be checked locally; they do not prove runtime protection, enchantments, infinite durability, or appearance. No Rainbow Armor device results have been recorded.
+
+Known compatibility gap: smithing armor trims are not implemented for Rainbow Armor, unlike vanilla iron armor. There are no trim recipes or trim rendering; this is not a pending check of an implemented feature.
+
+- [ ] Load both packs without Content Log errors. Creative equipment inventory and `/give` provide `bellity:rainbow_helmet`, `bellity:rainbow_chestplate`, `bellity:rainbow_leggings`, and `bellity:rainbow_boots`, each stacking to one.
+- [ ] Verify Japanese names "虹色のヘルメット", "虹色のチェストプレート", "虹色のレギンス", and "虹色のブーツ" and matching English names "Rainbow Helmet", "Rainbow Chestplate", "Rainbow Leggings", and "Rainbow Boots".
+- [ ] Each inventory icon matches its supplied `model_data/rainbow_<piece>.png` image. Equipped armor uses the unchanged `model_data/rainbow_armor_layer_1.png` artwork.
+- [ ] Helmet recipe `["SSS", "R R", "   "]` consumes 3 Stone and 2 Cobblestone and produces one helmet.
+- [ ] Chestplate recipe `["S S", "SSS", "R R"]` consumes 5 Stone and 2 Cobblestone and produces one chestplate; bottom-center remains empty.
+- [ ] Leggings recipe `["SSS", "S S", "R R"]` consumes 5 Stone and 2 Cobblestone and produces one pair of leggings.
+- [ ] Boots recipe `["   ", "S S", "R R"]` consumes 2 Stone and 2 Cobblestone and produces one pair of boots.
+- [ ] For all four recipes, `S` accepts only Stone (`minecraft:stone`), and `R` accepts only Cobblestone (`minecraft:cobblestone`). Check recipe-book entries and reject all-Stone, all-Cobblestone, reversed-material, and Smooth Stone substitutions.
+- [ ] Each piece equips only in its intended armor slot and can be replaced or removed normally. Compare equipping behavior with the corresponding iron armor.
+- [ ] Controlled damage comparisons match iron armor for each piece (2/6/5/2 armor points) and the complete set (15 armor points), without extra knockback resistance or damage effects.
+- [ ] Repeated damage never consumes durability or breaks any piece, including while Thorns is equipped.
+- [ ] Enchanting-table and anvil behavior matches applicable iron armor enchantments and enchantability. Check Protection and piece-specific enchantment effects; record any compatibility gap involving Unbreaking, Mending, or other durability-dependent enchantments.
+- [ ] Check all pieces on standard and slim players, from first-person and third-person views, while walking, crouching, and swimming, and on armor stands. Verify enchantment glint and correct movement of head, torso, arms, and legs.
+- [ ] Check the full rainbow set and mixed vanilla/rainbow sets for UV seams, invisible surfaces, and clipping, especially when leggings and boots are worn together.
+- [ ] Other players see the correct armor. Saving and reloading preserves equipment and enchantments, with no Content Log errors.
+
 ## Development Deployment Record: 2026-10-12
 
 After correcting the Air Sword texture to use `model_data/air_sword.png`, source validation and both script syntax checks passed again. The installed Resource Pack still contained the previous Air Sword texture before the update. `install-dev.ps1 -Update` deployed the correction, and `tools/verify-dev.ps1` confirmed that all 24 Behavior Pack files and 26 Resource Pack files match the source by file count and SHA-256 hash. Reload the Minecraft world to load the corrected texture; its in-game appearance remains pending verification.

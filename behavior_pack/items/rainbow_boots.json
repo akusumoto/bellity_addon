@@ -1,0 +1,28 @@
+{
+  "format_version": "1.21.110",
+  "minecraft:item": {
+    "description": {
+      "identifier": "bellity:rainbow_boots",
+      "menu_category": {
+        "category": "equipment",
+        "group": "minecraft:itemGroup.name.boots"
+      }
+    },
+    "components": {
+      "minecraft:display_name": {
+        "value": "item.bellity:rainbow_boots.name"
+      },
+      "minecraft:icon": "rainbow_boots",
+      "minecraft:max_stack_size": 1,
+      "minecraft:tags": { "tags": ["minecraft:is_armor"] },
+      "minecraft:wearable": {
+        "slot": "slot.armor.feet",
+        "protection": 2
+      },
+      "minecraft:enchantable": {
+        "slot": "armor_feet",
+        "value": 9
+      }
+    }
+  }
+}

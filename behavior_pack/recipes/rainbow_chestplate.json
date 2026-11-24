@@ -1,0 +1,31 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shaped": {
+    "description": {
+      "identifier": "bellity:rainbow_chestplate"
+    },
+    "tags": [
+      "crafting_table"
+    ],
+    "unlock": {
+      "context": "AlwaysUnlocked"
+    },
+    "pattern": [
+      "S S",
+      "SSS",
+      "R R"
+    ],
+    "key": {
+      "S": {
+        "item": "minecraft:stone"
+      },
+      "R": {
+        "item": "minecraft:cobblestone"
+      }
+    },
+    "result": {
+      "item": "bellity:rainbow_chestplate",
+      "count": 1
+    }
+  }
+}

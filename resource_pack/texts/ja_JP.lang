@@ -14,3 +14,7 @@ item.bellity:gold_shield.name=ゴールド盾
 item.bellity:kakejiku_banner.name=掛け軸
 tile.bellity:kakejiku_banner.name=掛け軸
 tile.bellity:decorate_trapdoor.name=模様付きのトラップドア
+item.bellity:rainbow_helmet.name=虹色のヘルメット
+item.bellity:rainbow_chestplate.name=虹色のチェストプレート
+item.bellity:rainbow_leggings.name=虹色のレギンス
+item.bellity:rainbow_boots.name=虹色のブーツ

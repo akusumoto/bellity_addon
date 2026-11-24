@@ -14,3 +14,7 @@ item.bellity:gold_shield.name=Gold Shield
 item.bellity:kakejiku_banner.name=Kakejiku Banner
 tile.bellity:kakejiku_banner.name=Kakejiku Banner
 tile.bellity:decorate_trapdoor.name=Decorate Trapdoor
+item.bellity:rainbow_helmet.name=Rainbow Helmet
+item.bellity:rainbow_chestplate.name=Rainbow Chestplate
+item.bellity:rainbow_leggings.name=Rainbow Leggings
+item.bellity:rainbow_boots.name=Rainbow Boots

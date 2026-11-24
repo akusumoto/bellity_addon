@@ -22,10 +22,10 @@ Current feature specifications:
 | Decorate Trapdoor | `bellity:decorate_trapdoor` | Placeable trapdoor | Implemented; device verification pending | [decorate_trapdoor.md](decorate_trapdoor.md) |
 | Gold Shield | `bellity:gold_shield` | Offhand item | Item, recipe, and model implemented; blocking TODO; device verification pending | [gold_shield.md](gold_shield.md) |
 | Kakejiku Banner | `bellity:kakejiku_banner` | Decorative banner block and item | Implemented; native banner compatibility gaps and device verification pending | [kakejiku_banner.md](kakejiku_banner.md) |
-| Rainbow Helmet | `bellity:rainbow_helmet` | Armor | Design only; not implemented | [rainbow_helmet.md](rainbow_helmet.md) |
-| Rainbow Chestplate | `bellity:rainbow_chestplate` | Armor | Design only; not implemented | [rainbow_chestplate.md](rainbow_chestplate.md) |
-| Rainbow Leggings | `bellity:rainbow_leggings` | Armor | Design only; not implemented | [rainbow_leggings.md](rainbow_leggings.md) |
-| Rainbow Boots | `bellity:rainbow_boots` | Armor | Design only; not implemented | [rainbow_boots.md](rainbow_boots.md) |
+| Rainbow Helmet | `bellity:rainbow_helmet` | Armor | Implemented; device verification pending | [rainbow_helmet.md](rainbow_helmet.md) |
+| Rainbow Chestplate | `bellity:rainbow_chestplate` | Armor | Implemented; device verification pending | [rainbow_chestplate.md](rainbow_chestplate.md) |
+| Rainbow Leggings | `bellity:rainbow_leggings` | Armor | Implemented; device verification pending | [rainbow_leggings.md](rainbow_leggings.md) |
+| Rainbow Boots | `bellity:rainbow_boots` | Armor | Implemented; device verification pending | [rainbow_boots.md](rainbow_boots.md) |
 
 ## Pack Structure
 

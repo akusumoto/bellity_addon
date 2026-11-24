@@ -1,0 +1,28 @@
+{
+  "format_version": "1.21.110",
+  "minecraft:item": {
+    "description": {
+      "identifier": "bellity:rainbow_helmet",
+      "menu_category": {
+        "category": "equipment",
+        "group": "minecraft:itemGroup.name.helmet"
+      }
+    },
+    "components": {
+      "minecraft:display_name": {
+        "value": "item.bellity:rainbow_helmet.name"
+      },
+      "minecraft:icon": "rainbow_helmet",
+      "minecraft:max_stack_size": 1,
+      "minecraft:tags": { "tags": ["minecraft:is_armor"] },
+      "minecraft:wearable": {
+        "slot": "slot.armor.head",
+        "protection": 2
+      },
+      "minecraft:enchantable": {
+        "slot": "armor_head",
+        "value": 9
+      }
+    }
+  }
+}

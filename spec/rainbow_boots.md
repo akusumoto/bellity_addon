@@ -4,7 +4,7 @@
 
 ## Status and Scope
 
-Design only. Item definitions, recipes, runtime textures, and armor rendering are not implemented. All device checks are pending.
+Item definitions, recipes, supplied inventory icons, worn texture, and armor attachables are implemented. Source checks cover the definitions and assets; actual protection, enchanting, infinite durability, and worn appearance remain pending device verification.
 
 This item is part of Rainbow Armor (Japanese set name: 虹色アーマー), comprising the [helmet](rainbow_helmet.md), [chestplate](rainbow_chestplate.md), [leggings](rainbow_leggings.md), and [boots](rainbow_boots.md). The set differs from iron armor in its names, appearance, stone crafting material, and infinite durability. Other gameplay behavior must match the corresponding vanilla iron armor piece.
 
@@ -31,6 +31,10 @@ A complete set provides 15 armor points (helmet 2, chestplate 6, leggings 5, boo
 
 Obtain the item through its crafting recipe, Creative equipment inventory, or `/give @s bellity:rainbow_boots`. Match iron armor equip/unequip behavior and applicable enchantments, including armor-piece-specific enchantments, anvil application, and enchantment effects. Unbreaking and Mending must never be required to maintain infinite durability; Thorns must not damage or break the item. Repair is unnecessary because the item cannot become damaged. Do not introduce additional abilities or fire/lava immunity. Any vanilla compatibility that cannot be reproduced on custom items must be documented as a gap rather than silently omitted.
 
+## Compatibility Gap
+
+Smithing armor trims are not implemented for this custom armor, unlike vanilla iron armor. No trim recipes or trim rendering are supplied. This is a known compatibility gap, not a feature awaiting device verification.
+
 ## Crafting
 
 Craft at a crafting table with Stone in the middle-left and middle-right slots and Cobblestone in the bottom-left and bottom-right slots. Leave the top row and center column empty.
@@ -49,20 +53,23 @@ R - R
 - Output: one `bellity:rainbow_boots`.
 - Follow the common `crafting_table`, format version 1.20.10, and `AlwaysUnlocked` policy.
 
-## Appearance and Implementation Plan
+## Appearance and Implementation
 
-Use the supplied 64 x 32 rainbow artwork for the equipped armor, preserving its colors and intended placement. The supplied reference model, `model_data/rainbow_armor.bbmodel`, contains head, hat, body, arm, and leg elements with identifier `player.armor.base`; it is an editable source model, not a ready-to-install attachable. Both legs use UV offset `[0,16]`. The texture file name does not limit the feature to upper-body armor: all four requested pieces must render correctly. Verify the UV layout for each piece before exporting runtime assets; no second-layer leggings texture is supplied. If different leggings UVs are needed, adapt the runtime geometry/UV mapping to the supplied texture. Keep source artwork unchanged.
+The equipped armor uses the supplied 64 x 32 `model_data/rainbow_armor_layer_1.png`, copied unchanged to the shared runtime texture. The editable reference model, `model_data/rainbow_armor.bbmodel`, supplies the head, hat, body, arm, and leg shapes and atlas layout; it is not installed as an attachable. Runtime geometry uses the corresponding vanilla humanoid bone names and pivots to inherit the wearer's pose without additional animations.
+
+The boots geometry uses the lower four model units of both legs with inflation 1. Cropped surfaces retain their matching source-atlas regions through per-face UV mapping. Leggings and boots use different inflation values to avoid coplanar surfaces when worn together. A separate second-layer texture is not required. Mixed-piece clipping and the final appearance still require device verification.
 
 Use the supplied inventory icon `model_data/rainbow_boots.png`, copied byte-for-byte to `resource_pack/textures/items/rainbow_boots.png` and registered as `rainbow_boots` in `resource_pack/textures/item_texture.json`. Do not generate a replacement icon or derive it from the worn armor atlas. Keep the source image unchanged.
 
-Use armor attachables and slot-appropriate geometry for the equipped armor, with enchantment glint and player-bone binding. Check all pieces worn together and in combination with vanilla armor.
+The armor attachable references slot-appropriate geometry and the shared `controller.render.bellity.rainbow_armor` render controller. The controller uses the armor material and its enchanted variant for enchantment glint. Check all pieces worn together and in combination with vanilla armor.
 
-Planned files (not yet created):
+Implementation files:
 
 - Item: `behavior_pack/items/rainbow_boots.json`.
 - Recipe: `behavior_pack/recipes/rainbow_boots.json`.
 - Attachable: `resource_pack/attachables/rainbow_boots.json`.
-- Geometry, if required: `resource_pack/models/entity/rainbow_boots.geo.json`.
+- Render controller: `resource_pack/render_controllers/rainbow_armor.render_controllers.json`.
+- Geometry: `resource_pack/models/entity/rainbow_boots.geo.json`.
 - Shared worn texture: `resource_pack/textures/models/armor/rainbow_armor_layer_1.png`.
 - Inventory icon: `resource_pack/textures/items/rainbow_boots.png`, copied unchanged from `model_data/rainbow_boots.png`.
 - Icon registration: `resource_pack/textures/item_texture.json`.
@@ -70,13 +77,13 @@ Planned files (not yet created):
 - Source validation: `tools/validate.mjs`.
 - Device-verification record: `tests/test_checklist.md`.
 
-Use `minecraft:wearable` for the slot and protection, and `minecraft:enchantable` for the appropriate armor enchantment category. Prefer omitting `minecraft:durability` for the unbreakable item, consistent with existing unbreakable items. Verify that protection and applicable enchantments still function without durability on the project's target Bedrock version; do not substitute a large finite durability value. Resolve component compatibility during implementation.
+The item uses `minecraft:wearable` for its slot and protection and `minecraft:enchantable` for its armor enchantment category. It omits `minecraft:durability`, consistent with existing unbreakable items; no large finite durability value or durability-repair script is used. Protection and applicable enchantments without a durability component require device verification on the project's target Bedrock version. Enchantments that specifically depend on durability may have no useful effect on this unbreakable item; record any inability to apply the corresponding iron armor enchantments as a compatibility gap.
 
 References: [official wearable component documentation](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/itemreference/examples/itemcomponents/minecraft_wearable?view=minecraft-bedrock-stable) and [official enchantable component documentation](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/itemreference/examples/itemcomponents/minecraft_enchantable?view=minecraft-bedrock-stable). Check compatibility with the project's format version 1.21.110 before using properties from newer documentation.
 
 ## Device Verification
 
-All checks are pending; this design does not establish runtime behavior.
+All checks are pending; source definitions and asset checks do not establish runtime behavior.
 
 - Load both packs without Content Log errors; verify Japanese/English names, Creative availability, `/give`, and stack size one.
 - Craft exactly one item from 2 Stone blocks and 2 Cobblestone blocks using the specified pattern. Check the recipe book; reject an all-Stone recipe, an all-Cobblestone recipe, swapped Stone/Cobblestone rows, and Smooth Stone substitutions.

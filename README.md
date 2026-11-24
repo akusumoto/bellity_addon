@@ -17,6 +17,10 @@ This is a custom-content addon for Minecraft Bedrock Edition 1.21.110 or later. 
 | Pallet | Crafting Table, Creative, `/give` | [Design Document](spec/pallet.md) |
 | Gold Shield | Crafting Table, Creative, `/give` | [Design Document](spec/gold_shield.md) |
 | Kakejiku Banner | Creative, `/give` | [Design Document](spec/kakejiku_banner.md) |
+| Rainbow Helmet | Crafting Table, Creative, `/give` | [Design Document](spec/rainbow_helmet.md) |
+| Rainbow Chestplate | Crafting Table, Creative, `/give` | [Design Document](spec/rainbow_chestplate.md) |
+| Rainbow Leggings | Crafting Table, Creative, `/give` | [Design Document](spec/rainbow_leggings.md) |
+| Rainbow Boots | Crafting Table, Creative, `/give` | [Design Document](spec/rainbow_boots.md) |
 
 ## Build and Installation
 
@@ -68,6 +72,10 @@ Obtaining commands:
 /give @s bellity:pallet
 /give @s bellity:gold_shield
 /give @s bellity:kakejiku_banner
+/give @s bellity:rainbow_helmet
+/give @s bellity:rainbow_chestplate
+/give @s bellity:rainbow_leggings
+/give @s bellity:rainbow_boots
 /summon bellity:connectable_train_cart ~ ~ ~
 ```
 

@@ -11,6 +11,10 @@
     "noboru_netherite_axe": { "textures": "textures/items/noboru_netherite_axe" },
     "osu_sword": { "textures": "textures/items/osu_sword" },
     "pallet": { "textures": "textures/items/pallet" },
+    "rainbow_helmet": { "textures": "textures/items/rainbow_helmet" },
+    "rainbow_chestplate": { "textures": "textures/items/rainbow_chestplate" },
+    "rainbow_leggings": { "textures": "textures/items/rainbow_leggings" },
+    "rainbow_boots": { "textures": "textures/items/rainbow_boots" },
     "sun_bigman_light": { "textures": "textures/items/sun_bigman_light" },
     "wind_sword": { "textures": "textures/items/wind_sword" }
   }

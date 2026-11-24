@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { runInNewContext } from "node:vm";
+import { validateRainbowArmor } from "./validate-rainbow-armor.mjs";
 
 const root = resolve(import.meta.dirname, "..");
 const json = (path) => JSON.parse(readFileSync(resolve(root, path), "utf8"));
@@ -25,6 +26,7 @@ function validateJsonTree(relativeDirectory) {
 
 validateJsonTree("behavior_pack");
 validateJsonTree("resource_pack");
+validateRainbowArmor(root);
 
 const bp = json("behavior_pack/manifest.json");
 const rp = json("resource_pack/manifest.json");
@@ -250,6 +252,10 @@ assert.deepEqual(recipeFiles, [
   "noboru_netherite_axe.json",
   "osu_sword.json",
   "pallet.json",
+  "rainbow_boots.json",
+  "rainbow_chestplate.json",
+  "rainbow_helmet.json",
+  "rainbow_leggings.json",
   "sun_bigman_light.json",
   "wind_sword.json",
 ]);
@@ -831,4 +837,4 @@ for (const event of [{ face: "Down" }, { face: "invalid" }, { face: "Up" },
 }
 assert.match(script, /registerKakejikuBanner\(blockComponentRegistry\)/);
 
-console.log("Bellity pack validation passed: 12 items, 3 blocks, 13 recipes, Wind/Osu Sword definitions and supplied textures, Kakejiku Banner assets/20 placement states/callbacks, Gold Shield assets/attachable, trapdoor assets/state callbacks, Pallet UI/placement callbacks, levitation callback, light ball, freeze effect, connectable train cart, textures, names, manifests.");
+console.log("Bellity pack validation passed: 16 items, 3 blocks, 17 recipes, Rainbow Armor definitions/recipes/supplied textures/attachables/geometry, Wind/Osu Sword definitions and supplied textures, Kakejiku Banner assets/20 placement states/callbacks, Gold Shield assets/attachable, trapdoor assets/state callbacks, Pallet UI/placement callbacks, levitation callback, light ball, freeze effect, connectable train cart, textures, names, manifests.");
